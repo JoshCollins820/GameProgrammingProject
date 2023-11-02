@@ -9,10 +9,14 @@ public class playerStats : MonoBehaviour
     public float playerStamina = 100;
 
     // weapons
-    
+
 
     // ammo
 
+
+    // bools
+    public bool isWalking;
+    public bool isRunning;
 
 
 
