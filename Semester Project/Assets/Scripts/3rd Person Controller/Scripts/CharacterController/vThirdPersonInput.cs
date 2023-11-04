@@ -21,6 +21,7 @@ namespace Invector.vCharacterController
         [HideInInspector] public vThirdPersonCamera tpCamera;
         [HideInInspector] public Camera cameraMain;
 
+
         #endregion
 
         protected virtual void Start()
