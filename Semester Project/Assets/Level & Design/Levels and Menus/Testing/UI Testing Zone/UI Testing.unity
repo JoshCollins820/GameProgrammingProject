@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 184471996}
   - component: {fileID: 184471995}
+  - component: {fileID: 184471997}
   m_Layer: 0
   m_Name: Dummy Player
   m_TagString: Untagged
@@ -154,6 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   stamina_bar: {fileID: 0}
+  blood_screen: {fileID: 0}
 --- !u!4 &184471996
 Transform:
   m_ObjectHideFlags: 0
@@ -169,6 +171,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &184471997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184471994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fa303a0c8110249a323db72f8ce3f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerDamaged: 0
+  playerStamina: 100
+  isWalking: 0
+  isRunning: 0
 --- !u!1 &412015859
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,12 +707,12 @@ GameObject:
   - component: {fileID: 2103693130}
   - component: {fileID: 2103693129}
   m_Layer: 5
-  m_Name: blood_hit
+  m_Name: blood_screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2103693128
 RectTransform:
   m_ObjectHideFlags: 0
@@ -727,7 +745,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

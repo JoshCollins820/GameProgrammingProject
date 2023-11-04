@@ -5,8 +5,8 @@ using UnityEngine;
 public class playerStats : MonoBehaviour
 {
     // player stats
-    public float playerHealth = 100;
-    public float playerStamina = 100;
+    public bool playerDamaged; // default: false
+    public float playerStamina; // default: 100
 
     // weapons
 
@@ -25,7 +25,11 @@ public class playerStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // initialize player stats
+        playerDamaged = false;
+        playerStamina = 100;
+        isWalking = true;
+        isRunning = false;
     }
 
     // Update is called once per frame
