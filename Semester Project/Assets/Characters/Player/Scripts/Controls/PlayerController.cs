@@ -11,16 +11,16 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] Transform cameraFollowTarget; // Transform of object the camera will rotate around
 
-    private InputsManager input; // Reference to InputsManager to get move vector
+    private InputsManager input; // Reference to InputsManager for controls
     private CharacterController controller; // Reference to CharacterController of character
     private Animator animator; // Reference to Animator component
 
-    float xRotation; // x-axis Camera movement
-    float yRotation; // y-axis Camera movement
+    private float xRotation; // x-axis Camera movement
+    private float yRotation; // y-axis Camera movement
 
     [SerializeField] GameObject mainCam; // For camera movement of main camera
-    [SerializeField] GameObject normalCam; // Virtual Normal Camera // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
-    [SerializeField] GameObject aimCam; // Virtual Aim Camera // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
+    [SerializeField] GameObject normalCam; // Virtual Normal Camera
+    [SerializeField] GameObject aimCam; // Virtual Aim Camera
 
     // Start is called before the first frame update
     void Start()
@@ -41,9 +41,9 @@ public class PlayerController : MonoBehaviour
         mainCam = GameObject.Find("Main Camera"); // Main Camera
 
         // Get the "Normal VCamera" object
-        normalCam = GameObject.Find("Normal VCamera");  // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
+        normalCam = GameObject.Find("Normal VCamera");
         // Get the "Aim VCamera" object
-        aimCam = GameObject.Find("Aim VCamera");  // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
+        aimCam = GameObject.Find("Aim VCamera");
         aimCam.SetActive(false);
     }
 
@@ -85,15 +85,13 @@ public class PlayerController : MonoBehaviour
     }
 
     // Used for smoothness
-    private void LateUpdate() // this function only had CameraRotation() in it originally
+    private void LateUpdate()
     {
         // Apply camera movement
         CameraRotation();
-
-        //if (input.aim && normalCam.activeInHierarchy && !aimCam.activeInHierarchy) { Debug.Log("Aiming!");  }
         
         // Switch between default camera/aim camera
-        if(input.aim && !aimCam.activeInHierarchy) // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
+        if(input.aim && !aimCam.activeInHierarchy)
         {
             aimCam.SetActive(true);
             normalCam.SetActive(false);
@@ -103,7 +101,6 @@ public class PlayerController : MonoBehaviour
             aimCam.SetActive(false);
             normalCam.SetActive(true);
         }
-
     }
 
     // Controls camera rotation
@@ -118,19 +115,3 @@ public class PlayerController : MonoBehaviour
     }
 
 }
-
-
-/*
-        if(input.aim && !aimCam.activeInHierarchy) // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
-        {
-            aimCam.SetActive(true);
-            mainCam.SetActive(false);
-            CameraRotation();
-        }
-        else if(!input.aim)// && !mainCam.activeInHierarchy)
-        {
-            aimCam.SetActive(false);
-            mainCam.SetActive(true);
-            CameraRotation();
-        }
-        */

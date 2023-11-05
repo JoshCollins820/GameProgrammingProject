@@ -7,8 +7,9 @@ public class InputsManager : MonoBehaviour
 {
     public Vector2 move; // Needed for x-axis, z-axis
     public Vector2 look; // Needed for camera
-    public bool sprint; // Needed to determine is player is currently sprinting
-    public bool aim; // Needed to determine is player is aiming // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
+    public bool sprint; // Needed to determine if player is currently sprinting
+    public bool aim; // Needed to determine if player is aiming
+    public bool interact; // Needed to determine if player is interacting
 
     // Gets player input based on their "Move" action (WASD Keys)
     void OnMove(InputValue value)
@@ -30,9 +31,15 @@ public class InputsManager : MonoBehaviour
         sprint = value.isPressed;
     }
 
-    // Gets player input based on their "Aim" action (Right Mouse Click) // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
+    // Gets player input based on their "Aim" action (Right Mouse Click)
     void OnAim(InputValue value)
     {
         aim = value.isPressed;
+    }
+
+    // Gets player input based on their "Interact" action (E Key)
+    void OnInteract(InputValue value)
+    {
+        interact = value.isPressed;
     }
 }
