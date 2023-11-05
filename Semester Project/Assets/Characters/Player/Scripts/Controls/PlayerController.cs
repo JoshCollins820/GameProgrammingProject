@@ -18,7 +18,9 @@ public class PlayerController : MonoBehaviour
     float xRotation; // x-axis Camera movement
     float yRotation; // y-axis Camera movement
 
-    [SerializeField] GameObject mainCam; // For camera movement
+    [SerializeField] GameObject mainCam; // For camera movement of main camera
+    [SerializeField] GameObject normalCam; // Virtual Normal Camera // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
+    [SerializeField] GameObject aimCam; // Virtual Aim Camera // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
 
     // Start is called before the first frame update
     void Start()
@@ -33,10 +35,16 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         // Get the Animator component
         animator = GetComponent<Animator>();
-        // Get the CameraFollowTarget object
+        // Get the CameraFollowTarget object's transform
         cameraFollowTarget = GameObject.Find("Player/CameraFollowTarget").GetComponent<Transform>();
         // Get the MainCamera object
-        mainCam = GameObject.Find("Main Camera");
+        mainCam = GameObject.Find("Main Camera"); // Main Camera
+
+        // Get the "Normal VCamera" object
+        normalCam = GameObject.Find("Normal VCamera");  // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
+        // Get the "Aim VCamera" object
+        aimCam = GameObject.Find("Aim VCamera");  // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
+        aimCam.SetActive(false);
     }
 
     // Update is called once per frame
@@ -62,6 +70,7 @@ public class PlayerController : MonoBehaviour
             targetRotation = Quaternion.LookRotation(inputDirection).eulerAngles.y + mainCam.transform.rotation.eulerAngles.y;
             Quaternion rotation = Quaternion.Euler(0, targetRotation, 0);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 20 * Time.deltaTime);
+
             // 2 For Sprint animation, 1 for Walk animation
             animator.SetFloat("speed", input.sprint ? 2 : input.move.magnitude);
         }
@@ -76,9 +85,25 @@ public class PlayerController : MonoBehaviour
     }
 
     // Used for smoothness
-    private void LateUpdate()
+    private void LateUpdate() // this function only had CameraRotation() in it originally
     {
+        // Apply camera movement
         CameraRotation();
+
+        //if (input.aim && normalCam.activeInHierarchy && !aimCam.activeInHierarchy) { Debug.Log("Aiming!");  }
+        
+        // Switch between default camera/aim camera
+        if(input.aim && !aimCam.activeInHierarchy) // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
+        {
+            aimCam.SetActive(true);
+            normalCam.SetActive(false);
+        }
+        else if(!input.aim && !normalCam.activeInHierarchy)
+        {
+            aimCam.SetActive(false);
+            normalCam.SetActive(true);
+        }
+
     }
 
     // Controls camera rotation
@@ -93,3 +118,19 @@ public class PlayerController : MonoBehaviour
     }
 
 }
+
+
+/*
+        if(input.aim && !aimCam.activeInHierarchy) // !!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!
+        {
+            aimCam.SetActive(true);
+            mainCam.SetActive(false);
+            CameraRotation();
+        }
+        else if(!input.aim)// && !mainCam.activeInHierarchy)
+        {
+            aimCam.SetActive(false);
+            mainCam.SetActive(true);
+            CameraRotation();
+        }
+        */

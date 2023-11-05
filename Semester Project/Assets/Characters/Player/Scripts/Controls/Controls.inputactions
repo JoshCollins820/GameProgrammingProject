@@ -24,18 +24,27 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Fire",
-                    "type": "Button",
-                    "id": "1eec1988-1e26-4d01-87ac-c124a18e9766",
+                    "name": "Sprint",
+                    "type": "PassThrough",
+                    "id": "f30bc6a4-7902-4e47-9ef8-c6f02b3427ac",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Sprint",
+                    "name": "Aim",
                     "type": "PassThrough",
-                    "id": "f30bc6a4-7902-4e47-9ef8-c6f02b3427ac",
+                    "id": "a85dd09b-a028-4201-a148-18c07b77e587",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Fire",
+                    "type": "Button",
+                    "id": "1eec1988-1e26-4d01-87ac-c124a18e9766",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -210,11 +219,22 @@
                 },
                 {
                     "name": "",
+                    "id": "1173459f-1699-4653-a56f-72a605989e32",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
+                    "groups": "Gamepad",
                     "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -225,7 +245,7 @@
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse",
                     "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -236,7 +256,7 @@
                     "path": "<Touchscreen>/primaryTouch/tap",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Touch",
+                    "groups": "Touch",
                     "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -265,12 +285,12 @@
                 },
                 {
                     "name": "",
-                    "id": "1173459f-1699-4653-a56f-72a605989e32",
-                    "path": "<Keyboard>/leftShift",
+                    "id": "4d11281e-0a44-4845-b918-9b58c20deedb",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Sprint",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
