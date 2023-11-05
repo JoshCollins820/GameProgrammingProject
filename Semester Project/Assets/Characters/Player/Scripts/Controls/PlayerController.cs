@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem.Layouts;
 
@@ -21,6 +22,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject mainCam; // For camera movement of main camera
     [SerializeField] GameObject normalCam; // Virtual Normal Camera
     [SerializeField] GameObject aimCam; // Virtual Aim Camera
+
+
+    Vector3 moveVector;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -80,8 +86,21 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("speed", 0);
         }
         Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
+
+
+
         // Moves character towards a direction
-        controller.Move(targetDirection * speed * Time.deltaTime);
+        controller.Move(speed * Time.deltaTime * targetDirection);
+
+
+
+        moveVector = Vector3.zero;
+        if(!controller.isGrounded)
+        {
+            moveVector += Physics.gravity;
+        }
+        controller.Move(moveVector * Time.deltaTime);
+
     }
 
     // Used for smoothness
