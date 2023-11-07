@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerUI : MonoBehaviour
 {
@@ -9,29 +10,53 @@ public class PlayerUI : MonoBehaviour
     public GameObject player; // player
     public GameObject stamina_bar; // stamina ui element
     public GameObject blood_screen; // blood screen ui element
+    public GameObject interact_e; // interact E ui element
 
     // script local variables
     private float normalized_stamina; // stamina of player, but normalized to 0-1
     private bool blood_cycle_on; // true if the blood screen currently on/cycle is running
     private float blood_cycle_speed; // speed of blood cycle/pulse
+    private bool show_interact_ui; // true if the interact UI [E] is being shown
 
     // Start is called before the first frame update
     void Start()
     {
-        // initialize values
+        // find objects
         player = GameObject.Find("Dummy Player");
-        stamina_bar = GameObject.Find("stamina_bar");
+        stamina_bar = GameObject.Find("stamina");
         blood_screen = GameObject.Find("blood_screen");
+        interact_e = GameObject.Find("interact_e");
+        // blood screen initialization
         blood_cycle_on = false;
         blood_cycle_speed = 0.08f;
+        // interact ui initialization
+        show_interact_ui = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        StaminaBar(); // check for stamina bar updates
-        BloodScreen(); // check for blood screen updates
-        Debug.Log(blood_screen.GetComponent<Image>().color.a);
+        // stamina bar
+        if(player.GetComponent<playerStats>().playerStamina < 100){ // if player is using stamina
+            stamina_bar.SetActive(true); // show stamina UI
+            StaminaBar(); // update stamina bar
+        }
+        else{
+            stamina_bar.SetActive(false); // show stamina UI
+        }
+
+        // blood screen
+        if (player.GetComponent<playerStats>().playerDamaged == true){ // if player is damaged
+            BloodScreen(); // show blood screen
+        }
+
+        // display interact UI
+        if (show_interact_ui == true){
+            interact_e.SetActive(true); // show interact UI
+        }
+        else{
+            interact_e.SetActive(false); // hide interact UI
+        }
     }
 
     void StaminaBar()
@@ -39,7 +64,8 @@ public class PlayerUI : MonoBehaviour
         // normalize player stamina from 0-100 to 0-1
         normalized_stamina = (player.GetComponent<playerStats>().playerStamina) / 100;
         // set bar to player stamina
-        stamina_bar.GetComponent<Image>().fillAmount = normalized_stamina;
+        //stamina_bar.GetComponent<Image>().fillAmount = normalized_stamina;
+        stamina_bar.transform.GetChild(1).GetComponent<Image>().fillAmount = normalized_stamina;
     }
 
     // changes blood screen so it is high opacity
@@ -108,16 +134,25 @@ public class PlayerUI : MonoBehaviour
 
     void BloodScreen()
     {
-        // if player is damaged
-        if (player.GetComponent<playerStats>().playerDamaged == true)
+        // check if blood cycle is currently off, if it's on/true, we don't want to call this again
+        if(blood_cycle_on == false)
         {
-            // check if blood cycle is currently off, if it's on/true, we don't want to call this again
-            if(blood_cycle_on == false)
-            {
-                BloodScreenPulseUp(); // start blood screen effect cycle
-                blood_cycle_on = true; // set to true, this prevents this function from being called multiple times by Update
-            }
-            
+            BloodScreenPulseUp(); // start blood screen effect cycle
+            blood_cycle_on = true; // set to true, this prevents this function from being called multiple times by Update
         }
+    }
+
+    // public API for displaying interact UI: [E] 'text'
+    public void DisplayInteractUI(string interactText)
+    {
+        show_interact_ui = true; // enable show interact bool, this will trigger Update function to enable interact ui game object
+        interact_e.GetComponent<TextMeshProUGUI>().text = "[E] " + interactText; // change text to "[E] interactText" (ie: [E] Hide)
+    }
+
+    // public API for disabling interact UI
+    public void DisableInteractUI()
+    {
+        show_interact_ui = false; // disable show interact bool, this will trigger Update function to enable interact ui game object
+        interact_e.GetComponent<TextMeshProUGUI>().text = "[E]"; // reset text to just "[E]"
     }
 }
