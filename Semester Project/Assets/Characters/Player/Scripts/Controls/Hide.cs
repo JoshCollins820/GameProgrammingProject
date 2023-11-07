@@ -9,7 +9,7 @@ public class Hide : MonoBehaviour
     private GameObject player; // Needed to grab InputsManager script
 
     private InputsManager input; // Reference to InputsManager for controls
-    private PlayerController controller; // Get instance of the PlayerController class
+    //private PlayerController controller; // Get instance of the PlayerController class
 
     [SerializeField] GameObject normalCam; // Virtual Normal Camera
     [SerializeField] GameObject hidingCam; // Virtual Hiding Camera
@@ -21,6 +21,10 @@ public class Hide : MonoBehaviour
     public float smoothing = 1.5f;
     Vector2 velocity;
     Vector2 frameVelocity;
+
+    // Wardrobe positions
+    [SerializeField] Transform door;
+    [SerializeField] Transform openPos;
 
 
     // Start is called before the first frame update
@@ -34,6 +38,13 @@ public class Hide : MonoBehaviour
         normalCam = GameObject.Find("Normal VCamera");
         // Get the "Hiding VCamera" object OF the hiding spot
         hidingCam = this.transform.parent.gameObject.transform.Find("Hide VCamera").gameObject;
+
+        // If the hiding spot is a wardrobe
+        if(this.transform.parent.gameObject.name == "Hideable Wardrobe")
+        {
+            door = this.transform.parent.gameObject.transform.Find("Door").gameObject.transform;
+            openPos = this.transform.parent.gameObject.transform.Find("OpenPosition").gameObject.transform;
+        }
     }
 
     // Update is called once per frame
@@ -45,19 +56,40 @@ public class Hide : MonoBehaviour
         // Enter hiding spot
         if(collisionEntered && Input.GetKeyDown(KeyCode.E) && normalCam.activeInHierarchy)
         {
+            //Reset player movement
+            player.GetComponent<InputsManager>().move = Vector2.zero;
+
             normalCam.SetActive(false);
             hidingCam.SetActive(true);
             player.SetActive(false);
+
+            // If the hiding spot is a Wardrobe
+            if(this.transform.parent.gameObject.name == "Hideable Wardrobe")
+            {
+                // Open the door immediately
+                door.position = openPos.position;
+                door.rotation = openPos.rotation;
+
+                // Open the door
+                GetComponent<HideWardrobe>().open = true;
+            }
         }
         // Leave hiding spot
-        else if (collisionEntered && Input.GetKeyDown(KeyCode.E) && !normalCam.activeInHierarchy)
+        else if(collisionEntered && Input.GetKeyDown(KeyCode.E) && !normalCam.activeInHierarchy)
         {
             normalCam.SetActive(true);
             hidingCam.SetActive(false);
             player.SetActive(true);
+
+            // If the hiding spot is a Wardrobe
+            if(this.transform.parent.gameObject.name == "Hideable Wardrobe")
+            {
+                // Close the door
+                GetComponent<HideWardrobe>().open = false;
+            }
         }
         // While hiding, enable camera movement
-        if (collisionEntered && !normalCam.activeInHierarchy)
+        if(collisionEntered && !normalCam.activeInHierarchy)
         {
             CameraRotation();
         }
@@ -83,13 +115,10 @@ public class Hide : MonoBehaviour
         Vector2 rawFrameVelocity = Vector2.Scale(mouseDelta, Vector2.one * sensitivity);
         frameVelocity = Vector2.Lerp(frameVelocity, rawFrameVelocity, 1 / smoothing);
         velocity += frameVelocity;
-        //velocity.y = Mathf.Clamp(velocity.y, -45, 45); //-90, 90
 
-        // Rotate camera up-down and controller left-right from velocity.
-        //hidingCam.transform.localRotation = Quaternion.AngleAxis(-velocity.y, Vector3.right);
+        // Rotate camera left-right
         hidingCam.transform.localRotation = Quaternion.AngleAxis(velocity.x, Vector3.up);
     }
-    
 
 
 }

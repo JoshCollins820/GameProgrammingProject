@@ -7,8 +7,8 @@ using UnityEngine.InputSystem.Layouts;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float walkSpeed = 2f; // Player movement speed;
-    [SerializeField] float sprintSpeed = 7f;
+    public float walkSpeed = 2f; // Player movement speed;
+    public float sprintSpeed = 7f;
 
     [SerializeField] Transform cameraFollowTarget; // Transform of object the camera will rotate around
 
@@ -41,11 +41,11 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         // Get the Animator component
         animator = GetComponent<Animator>();
+
         // Get the CameraFollowTarget object's transform
         cameraFollowTarget = GameObject.Find("Player/CameraFollowTarget").GetComponent<Transform>();
         // Get the MainCamera object
         mainCam = GameObject.Find("Main Camera"); // Main Camera
-
         // Get the "Normal VCamera" object
         normalCam = GameObject.Find("Normal VCamera");
         // Get the "Aim VCamera" object
@@ -88,19 +88,16 @@ public class PlayerController : MonoBehaviour
         Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
 
 
-
         // Moves character towards a direction
         controller.Move(speed * Time.deltaTime * targetDirection);
 
-
-
+        // Adds gravity to character
         moveVector = Vector3.zero;
         if(!controller.isGrounded)
         {
             moveVector += Physics.gravity;
         }
         controller.Move(moveVector * Time.deltaTime);
-
     }
 
     // Used for smoothness
@@ -132,5 +129,7 @@ public class PlayerController : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(-xRotation, yRotation, 0);
         cameraFollowTarget.rotation = rotation;
     }
+
+
 
 }
