@@ -12,6 +12,7 @@ public class PlayerUI : MonoBehaviour
     public GameObject blood_screen; // blood screen ui element
     public GameObject interact_e; // interact E ui element
 
+
     // script local variables
     private float normalized_stamina; // stamina of player, but normalized to 0-1
     private bool blood_cycle_on; // true if the blood screen currently on/cycle is running
@@ -37,7 +38,7 @@ public class PlayerUI : MonoBehaviour
     void Update()
     {
         // stamina bar
-        if(player.GetComponent<playerStats>().playerStamina < 100){ // if player is using stamina
+        if(player.GetComponent<PlayerStats>().playerStamina < 100){ // if player is using stamina
             stamina_bar.SetActive(true); // show stamina UI
             StaminaBar(); // update stamina bar
         }
@@ -46,7 +47,7 @@ public class PlayerUI : MonoBehaviour
         }
 
         // blood screen
-        if (player.GetComponent<playerStats>().playerDamaged == true){ // if player is damaged
+        if (player.GetComponent<PlayerStats>().playerDamaged == true){ // if player is damaged
             BloodScreen(); // show blood screen
         }
 
@@ -62,7 +63,7 @@ public class PlayerUI : MonoBehaviour
     void StaminaBar()
     {
         // normalize player stamina from 0-100 to 0-1
-        normalized_stamina = (player.GetComponent<playerStats>().playerStamina) / 100;
+        normalized_stamina = (player.GetComponent<PlayerStats>().playerStamina) / 100;
         // set bar to player stamina
         //stamina_bar.GetComponent<Image>().fillAmount = normalized_stamina;
         stamina_bar.transform.GetChild(1).GetComponent<Image>().fillAmount = normalized_stamina;
@@ -74,7 +75,7 @@ public class PlayerUI : MonoBehaviour
         Debug.Log("PulseUp");
         var blood_screen_color = blood_screen.GetComponent<Image>().color; // get the current color of blood_screen
 
-        if (player.GetComponent<playerStats>().playerDamaged == true) // if player is damaged
+        if (player.GetComponent<PlayerStats>().playerDamaged == true) // if player is damaged
         {
             if(blood_screen_color.a < 0.7f) // if the blood_screen color's alpha is less than 1f (max)
             {
@@ -99,7 +100,7 @@ public class PlayerUI : MonoBehaviour
         Debug.Log("PulseDown");
         var blood_screen_color = blood_screen.GetComponent<Image>().color; // get the current color of blood_screen
 
-        if (player.GetComponent<playerStats>().playerDamaged == true) // if player is damaged
+        if (player.GetComponent<PlayerStats>().playerDamaged == true) // if player is damaged
         {
             if (blood_screen_color.a > 0.2f) // if the blood_screen color's alpha is greater than 0.5f
             {
@@ -129,6 +130,7 @@ public class PlayerUI : MonoBehaviour
             blood_screen_color.a -= 0.1f; // decrease opacity by 0.1f
             blood_screen.GetComponent<Image>().color = blood_screen_color; // update blood_screen color with new modified color
             Invoke(nameof(BloodScreenPulseStop), blood_cycle_speed/2); // call this function again
+            blood_cycle_on = false;
         }
     }
 

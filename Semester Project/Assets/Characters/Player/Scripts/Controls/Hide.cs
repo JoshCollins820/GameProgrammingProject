@@ -40,7 +40,7 @@ public class Hide : MonoBehaviour
         hidingCam = this.transform.parent.gameObject.transform.Find("Hide VCamera").gameObject;
 
         // If the hiding spot is a wardrobe
-        if(this.transform.parent.gameObject.name == "Hideable Wardrobe")
+        if(this.transform.parent.gameObject.name.Contains("(Hinge)"))
         {
             door = this.transform.parent.gameObject.transform.Find("Door").gameObject.transform;
             openPos = this.transform.parent.gameObject.transform.Find("OpenPosition").gameObject.transform;
@@ -64,11 +64,10 @@ public class Hide : MonoBehaviour
             player.SetActive(false);
 
             // If the hiding spot is a Wardrobe
-            if(this.transform.parent.gameObject.name == "Hideable Wardrobe")
+            if(this.transform.parent.gameObject.name.Contains("(Hinge)")) //== "Hideable Wardrobe")
             {
                 // Open the door immediately
-                door.position = openPos.position;
-                door.rotation = openPos.rotation;
+                door.SetPositionAndRotation(openPos.position, openPos.rotation);
 
                 // Open the door
                 GetComponent<HideWardrobe>().open = true;
@@ -82,7 +81,7 @@ public class Hide : MonoBehaviour
             player.SetActive(true);
 
             // If the hiding spot is a Wardrobe
-            if(this.transform.parent.gameObject.name == "Hideable Wardrobe")
+            if(this.transform.parent.gameObject.name.Contains("(Hinge)"))
             {
                 // Close the door
                 GetComponent<HideWardrobe>().open = false;
