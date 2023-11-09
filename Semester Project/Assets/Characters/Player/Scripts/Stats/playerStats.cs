@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviour
 {
     // player stats
     public bool playerDamaged; // default: false
