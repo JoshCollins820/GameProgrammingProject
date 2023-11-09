@@ -3036,7 +3036,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363578991983522480, guid: 6924745a509f7b746bc74f3d4548b1aa, type: 3}
       propertyPath: m_Name
-      value: Priest (1)
+      value: Priest
       objectReference: {fileID: 0}
     - target: {fileID: 4363578991983522480, guid: 6924745a509f7b746bc74f3d4548b1aa, type: 3}
       propertyPath: m_IsActive
@@ -3264,7 +3264,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4363578991983522480, guid: 6924745a509f7b746bc74f3d4548b1aa, type: 3}
       propertyPath: m_Name
-      value: Priest
+      value: PriestTest
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3275,16 +3275,13 @@ PrefabInstance:
       addedObject: {fileID: 1338312124}
     - targetCorrespondingSourceObject: {fileID: 4363578991983522480, guid: 6924745a509f7b746bc74f3d4548b1aa, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1338312123}
+      addedObject: {fileID: 1338312128}
     - targetCorrespondingSourceObject: {fileID: 4363578991983522480, guid: 6924745a509f7b746bc74f3d4548b1aa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1338312122}
     - targetCorrespondingSourceObject: {fileID: 4363578991983522480, guid: 6924745a509f7b746bc74f3d4548b1aa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1338312127}
-    - targetCorrespondingSourceObject: {fileID: 4363578991983522480, guid: 6924745a509f7b746bc74f3d4548b1aa, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1338312128}
   m_SourcePrefab: {fileID: 100100000, guid: 6924745a509f7b746bc74f3d4548b1aa, type: 3}
 --- !u!1001 &986191825
 PrefabInstance:
@@ -3886,19 +3883,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
---- !u!114 &1338312123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1338312121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50024db8105995d4aae871ecb980fd3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inSight: 0
 --- !u!114 &1338312124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3946,8 +3930,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9a45266322f37b4183d106975d99a17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 7
-  viewAngle: 0
+  inView: 0
+  viewRadius: 9
+  viewAngle: 60
 --- !u!1 &1367498686
 GameObject:
   m_ObjectHideFlags: 0
