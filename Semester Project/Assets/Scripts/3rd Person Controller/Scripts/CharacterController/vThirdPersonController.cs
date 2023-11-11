@@ -4,6 +4,7 @@ namespace Invector.vCharacterController
 {
     public class vThirdPersonController : vThirdPersonAnimator
     {
+
         public virtual void ControlAnimatorRootMotion()
         {
             if (!this.enabled) return;
@@ -123,6 +124,13 @@ namespace Invector.vCharacterController
                 animator.CrossFadeInFixedTime("Jump", 0.1f);
             else
                 animator.CrossFadeInFixedTime("JumpMove", .2f);
+        }
+
+        private void Awake()
+        {
+            // Lock the mouse cursor and hide it
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 }
