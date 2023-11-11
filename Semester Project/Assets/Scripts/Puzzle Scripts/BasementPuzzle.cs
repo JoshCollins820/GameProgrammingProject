@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BasementPuzzle : MonoBehaviour
@@ -13,8 +14,8 @@ public class BasementPuzzle : MonoBehaviour
     GameObject StoneYellow;
     Camera PuzzleCamera;
     Camera PlayerCamera;
-    GameObject SecretDoorLeft;
-    GameObject SecretDoorRight;
+    Camera SecretDoorCamera;
+    GameObject SecretDoor;
 
     public bool puzzleStarted;
     public bool puzzleFailed;
@@ -29,10 +30,11 @@ public class BasementPuzzle : MonoBehaviour
     public int activeStones;
     public string orderActive;
 
-    Vector3 openLeft;
-    Vector3 closedLeft;
-    Vector3 openRight;
-    Vector3 closedRight;
+    Vector3 openPos;
+    Vector3 closedPos;
+    float lerpDuration;
+    bool opening;
+
 
     // Start is called before the first frame update
     void Start()
@@ -46,8 +48,13 @@ public class BasementPuzzle : MonoBehaviour
         StoneYellow = GameObject.Find("Stone_Yellow");
         PuzzleCamera = GameObject.Find("Puzzle Camera").GetComponent<Camera>();
         PlayerCamera = Player.GetComponentInChildren<Camera>();
-        SecretDoorLeft = GameObject.Find("SecretDoorLeft");
-        SecretDoorRight = GameObject.Find("SecretDoorRight");
+        SecretDoorCamera = GameObject.Find("SecretDoorCamera").GetComponent<Camera>();
+        SecretDoor = GameObject.Find("SecretDoor");
+
+        closedPos = SecretDoor.transform.position;
+        openPos = new Vector3(SecretDoor.transform.position.x, SecretDoor.transform.position.y, -29.248f);
+        lerpDuration = 1.5f;
+        opening = false;
 
         puzzleStarted = false;
         puzzleFailed = false;
@@ -108,7 +115,17 @@ public class BasementPuzzle : MonoBehaviour
         }
         if (puzzleSolved)
         {
+            opening = true;
             // puzzle solved open doors
+            StartCoroutine(OpenDoor());
+            // wait until door opens before giving camera back to player
+            float waitTime = 0f ;
+            while (waitTime < 1.5f)
+            {
+                waitTime += Time.deltaTime;
+            }
+            SecretDoorCamera.gameObject.SetActive(false);
+            PlayerCamera.gameObject.SetActive(true);
 
         }
 
@@ -137,7 +154,7 @@ public class BasementPuzzle : MonoBehaviour
             Debug.Log("Puzzle Solved");
             puzzleSolved = true;
             PuzzleCamera.gameObject.SetActive(false);
-            PlayerCamera.gameObject.SetActive(true);
+            SecretDoorCamera.gameObject.SetActive(true);
         }
         else
         {
@@ -163,4 +180,16 @@ public class BasementPuzzle : MonoBehaviour
         orderActive = "";
     }
 
+    IEnumerator OpenDoor()
+    {
+        float timeElapsed = 0;
+        while (timeElapsed < lerpDuration)
+        {
+            SecretDoor.transform.position = Vector3.Lerp(closedPos, openPos, timeElapsed / lerpDuration);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        SecretDoor.transform.position = openPos;
+        opening = false;
+    }
 }
