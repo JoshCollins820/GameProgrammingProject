@@ -17,8 +17,7 @@ public class PlayerStats : MonoBehaviour
     // bools
     public bool isWalking;
     public bool isRunning;
-
-
+    private bool usingStamina;
 
 
 
@@ -35,6 +34,59 @@ public class PlayerStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // if not max stamina and not using stamina
+        if (playerStamina < 100 && usingStamina == false)
+        {
+            staminaRegen();
+        }
+    }
+
+
+    // regens stamina
+    void staminaRegen()
+    {
+        playerStamina += 10; // increase stamina, subject to change, I want to increase it with a sigmoid-like function
+
+        // if stamina overflows over max
+        if (playerStamina > 100) 
+        {
+            playerStamina = 100; // reset to 100
+        }
+    }
+
+    // public API function to deplete stamina, parameter is amount of stamina that will be depleted
+    public void useStamina(float stamina_lost)
+    {
+        // if player has stamina left
+        if (playerStamina > 0)
+        {
+            playerStamina -= stamina_lost; // decrease stamina
+        }
+
+        // if stamina goes under min
+        if (playerStamina < 0)
+        {
+            playerStamina = 0; // reset to 0
+        }
+    }
+
+    // public API function to damaging player
+    public void damagePlayer()
+    {
+        // if player is not damaged
+        if (playerDamaged == false)
+        {
+            playerDamaged = true ; // player is now damaged
+        }
+    }
+
+    // public API function to damaging player
+    public void healPlayer()
+    {
+        // if player is damaged
+        if (playerDamaged == true)
+        {
+            playerDamaged = false; // player no longer damaged
+        }
     }
 }
