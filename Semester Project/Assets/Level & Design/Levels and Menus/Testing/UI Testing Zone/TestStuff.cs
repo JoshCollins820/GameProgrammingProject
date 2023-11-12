@@ -14,29 +14,28 @@ public class TestStuff : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift)) // when the player holds down LSHIFT
         {
-            if(player.GetComponent<PlayerStats>().playerStamina > 0) 
-                player.GetComponent<PlayerStats>().playerStamina -= 5;
+            player.GetComponent<PlayerStats>().useStamina();
         }
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyUp(KeyCode.LeftShift)) // when the player stops holding LSHIFT
         {
-            if (player.GetComponent<PlayerStats>().playerStamina < 100)
-                player.GetComponent<PlayerStats>().playerStamina += 5;
+            player.GetComponent<PlayerStats>().isRunning = false;
         }
-        if (Input.GetKeyDown(KeyCode.X))
+
+        if (Input.GetKeyDown(KeyCode.X)) // placeholder for event that damages player
         {
-            player.GetComponent<PlayerStats>().playerDamaged = true;
+            player.GetComponent<PlayerStats>().damagePlayer();
         }
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C)) // placeholder for event that heals player
         {
-            player.GetComponent<PlayerStats>().playerDamaged = false;
+            player.GetComponent<PlayerStats>().healPlayer();
         }
-        if (Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.V)) // placeholder for event where Interact E should appear
         {
             player.GetComponent<PlayerUI>().DisplayInteractUI("Test");
         }
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B)) // placeholder for event where Interact E should not longer appear
         {
             player.GetComponent<PlayerUI>().DisableInteractUI();
         }

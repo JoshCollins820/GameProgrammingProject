@@ -4,9 +4,20 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    // player stats
-    public bool playerDamaged; // default: false
-    public float playerStamina; // default: 100
+    // PLAYER STATS
+    [Header("Health")] // HEALTH section -----------------------
+    public bool playerDamaged = false;                          // indicates if the player is currently damaged
+
+    [Header("Stamina")] // STAMINA section ---------------------
+    public float playerStamina = 100f;                          // current stamina
+    public float maxStamina = 100f;                             // max stamina
+    public bool isExausted = false;                             // indicates if stamina bar is fully regenerated/player is able to use stamina or not
+    [SerializeField] private float staminaDrain = 0.5f;         // rate at which stamina drains
+    [SerializeField] private float staminaRegen = 0.5f;         // rate at which stamina recovers 
+
+    [Header("Movement")] // MOVEMENT section -------------------
+    public bool isWalking = false;                              // indicates if player is walking
+    public bool isRunning = false;                              // indicates if player is running
 
     // weapons
 
@@ -14,59 +25,52 @@ public class PlayerStats : MonoBehaviour
     // ammo
 
 
-    // bools
-    public bool isWalking;
-    public bool isRunning;
-    private bool usingStamina;
-
-
 
     // Start is called before the first frame update
     void Start()
     {
-        // initialize player stats
-        playerDamaged = false;
-        playerStamina = 100;
-        isWalking = true;
-        isRunning = false;
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        // if not max stamina and not using stamina
-        if (playerStamina < 100 && usingStamina == false)
+        if(isRunning == false)
         {
-            staminaRegen();
+            staminaRegenerate();
         }
     }
 
 
     // regens stamina
-    void staminaRegen()
+    void staminaRegenerate()
     {
-        playerStamina += 10; // increase stamina, subject to change, I want to increase it with a sigmoid-like function
-
-        // if stamina overflows over max
-        if (playerStamina > 100) 
+        // if player is not max stamina
+        if(playerStamina <= maxStamina - 0.00)
         {
-            playerStamina = 100; // reset to 100
+            playerStamina += staminaRegen * Time.deltaTime; // increase stamina
+            
+            if(playerStamina >= maxStamina)
+            {
+                isExausted = false;
+            }
         }
     }
 
     // public API function to deplete stamina, parameter is amount of stamina that will be depleted
-    public void useStamina(float stamina_lost)
+    public void useStamina()
     {
-        // if player has stamina left
-        if (playerStamina > 0)
+        if(isExausted == false) // if player is able to use stamina
         {
-            playerStamina -= stamina_lost; // decrease stamina
-        }
+            isRunning = true;
+            playerStamina -= staminaDrain * Time.deltaTime;
 
-        // if stamina goes under min
-        if (playerStamina < 0)
-        {
-            playerStamina = 0; // reset to 0
+            if(playerStamina <= 0)
+            {
+                isExausted = true;
+                isRunning = false;
+            }
         }
     }
 
