@@ -27,6 +27,7 @@ public class Hide : MonoBehaviour
     [SerializeField] Transform openPos;
 
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,10 +59,12 @@ public class Hide : MonoBehaviour
         {
             //Reset player movement
             player.GetComponent<InputsManager>().move = Vector2.zero;
+            player.GetComponent<InputsManager>().look = Vector2.zero;
 
             normalCam.SetActive(false);
             hidingCam.SetActive(true);
             player.SetActive(false);
+            player.GetComponent<PlayerController>().hiding = true;
 
             // If the hiding spot is a Wardrobe
             if(this.transform.parent.gameObject.name.Contains("(Hinge)")) //== "Hideable Wardrobe")
@@ -79,6 +82,7 @@ public class Hide : MonoBehaviour
             normalCam.SetActive(true);
             hidingCam.SetActive(false);
             player.SetActive(true);
+            player.GetComponent<PlayerController>().hiding = false;
 
             // If the hiding spot is a Wardrobe
             if(this.transform.parent.gameObject.name.Contains("(Hinge)"))
@@ -97,13 +101,19 @@ public class Hide : MonoBehaviour
     // When player enters trigger zone
     void OnTriggerEnter(Collider other)
     {
-        collisionEntered = true;
+        if (other.CompareTag("Player"))
+        {
+            collisionEntered = true;
+        }
     }
 
     // When player exits trigger zone
     private void OnTriggerExit(Collider other)
     {
-        collisionEntered = false;
+        if (other.CompareTag("Player"))
+        {
+            collisionEntered = false;
+        }
     }
 
     // Controls camera rotation while hiding

@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem.Layouts;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,8 +24,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject normalCam; // Virtual Normal Camera
     [SerializeField] GameObject aimCam; // Virtual Aim Camera
 
-
     Vector3 moveVector;
+
+    // For enemy detection
+    public bool hiding = false;
 
 
 
@@ -63,30 +66,34 @@ public class PlayerController : MonoBehaviour
         // For character rotation
         float targetRotation = 0;
         // If player does "Move" action
-        if (input.move != Vector2.zero)
+        if(input.move != Vector2.zero)
         {
-            if (input.sprint)
+            // If player sprints
+            if(input.sprint && !GetComponent<PlayerStats>().isExausted)
             {
+                animator.SetFloat("speed", 2); // Sprint animation
                 speed = sprintSpeed;
+                GetComponent<PlayerStats>().useStamina();
             }
+            // If player walks
             else
             {
+                animator.SetFloat("speed", 1); // Walk animation
                 speed = walkSpeed;
+                GetComponent<PlayerStats>().isRunning = false;
             }
             targetRotation = Quaternion.LookRotation(inputDirection).eulerAngles.y + mainCam.transform.rotation.eulerAngles.y;
             Quaternion rotation = Quaternion.Euler(0, targetRotation, 0);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 20 * Time.deltaTime);
-
-            // 2 For Sprint animation, 1 for Walk animation
-            animator.SetFloat("speed", input.sprint ? 2 : input.move.magnitude);
         }
         else
         {
             // 0 For Idle animation
             animator.SetFloat("speed", 0);
+            GetComponent<PlayerStats>().isRunning = false;
         }
-        Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
 
+        Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
 
         // Moves character towards a direction
         controller.Move(speed * Time.deltaTime * targetDirection);
