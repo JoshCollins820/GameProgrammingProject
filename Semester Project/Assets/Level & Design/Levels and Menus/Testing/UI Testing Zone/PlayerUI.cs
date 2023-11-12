@@ -63,10 +63,19 @@ public class PlayerUI : MonoBehaviour
     void StaminaBar()
     {
         // normalize player stamina from 0-100 to 0-1
-        normalized_stamina = (player.GetComponent<PlayerStats>().playerStamina) / 100;
+        normalized_stamina = (player.GetComponent<PlayerStats>().playerStamina) / (player.GetComponent<PlayerStats>().maxStamina);
         // set bar to player stamina
         //stamina_bar.GetComponent<Image>().fillAmount = normalized_stamina;
         stamina_bar.transform.GetChild(1).GetComponent<Image>().fillAmount = normalized_stamina;
+
+        if(player.GetComponent<PlayerStats>().isExausted == false) // if player has not used entire stamina bar
+        {
+            stamina_bar.transform.GetChild(1).GetComponent<Image>().color = new Color32(255, 255, 255, 255); // show white bar
+        }
+        else // if player has used entire stamina bar
+        {
+            stamina_bar.transform.GetChild(1).GetComponent<Image>().color = new Color32(188, 188, 188, 255); // show red bar
+        }
     }
 
     // changes blood screen so it is high opacity
