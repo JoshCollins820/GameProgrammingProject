@@ -36,9 +36,9 @@ public class PlayerStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isRunning == false)
+        if(isRunning == false) // if player isn't running
         {
-            staminaRegenerate();
+            staminaRegenerate(); // regen stamina
         }
     }
 
@@ -51,9 +51,9 @@ public class PlayerStats : MonoBehaviour
         {
             playerStamina += staminaRegen * Time.deltaTime; // increase stamina
             
-            if(playerStamina >= maxStamina)
+            if(playerStamina >= maxStamina) // once stamina is fully refilled
             {
-                isExausted = false;
+                isExausted = false; // no longer exausted, can not run
             }
         }
     }
@@ -63,13 +63,13 @@ public class PlayerStats : MonoBehaviour
     {
         if(isExausted == false) // if player is able to use stamina
         {
-            isRunning = true;
-            playerStamina -= staminaDrain * Time.deltaTime;
+            isRunning = true; // player is running
+            playerStamina -= staminaDrain * Time.deltaTime; // decrease stamina
 
-            if(playerStamina <= 0)
+            if(playerStamina <= 0) // if stamina runs out
             {
-                isExausted = true;
-                isRunning = false;
+                isExausted = true; // player is tired
+                isRunning = false; // player is not running anymore
             }
         }
     }
