@@ -23,7 +23,7 @@ public class PlayerUI : MonoBehaviour
     void Start()
     {
         // find objects
-        player = GameObject.Find("Player");
+        player = GameObject.Find("Dummy Player");
         stamina_bar = GameObject.Find("stamina");
         blood_screen = GameObject.Find("blood_screen");
         interact_e = GameObject.Find("interact_e");

@@ -38,7 +38,7 @@ public class LineOfSight : MonoBehaviour
         float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
         // if player is within line of sight
-        if (angleToTarget < viewAngle / 2 && distanceToTarget < viewRadius && target.GetComponent<PlayerController>().hiding == false)
+        if (angleToTarget < viewAngle / 2 && distanceToTarget < viewRadius)
         {
             // if there are no objects blocking line of sight to player
             if (!Physics.Raycast(transform.position, dirToTarget, distanceToTarget))
