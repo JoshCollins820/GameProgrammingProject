@@ -1032,7 +1032,7 @@ GameObject:
   - component: {fileID: 800987872297160151}
   - component: {fileID: 4151361243308606789}
   - component: {fileID: 3977176743855367081}
-  - component: {fileID: 162358046239470673}
+  - component: {fileID: -5643435798204280256}
   m_Layer: 0
   m_Name: PriestTest
   m_TagString: Untagged
@@ -1141,7 +1141,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &162358046239470673
+--- !u!114 &-5643435798204280256
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
