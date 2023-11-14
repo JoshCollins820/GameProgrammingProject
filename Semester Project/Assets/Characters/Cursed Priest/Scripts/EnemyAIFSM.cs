@@ -19,7 +19,7 @@ using Random = UnityEngine.Random;
 ///   - Transition to Patrol if patrol is completed and the player is not seen.
 /// 
 /// - Chase: Scream and chase the player.
-///   - Transition to Silent if line of sight is broken or a specified time has passed.
+///   - Transition to Silent if line of sight is broken for a specified time.
 /// 
 /// - Silent: Pause after chasing the player.
 ///   - Transition to Chase if the player is seen again for more than a specified time.
@@ -150,6 +150,7 @@ public class EnemyAIFSM : BaseFSM
                 yield return null;
             }
             i = (i + 1) % pointList.Length;
+            yield return new WaitForSeconds(2.0f);  // pause briefly at the destination
         }
     }
 
@@ -188,7 +189,7 @@ public class EnemyAIFSM : BaseFSM
 
         while (currentState == FSMState.RadiusPatrol)
         {
-            if (eyesight.IsInView() == true)
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
                 seenTime += Time.deltaTime;
             }
@@ -258,7 +259,7 @@ public class EnemyAIFSM : BaseFSM
     }
 
     // Chase State: Scream and chase the player.
-    //   - Transition to Silent if line of sight is broken or a specified time has passed.
+    //   - Transition to Silent if line of sight is broken for a specified time.
     private IEnumerator ChaseCoroutine()
     {
         float notSeenTime = 0.0f;

@@ -5,6 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem.Layouts;
 
+
 public class PlayerController : MonoBehaviour
 {
     public float walkSpeed = 2f; // Player movement speed;
@@ -23,8 +24,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject normalCam; // Virtual Normal Camera
     [SerializeField] GameObject aimCam; // Virtual Aim Camera
 
+    public bool hiding = false; // For enemy detection
 
-    Vector3 moveVector;
+    Vector3 moveVector; // For moving
 
 
 
@@ -56,48 +58,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Speed is temporarily 0 as the player is idle
-        float speed = 0;
-        // Prevents controls being restricted to 2D plane
-        Vector3 inputDirection = new Vector3(input.move.x, 0, input.move.y);
-        // For character rotation
-        float targetRotation = 0;
-        // If player does "Move" action
-        if (input.move != Vector2.zero)
-        {
-            if (input.sprint)
-            {
-                speed = sprintSpeed;
-            }
-            else
-            {
-                speed = walkSpeed;
-            }
-            targetRotation = Quaternion.LookRotation(inputDirection).eulerAngles.y + mainCam.transform.rotation.eulerAngles.y;
-            Quaternion rotation = Quaternion.Euler(0, targetRotation, 0);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 20 * Time.deltaTime);
-
-            // 2 For Sprint animation, 1 for Walk animation
-            animator.SetFloat("speed", input.sprint ? 2 : input.move.magnitude);
-        }
-        else
-        {
-            // 0 For Idle animation
-            animator.SetFloat("speed", 0);
-        }
-        Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
-
-
-        // Moves character towards a direction
-        controller.Move(speed * Time.deltaTime * targetDirection);
-
-        // Adds gravity to character
-        moveVector = Vector3.zero;
-        if(!controller.isGrounded)
-        {
-            moveVector += Physics.gravity;
-        }
-        controller.Move(moveVector * Time.deltaTime);
+        ApplyMovement();
+        ApplyGravity();
     }
 
     // Used for smoothness
@@ -130,6 +92,60 @@ public class PlayerController : MonoBehaviour
         cameraFollowTarget.rotation = rotation;
     }
 
+    // Controls player movement
+    void ApplyMovement()
+    {
+        // Speed is temporarily 0 as the player is idle
+        float speed = 0;
+        // Prevents controls being restricted to 2D plane
+        Vector3 inputDirection = new Vector3(input.move.x, 0, input.move.y);
+        // For character rotation
+        float targetRotation = 0;
+        // If player does "Move" action
+        if (input.move != Vector2.zero)
+        {
+            // If player sprints
+            if(input.sprint && !GetComponent<PlayerStats>().isExausted)
+            {
+                animator.SetFloat("speed", 2); // Sprint animation
+                speed = sprintSpeed; // Change speed to sprint speed
+                GetComponent<PlayerStats>().useStamina(); // Use stamina
+            }
+            // If player walks
+            else
+            {
+                animator.SetFloat("speed", 1); // Walk animation
+                speed = walkSpeed; // Change speed to walk speed
+                GetComponent<PlayerStats>().isRunning = false; // Let stamina controller know player is not running
+            }
+            targetRotation = Quaternion.LookRotation(inputDirection).eulerAngles.y + mainCam.transform.rotation.eulerAngles.y;
+            Quaternion rotation = Quaternion.Euler(0, targetRotation, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 20 * Time.deltaTime);
+        }
+        // If the player is standing still
+        else
+        {
+            // 0 For Idle animation
+            animator.SetFloat("speed", 0);
+            GetComponent<PlayerStats>().isRunning = false; // Let stamina controller know player is not running
+        }
+
+        // Move player
+        Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
+        controller.Move(speed * Time.deltaTime * targetDirection);
+    }
+
+    // Applies gravity to player
+    void ApplyGravity()
+    {
+        // Adds gravity to character
+        moveVector = Vector3.zero;
+        if(!controller.isGrounded)
+        {
+            moveVector += Physics.gravity;
+        }
+        controller.Move(moveVector * Time.deltaTime);
+    }
 
 
 }
