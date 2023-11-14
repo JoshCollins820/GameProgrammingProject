@@ -1,54 +1,58 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class LightFlicker : MonoBehaviour
 {
-    public Light flickeringLight;
+    public Light targetLight;           // The light to be turned on and off
+    public GameObject emissionObject;   // The GameObject with emission texture
 
-    public float minIntensity = 0.5f;
-    public float maxIntensity = 1.5f;
-    public float minFlickerSpeed = 0.1f;
-    public float maxFlickerSpeed = 1.0f;
+    public float minTimeOn = 0.25f;        // Minimum time the light is on or off (in seconds)
+    public float maxTimeOn = 60f;          // Maximum time the light is on or off (in seconds)
 
-    private float originalIntensity;
+    public float minTimeOff = 0.25f;        // Minimum time the light is on or off (in seconds)
+    public float maxTimeOff = 4f;          // Maximum time the light is on or off (in seconds)
 
     private void Start()
     {
-        if (flickeringLight == null)
-        {
-            flickeringLight = GetComponent<Light>();
-        }
-
-        if (flickeringLight != null)
-        {
-            originalIntensity = flickeringLight.intensity;
-            StartCoroutine(Flicker());
-        }
-        else
-        {
-            Debug.LogError("No Light component found on this GameObject.");
-        }
+        // Start the routine to control the light
+        StartCoroutine(RandomLightRoutine());
     }
 
-    private IEnumerator Flicker()
+    IEnumerator RandomLightRoutine()
     {
         while (true)
         {
-            float targetIntensity = Random.Range(minIntensity, maxIntensity);
-            float flickerSpeed = Random.Range(minFlickerSpeed, maxFlickerSpeed);
+            // Turn on the light
+            targetLight.enabled = true;
 
-            float startTime = Time.time;
-            float endTime = startTime + flickerSpeed;
-
-            while (Time.time < endTime)
+            // If the emissionObject is not null, turn on its emission texture
+            if (emissionObject != null)
             {
-                float t = (Time.time - startTime) / flickerSpeed;
-                flickeringLight.intensity = Mathf.Lerp(originalIntensity, targetIntensity, t);
-                yield return null;
+                Renderer renderer = emissionObject.GetComponent<Renderer>();
+                if (renderer != null)
+                {
+                    Material material = renderer.material;
+                    material.EnableKeyword("_EMISSION");
+                }
             }
 
-            yield return new WaitForSeconds(Random.Range(0.1f, 0.5f)); // Wait before the next flicker
+            yield return new WaitForSeconds(Random.Range(minTimeOn, maxTimeOn));
+
+            // Turn off the light
+            targetLight.enabled = false;
+
+            // If the emissionObject is not null, turn off its emission texture
+            if (emissionObject != null)
+            {
+                Renderer renderer = emissionObject.GetComponent<Renderer>();
+                if (renderer != null)
+                {
+                    Material material = renderer.material;
+                    material.DisableKeyword("_EMISSION");
+                }
+            }
+
+            yield return new WaitForSeconds(Random.Range(minTimeOff, maxTimeOff));
         }
     }
 }

@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem.Layouts;
+using Cinemachine;
 
 
 public class PlayerController : MonoBehaviour
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject mainCam; // For camera movement of main camera
     [SerializeField] GameObject normalCam; // Virtual Normal Camera
     [SerializeField] GameObject aimCam; // Virtual Aim Camera
+    [SerializeField] CinemachineVirtualCamera virtualCamera;
 
     public bool hiding = false; // For enemy detection
 
@@ -33,6 +35,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         // Lock mouse onto screen
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -53,6 +56,9 @@ public class PlayerController : MonoBehaviour
         // Get the "Aim VCamera" object
         aimCam = GameObject.Find("Aim VCamera");
         aimCam.SetActive(false);
+
+        virtualCamera = GameObject.Find("YourVirtualCameraGameObjectName").GetComponent<CinemachineVirtualCamera>();
+
     }
 
     // Update is called once per frame
@@ -78,6 +84,17 @@ public class PlayerController : MonoBehaviour
         {
             aimCam.SetActive(false);
             normalCam.SetActive(true);
+        }
+
+        // Check if the player is sprinting and adjust the noise level frequency
+        if (input.sprint && !GetComponent<PlayerStats>().isExausted)
+        {
+            virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 10f;
+        }
+        else
+        {
+            // Reset the noise level frequency when not sprinting
+            virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0.25f;
         }
     }
 
