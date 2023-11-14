@@ -162,10 +162,10 @@ public class EnemyAIFSM : BaseFSM
         yield return new WaitForSeconds(1.0f);
         float elapsedTime = 0.0f;
 
-        while (currentState == FSMState.Alert && elapsedTime < 4.0f)
+        while (currentState == FSMState.Alert && elapsedTime < 10.0f) //4 seconds default
         {
             // change state if sound is heard
-            if (earshot.IsInEarshot() == true)
+            if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
                 lastPos = GetComponent<Transform>().position;   // save enemy location
                 SetStateToRadiusPatrol();   // transition to radius patrol state
