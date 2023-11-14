@@ -20,9 +20,8 @@ public class EnemyEarshot : MonoBehaviour
     private void Update()
     {
         // If the player is within earshot and moving
-        if (inEarshot && player.GetComponent<InputsManager>().move != Vector2.zero)
+        if(inEarshot && player.GetComponent<InputsManager>().move != Vector2.zero)
         {
-            Debug.Log("You have been heard!");
             // Save the current position of player (where sound was last heard)
             lastHeard = player.GetComponent<Transform>().position;
         }

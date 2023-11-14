@@ -12,9 +12,9 @@ public class BasementPuzzle : MonoBehaviour
     GameObject StoneCyan;
     GameObject StoneGreen;
     GameObject StoneYellow;
-    Camera PuzzleCamera;
-    Camera PlayerCamera;
-    Camera SecretDoorCamera;
+    [SerializeField] GameObject PuzzleCamera;
+    [SerializeField] GameObject PlayerCamera;
+    [SerializeField] GameObject SecretDoorCamera;
     GameObject SecretDoor;
 
     public bool puzzleStarted;
@@ -34,6 +34,7 @@ public class BasementPuzzle : MonoBehaviour
     Vector3 closedPos;
     float lerpDuration;
     bool opening;
+    bool changeCamera = false;
 
 
     // Start is called before the first frame update
@@ -46,14 +47,14 @@ public class BasementPuzzle : MonoBehaviour
         StoneCyan = GameObject.Find("Stone_Cyan");
         StoneGreen = GameObject.Find("Stone_Green");
         StoneYellow = GameObject.Find("Stone_Yellow");
-        PuzzleCamera = GameObject.Find("Puzzle Camera").GetComponent<Camera>();
-        PlayerCamera = Player.GetComponentInChildren<Camera>();
-        SecretDoorCamera = GameObject.Find("SecretDoorCamera").GetComponent<Camera>();
+        PuzzleCamera = this.transform.gameObject.transform.Find("Puzzle Camera").gameObject;
+        PlayerCamera = GameObject.Find("Normal VCamera");
+        SecretDoorCamera = this.transform.gameObject.transform.Find("SecretDoorCamera").gameObject;
         SecretDoor = GameObject.Find("SecretDoor");
 
         closedPos = SecretDoor.transform.position;
         openPos = new Vector3(SecretDoor.transform.position.x, SecretDoor.transform.position.y, -29.248f);
-        lerpDuration = 1.5f;
+        lerpDuration = 4f;
         opening = false;
 
         puzzleStarted = false;
@@ -73,6 +74,18 @@ public class BasementPuzzle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.E) && interacting)
+        {
+            PlayerCamera.SetActive(false);
+            PuzzleCamera.SetActive(true);
+            Player.SetActive(false);
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            puzzleStarted = true;
+        }
+
         if (StoneRed.GetComponent<StoneOnClick>().activated && !redActive)
         {
             activeStones++;
@@ -113,36 +126,20 @@ public class BasementPuzzle : MonoBehaviour
         {
             checkOrder();
         }
-        if (puzzleSolved)
+        if(opening)
         {
-            opening = true;
             // puzzle solved open doors
             StartCoroutine(OpenDoor());
-            // wait until door opens before giving camera back to player
-            float waitTime = 0f ;
-            while (waitTime < 1.5f)
-            {
-                waitTime += Time.deltaTime;
-            }
-            SecretDoorCamera.gameObject.SetActive(false);
-            PlayerCamera.gameObject.SetActive(true);
-
         }
-
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.name == "Player")
+        if(changeCamera)
         {
-            // TODO: get player canvas and show "E to interact"
-            if (Input.GetKeyDown("Interact") && !interacting)
-            {
-                interacting = true;
-                PlayerCamera.gameObject.SetActive(false);
-                PuzzleCamera.gameObject.SetActive(true);
-                puzzleStarted = true;
-            }
+            Debug.Log("Give camera back.");
+            SecretDoorCamera.SetActive(false);
+            PlayerCamera.SetActive(true);
+            Player.SetActive(true);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            changeCamera = false;
         }
     }
 
@@ -152,17 +149,40 @@ public class BasementPuzzle : MonoBehaviour
         if (orderActive == "rpbcgy")
         {
             Debug.Log("Puzzle Solved");
-            puzzleSolved = true;
-            PuzzleCamera.gameObject.SetActive(false);
-            SecretDoorCamera.gameObject.SetActive(true);
+            opening = true;
+            PuzzleCamera.SetActive(false);
+            SecretDoorCamera.SetActive(true);
+            interacting = false;
+            activeStones = 0;
         }
         else
         {
             Debug.Log("Puzzle Failed");
             puzzleFailed = true;
             resetPuzzle();
-            PuzzleCamera.gameObject.SetActive(false);
-            PlayerCamera.gameObject.SetActive(true);
+            PuzzleCamera.SetActive(false);
+            PlayerCamera.SetActive(true);
+            Player.SetActive(true);
+            interacting = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.name == "Player")
+        {
+            Debug.Log("Puzzle zone entered.");
+            interacting = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.name == "Player")
+        {
+            interacting = false;
         }
     }
 
@@ -182,6 +202,7 @@ public class BasementPuzzle : MonoBehaviour
 
     IEnumerator OpenDoor()
     {
+        Debug.Log("Opening door!");
         float timeElapsed = 0;
         while (timeElapsed < lerpDuration)
         {
@@ -191,5 +212,6 @@ public class BasementPuzzle : MonoBehaviour
         }
         SecretDoor.transform.position = openPos;
         opening = false;
+        changeCamera = true;
     }
 }
