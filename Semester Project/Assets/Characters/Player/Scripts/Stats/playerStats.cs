@@ -18,6 +18,7 @@ public class PlayerStats : MonoBehaviour
     [Header("Movement")] // MOVEMENT section -------------------
     public bool isWalking = false;                              // indicates if player is walking
     public bool isRunning = false;                              // indicates if player is running
+    public bool canMove = false;                                // indicates if player is free to move
 
     // weapons
 
