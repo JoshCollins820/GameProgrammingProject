@@ -94,4 +94,14 @@ public class PlayerStats : MonoBehaviour
             playerDamaged = false; // player no longer damaged
         }
     }
+
+    public void enableMove()
+    {
+        canMove = true;
+    }
+
+    public void disableMove()
+    {
+        canMove = false;
+    }
 }
