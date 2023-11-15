@@ -18,7 +18,7 @@ public class BasementPuzzle : MonoBehaviour
     [SerializeField] GameObject SecretDoorCamera;
     GameObject SecretDoor;
     public AudioSource doorOpen;
-    public GameObject priestEnable;
+    public GameObject Priest;
 
     public bool puzzleStarted;
     public bool puzzleFailed;
@@ -43,7 +43,8 @@ public class BasementPuzzle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Player = GameObject.Find("Player");
+        Player = GameObject.Find("Magistrate");
+        Priest = GameObject.Find("PriestTest");
         StoneRed = GameObject.Find("Stone_Red");
         StonePurple = GameObject.Find("Stone_Purple");
         StoneBlue = GameObject.Find("Stone_Blue");
@@ -51,7 +52,7 @@ public class BasementPuzzle : MonoBehaviour
         StoneGreen = GameObject.Find("Stone_Green");
         StoneYellow = GameObject.Find("Stone_Yellow");
         PuzzleCamera = this.transform.gameObject.transform.Find("Puzzle Camera").gameObject;
-        PlayerCamera = GameObject.Find("Normal VCamera");
+        PlayerCamera = Player.transform.gameObject.transform.Find("Normal VCamera").gameObject;
         SecretDoorCamera = this.transform.gameObject.transform.Find("SecretDoorCamera").gameObject;
         SecretDoor = GameObject.Find("SecretDoor");
 
@@ -149,10 +150,10 @@ public class BasementPuzzle : MonoBehaviour
     // Check order when finished and give control back to player
     private void checkOrder()
     {
-        if (orderActive == "rpbcgy")
+        if (orderActive == "rygcbp")
         {
-            priestEnable.GetComponent<NavMeshAgent>().enabled = true;
-            priestEnable.GetComponent<Animator>().enabled = true;
+            Priest.GetComponent<NavMeshAgent>().enabled = true;
+            Priest.GetComponent<Animator>().enabled = true;
             Debug.Log("Puzzle Solved");
             opening = true;
             PuzzleCamera.SetActive(false);
@@ -167,8 +168,8 @@ public class BasementPuzzle : MonoBehaviour
             puzzleFailed = true;
             resetPuzzle();
             PuzzleCamera.SetActive(false);
-            PlayerCamera.SetActive(true);
             Player.SetActive(true);
+            PlayerCamera.SetActive(true);
             interacting = false;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

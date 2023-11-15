@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657886, g: 0.49641275, b: 0.5748176, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1317,7 +1317,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 892565242}
-  - {fileID: 1546844828}
   - {fileID: 221809771}
   - {fileID: 534597782}
   - {fileID: 400303764}
@@ -8402,7 +8401,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 0}
   SecretDoorCamera: {fileID: 0}
   doorOpen: {fileID: 0}
-  priestEnable: {fileID: 0}
+  Priest: {fileID: 0}
   puzzleStarted: 0
   puzzleFailed: 0
   puzzleSolved: 0
@@ -29787,6 +29786,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1546844828}
   - {fileID: 33350542}
   - {fileID: 81802704}
   - {fileID: 928882426}
@@ -35564,11 +35564,11 @@ Transform:
   m_GameObject: {fileID: 1546844821}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.13201584, z: -0, w: 0.99124765}
-  m_LocalPosition: {x: 4.952296, y: -3.5946002, z: -20.58322}
+  m_LocalPosition: {x: -1.2577044, y: -3.5946002, z: -16.94322}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 33350542}
+  m_Father: {fileID: 1259712699}
   m_LocalEulerAnglesHint: {x: 4.227, y: -179.292, z: 0.089}
 --- !u!81 &1546844829
 AudioListener:
