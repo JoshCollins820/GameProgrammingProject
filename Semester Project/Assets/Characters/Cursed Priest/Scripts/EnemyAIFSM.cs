@@ -158,8 +158,8 @@ public class EnemyAIFSM : BaseFSM
                 yield return null;
             }
             i = (i + 1) % pointList.Length;
-            yield return new WaitForSeconds(2.0f);  // pause briefly at the destination
             animations.PlayIdleAnimation(); // change animation to "idle"
+            yield return new WaitForSeconds(4.0f);  // pause briefly at the destination (2 default)
         }
     }
 
@@ -248,7 +248,7 @@ public class EnemyAIFSM : BaseFSM
         //          until transition to patrol state
 
         // turn around
-        yield return StartCoroutine(Rotate180());
+        /////////////////////////yield return StartCoroutine(Rotate180()); temp
 
         // return to last position
         agent.SetDestination(lastPos);
@@ -266,7 +266,17 @@ public class EnemyAIFSM : BaseFSM
     {
         // temp test values
         Vector3 position = earshot.GetLastHeardPos();
-        return new Vector3[] { position + new Vector3(0, 0, 3), position + new Vector3(0, 0, -3) };
+        //return new Vector3[] { position + new Vector3(0, 0, 3), position + new Vector3(0, 0, -3) };
+
+        Vector3[] points = { }; // will hold the radius patrol points to be returned
+        for(int i = 0; i < 4; i++)
+        {
+            int x = Random.Range(0, 5);
+            int z = Random.Range(0, 5);
+            points[i] = new Vector3(x, position.y, z);
+        }
+
+        return points;
     }
 
     // Chase State: Scream and chase the player.
