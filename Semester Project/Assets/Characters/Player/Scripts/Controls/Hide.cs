@@ -56,39 +56,12 @@ public class Hide : MonoBehaviour
         // Enter hiding spot
         if(collisionEntered && Input.GetKeyDown(KeyCode.E) && normalCam.activeInHierarchy)
         {
-            //Reset player movement
-            player.GetComponent<InputsManager>().move = Vector2.zero;
-            player.GetComponent<InputsManager>().look = Vector2.zero;
-
-            normalCam.SetActive(false);
-            hidingCam.SetActive(true);
-            player.SetActive(false);
-            player.GetComponent<PlayerController>().hiding = true;
-
-            // If the hiding spot is a Wardrobe
-            if (this.transform.parent.gameObject.name.Contains("(Hinge)")) //== "Hideable Wardrobe")
-            {
-                // Open the door immediately
-                door.SetPositionAndRotation(openPos.position, openPos.rotation);
-
-                // Open the door
-                GetComponent<HideWardrobe>().open = true;
-            }
+            EnterHidingSpot();
         }
         // Leave hiding spot
         else if(collisionEntered && Input.GetKeyDown(KeyCode.E) && !normalCam.activeInHierarchy)
         {
-            normalCam.SetActive(true);
-            hidingCam.SetActive(false);
-            player.SetActive(true);
-            player.GetComponent<PlayerController>().hiding = false;
-
-            // If the hiding spot is a Wardrobe
-            if (this.transform.parent.gameObject.name.Contains("(Hinge)"))
-            {
-                // Close the door
-                GetComponent<HideWardrobe>().open = false;
-            }
+            LeaveHidingSpot();
         }
         // While hiding, enable camera movement
         if(collisionEntered && !normalCam.activeInHierarchy)
@@ -126,6 +99,45 @@ public class Hide : MonoBehaviour
 
         // Rotate camera left-right
         hidingCam.transform.localRotation = Quaternion.AngleAxis(velocity.x, Vector3.up);
+    }
+    
+    // Enters a hiding spot
+    void EnterHidingSpot()
+    {
+        // Reset player movement
+        player.GetComponent<InputsManager>().move = Vector2.zero;
+        player.GetComponent<InputsManager>().look = Vector2.zero;
+
+        normalCam.SetActive(false);
+        hidingCam.SetActive(true);
+        player.SetActive(false);
+        player.GetComponent<PlayerController>().hiding = true;
+
+        // If the hiding spot is a Wardrobe
+        if (this.transform.parent.gameObject.name.Contains("(Hinge)")) //== "Hideable Wardrobe")
+        {
+            // Open the door immediately
+            door.SetPositionAndRotation(openPos.position, openPos.rotation);
+
+            // Open the door
+            GetComponent<HideWardrobe>().open = true;
+        }
+    }
+
+    // Leave hiding spot
+    void LeaveHidingSpot()
+    {
+        normalCam.SetActive(true);
+        hidingCam.SetActive(false);
+        player.SetActive(true);
+        player.GetComponent<PlayerController>().hiding = false;
+
+        // If the hiding spot is a Wardrobe
+        if (this.transform.parent.gameObject.name.Contains("(Hinge)"))
+        {
+            // Close the door
+            GetComponent<HideWardrobe>().open = false;
+        }
     }
 
 
