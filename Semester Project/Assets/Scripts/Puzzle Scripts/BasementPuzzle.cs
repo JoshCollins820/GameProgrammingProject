@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BasementPuzzle : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class BasementPuzzle : MonoBehaviour
     [SerializeField] GameObject PlayerCamera;
     [SerializeField] GameObject SecretDoorCamera;
     GameObject SecretDoor;
+    public AudioSource doorOpen;
+    public GameObject priestEnable;
 
     public bool puzzleStarted;
     public bool puzzleFailed;
@@ -148,12 +151,15 @@ public class BasementPuzzle : MonoBehaviour
     {
         if (orderActive == "rpbcgy")
         {
+            priestEnable.GetComponent<NavMeshAgent>().enabled = true;
+            priestEnable.GetComponent<Animator>().enabled = true;
             Debug.Log("Puzzle Solved");
             opening = true;
             PuzzleCamera.SetActive(false);
             SecretDoorCamera.SetActive(true);
             interacting = false;
             activeStones = 0;
+            doorOpen.Play();
         }
         else
         {
