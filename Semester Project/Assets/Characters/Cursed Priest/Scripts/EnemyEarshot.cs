@@ -3,11 +3,9 @@ using UnityEngine;
 public class EnemyEarshot : MonoBehaviour
 {
     public bool inEarshot = false;     // enemy can hear player
-    private Vector3 lastHeard;
-
     public bool IsInEarshot() {  return inEarshot; }
-    
-    public Vector3 GetLastHeardPos() { return new Vector3(-25f, 4.103967f, 20f); /*lastHeard;*/ }  // temp test values
+
+    private Vector3 lastHeard;
 
     private GameObject player; // For checking if player is moving
 
@@ -44,4 +42,11 @@ public class EnemyEarshot : MonoBehaviour
             inEarshot = false;
         }
     }
+
+    public Vector3 GetLastHeardPos()
+    {
+        return lastHeard;
+    }
+
+
 }

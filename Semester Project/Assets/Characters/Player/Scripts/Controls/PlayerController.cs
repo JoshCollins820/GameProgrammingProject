@@ -35,10 +35,12 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        // Lock mouse onto screen
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (GetComponent<PlayerStats>().gameStarted)
+        {
+            // Lock mouse onto screen
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
 
         // Get the InputsManager script
         input = GetComponent<InputsManager>();
@@ -65,7 +67,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GetComponent<PlayerStats>().canMove)
+        if (GetComponent<PlayerStats>().canMove)
         {
             ApplyMovement();
             ApplyGravity();
@@ -75,7 +77,7 @@ public class PlayerController : MonoBehaviour
     // Used for smoothness
     private void LateUpdate()
     {
-        if(GetComponent<PlayerStats>().canMove)
+        if (GetComponent<PlayerStats>().canMove)
         {
             // Apply camera movement
             CameraRotation();
@@ -110,8 +112,8 @@ public class PlayerController : MonoBehaviour
     // Controls camera rotation
     void CameraRotation()
     {
-        xRotation += input.look.y/5;
-        yRotation += input.look.x/5;
+        xRotation += input.look.y / 5;
+        yRotation += input.look.x / 5;
         xRotation = Mathf.Clamp(xRotation, -30, 35); // -30, 70
 
         Quaternion rotation = Quaternion.Euler(-xRotation, yRotation, 0);
@@ -131,7 +133,7 @@ public class PlayerController : MonoBehaviour
         if (input.move != Vector2.zero)
         {
             // If player sprints
-            if(input.sprint && !GetComponent<PlayerStats>().isExausted)
+            if (input.sprint && !GetComponent<PlayerStats>().isExausted)
             {
                 animator.SetFloat("speed", 2); // Sprint animation
                 speed = sprintSpeed; // Change speed to sprint speed
@@ -166,12 +168,16 @@ public class PlayerController : MonoBehaviour
     {
         // Adds gravity to character
         moveVector = Vector3.zero;
-        if(!controller.isGrounded)
+        if (!controller.isGrounded)
         {
             moveVector += Physics.gravity;
         }
         controller.Move(moveVector * Time.deltaTime);
     }
 
+    public void EnableGetUp(string name)
+    {
+        animator.SetBool("GameStart", true);
+    }
 
 }
