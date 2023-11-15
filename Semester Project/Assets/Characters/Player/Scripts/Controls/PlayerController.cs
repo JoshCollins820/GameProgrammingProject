@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
     private InputsManager input; // Reference to InputsManager for controls
     private CharacterController controller; // Reference to CharacterController of character
     private Animator animator; // Reference to Animator component
-    private bool canMove; // Will reference the "canMove" bool of the PlayerStats component
 
     private float xRotation; // x-axis Camera movement
     private float yRotation; // y-axis Camera movement
@@ -47,8 +46,6 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         // Get the Animator component
         animator = GetComponent<Animator>();
-        // Get the PlayerStats component
-        canMove = GetComponent<PlayerStats>().canMove;
 
 
         // Get the CameraFollowTarget object's transform
@@ -68,7 +65,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(canMove)
+        if(GetComponent<PlayerStats>().canMove)
         {
             ApplyMovement();
             ApplyGravity();
@@ -78,7 +75,7 @@ public class PlayerController : MonoBehaviour
     // Used for smoothness
     private void LateUpdate()
     {
-        if(canMove)
+        if(GetComponent<PlayerStats>().canMove)
         {
             // Apply camera movement
             CameraRotation();
