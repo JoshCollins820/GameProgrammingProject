@@ -21,6 +21,8 @@ public class PlayerStats : MonoBehaviour
     public bool canMove = false;                                // indicates if player is free to move
     public bool gameStarted = false;
 
+    public GameObject maincamera;
+
     // weapons
 
 
@@ -109,10 +111,25 @@ public class PlayerStats : MonoBehaviour
     public void enableGame()
     {
         gameStarted = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Invoke("EnableMainCamera", 8f);
+        Invoke("enableMove", 12f);
     }
 
     public void disableGame()
     {
         gameStarted = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    private void EnableMainCamera()
+    {
+        // Enable the mainCamera GameObject
+        if (maincamera != null)
+        {
+            maincamera.SetActive(true);
+        }
     }
 }
