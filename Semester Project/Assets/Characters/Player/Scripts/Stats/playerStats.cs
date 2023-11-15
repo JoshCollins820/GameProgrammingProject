@@ -105,4 +105,14 @@ public class PlayerStats : MonoBehaviour
     {
         canMove = false;
     }
+
+    public void enableGame()
+    {
+        gameStarted = true;
+    }
+
+    public void disableGame()
+    {
+        gameStarted = false;
+    }
 }
