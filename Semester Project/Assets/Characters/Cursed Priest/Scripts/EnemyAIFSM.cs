@@ -45,6 +45,7 @@ public class EnemyAIFSM : BaseFSM
 
     private EnemyEarshot earshot;
     private LineOfSight eyesight;
+    private AnimationHandler animations;
 
     private AudioSource screamAudio;
     private Vector3 lastPos;
@@ -61,6 +62,7 @@ public class EnemyAIFSM : BaseFSM
         agent = GetComponent<NavMeshAgent>();
         earshot = gameObject.GetComponentInChildren<EnemyEarshot>();
         eyesight = gameObject.GetComponentInChildren<LineOfSight>();
+        animations = gameObject.GetComponentInChildren<AnimationHandler>();
         screamAudio = GetComponent<AudioSource>();
         pointList = GameObject.FindGameObjectsWithTag("PatrolPoint");
         SetStateToPatrol();
@@ -128,7 +130,12 @@ public class EnemyAIFSM : BaseFSM
 
         while (currentState == FSMState.Patrol)
         {
-            if (earshot.IsInEarshot() == true)
+            if (eyesight.IsInView() == true)
+            {
+                StopCoroutine(PatrolMovementCoroutine());
+                SetStateToChase(); // transition to chase state
+            }
+            else if (earshot.IsInEarshot() == true)
             {
                 StopCoroutine(PatrolMovementCoroutine());
                 SetStateToAlert();  // transition to alert state
@@ -142,6 +149,7 @@ public class EnemyAIFSM : BaseFSM
     {
         while (currentState == FSMState.Patrol)
         {
+            animations.PlayWalkAnimation(); // change animation to "walk"
             GameObject destination = pointList[i];
             agent.SetDestination(destination.transform.position);
             yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
@@ -151,6 +159,7 @@ public class EnemyAIFSM : BaseFSM
             }
             i = (i + 1) % pointList.Length;
             yield return new WaitForSeconds(2.0f);  // pause briefly at the destination
+            animations.PlayIdleAnimation(); // change animation to "idle"
         }
     }
 
@@ -161,10 +170,11 @@ public class EnemyAIFSM : BaseFSM
     {
         yield return new WaitForSeconds(1.0f);
         float elapsedTime = 0.0f;
+        animations.PlayIdleAnimation(); // change animation to "idle"
 
-        while (currentState == FSMState.Alert && elapsedTime < 10.0f) //4 seconds default
+        while (currentState == FSMState.Alert && elapsedTime < 5f) //4 seconds default
         {
-            // change state if sound is heard
+            // change state if sound is heard from player movement
             if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
                 lastPos = GetComponent<Transform>().position;   // save enemy location
@@ -207,6 +217,7 @@ public class EnemyAIFSM : BaseFSM
     // handle radius patrol movement so transition checks happen alongside enemy movement
     private IEnumerator RadiusPatrolMovementCoroutine()
     {
+        animations.PlayWalkAnimation(); // change animation to "walk"
         // move to last heard position
         agent.SetDestination(earshot.GetLastHeardPos());
         yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
@@ -262,11 +273,13 @@ public class EnemyAIFSM : BaseFSM
     //   - Transition to Silent if line of sight is broken for a specified time.
     private IEnumerator ChaseCoroutine()
     {
+        animations.PlayRunAnimation(); // change animation to "run"
         float notSeenTime = 0.0f;
 
         while (currentState == FSMState.Chase)
         {
             agent.SetDestination(player.position);  // chase player
+                // something about changing the animation + speed
             
             // if player is not in view
             if (eyesight.IsInView() == false)
@@ -294,6 +307,7 @@ public class EnemyAIFSM : BaseFSM
     //   - Transition to Patrol if a specified time has passed and the player was not seen.
     private IEnumerator SilentCoroutine()
     {
+        animations.PlayIdleAnimation(); // change animation to "idle"
         yield return new WaitForSeconds(1.0f);
         float elapsedTime = 0.0f;
 

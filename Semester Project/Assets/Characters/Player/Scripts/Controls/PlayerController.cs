@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private InputsManager input; // Reference to InputsManager for controls
     private CharacterController controller; // Reference to CharacterController of character
     private Animator animator; // Reference to Animator component
+    private bool canMove; // Will reference the "canMove" bool of the PlayerStats component
 
     private float xRotation; // x-axis Camera movement
     private float yRotation; // y-axis Camera movement
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject mainCam; // For camera movement of main camera
     [SerializeField] GameObject normalCam; // Virtual Normal Camera
     [SerializeField] GameObject aimCam; // Virtual Aim Camera
-    [SerializeField] CinemachineVirtualCamera virtualCamera;
+    //[SerializeField] CinemachineVirtualCamera virtualCamera;
 
     public bool hiding = false; // For enemy detection
 
@@ -46,6 +47,9 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         // Get the Animator component
         animator = GetComponent<Animator>();
+        // Get the PlayerStats component
+        canMove = GetComponent<PlayerStats>().canMove;
+
 
         // Get the CameraFollowTarget object's transform
         cameraFollowTarget = GameObject.Find("Player/CameraFollowTarget").GetComponent<Transform>();
@@ -57,35 +61,42 @@ public class PlayerController : MonoBehaviour
         aimCam = GameObject.Find("Aim VCamera");
         aimCam.SetActive(false);
 
-        virtualCamera = GameObject.Find("YourVirtualCameraGameObjectName").GetComponent<CinemachineVirtualCamera>();
+        //virtualCamera = GameObject.Find("YourVirtualCameraGameObjectName").GetComponent<CinemachineVirtualCamera>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        ApplyMovement();
-        ApplyGravity();
+        if(canMove)
+        {
+            ApplyMovement();
+            ApplyGravity();
+        }
     }
 
     // Used for smoothness
     private void LateUpdate()
     {
-        // Apply camera movement
-        CameraRotation();
-        
-        // Switch between default camera/aim camera
-        if(input.aim && !aimCam.activeInHierarchy)
+        if(canMove)
         {
-            aimCam.SetActive(true);
-            normalCam.SetActive(false);
-        }
-        else if(!input.aim && !normalCam.activeInHierarchy)
-        {
-            aimCam.SetActive(false);
-            normalCam.SetActive(true);
+            // Apply camera movement
+            CameraRotation();
+
+            // Switch between default camera/aim camera
+            if (input.aim && !aimCam.activeInHierarchy)
+            {
+                aimCam.SetActive(true);
+                normalCam.SetActive(false);
+            }
+            else if (!input.aim && !normalCam.activeInHierarchy)
+            {
+                aimCam.SetActive(false);
+                normalCam.SetActive(true);
+            }
         }
 
+        /*
         // Check if the player is sprinting and adjust the noise level frequency
         if (input.sprint && !GetComponent<PlayerStats>().isExausted)
         {
@@ -96,6 +107,7 @@ public class PlayerController : MonoBehaviour
             // Reset the noise level frequency when not sprinting
             virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0.25f;
         }
+        */
     }
 
     // Controls camera rotation
