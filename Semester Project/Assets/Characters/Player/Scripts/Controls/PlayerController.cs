@@ -175,7 +175,7 @@ public class PlayerController : MonoBehaviour
         controller.Move(moveVector * Time.deltaTime);
     }
 
-    public void EnableGetUp(string name)
+    public void EnableGetUp()
     {
         animator.SetBool("GameStart", true);
     }
