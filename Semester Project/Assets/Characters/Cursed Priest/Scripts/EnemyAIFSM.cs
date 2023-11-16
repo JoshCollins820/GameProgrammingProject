@@ -395,14 +395,4 @@ public class EnemyAIFSM : BaseFSM
         }
     }
 
-
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Player"))
-        {
-            Application.Quit();
-        }
-    }
 }
