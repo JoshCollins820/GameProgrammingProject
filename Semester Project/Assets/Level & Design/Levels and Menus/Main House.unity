@@ -36577,6 +36577,10 @@ PrefabInstance:
       propertyPath: m_Acceleration
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4151361243308606789, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
+      propertyPath: currentState
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4429241851313915176, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
       propertyPath: m_Name
       value: PriestTest
@@ -36648,6 +36652,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 501430015}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4429241851313915176, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 1583430240}
     - targetCorrespondingSourceObject: {fileID: 4429241851313915176, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1583430234}
@@ -36831,6 +36838,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 501430016}
+--- !u!114 &1583430240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583430228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8eac7748e75793409b9b33eeb3a5775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  agent: {fileID: 0}
 --- !u!1001 &1584569793
 PrefabInstance:
   m_ObjectHideFlags: 0

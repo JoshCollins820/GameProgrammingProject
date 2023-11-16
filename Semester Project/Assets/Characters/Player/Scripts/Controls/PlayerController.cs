@@ -35,12 +35,13 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        /*
         if (GetComponent<PlayerStats>().gameStarted)
         {
             // Lock mouse onto screen
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        }
+        }*/
 
         // Get the InputsManager script
         input = GetComponent<InputsManager>();
@@ -178,6 +179,8 @@ public class PlayerController : MonoBehaviour
     public void EnableGetUp()
     {
         animator.SetBool("GameStart", true);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
 }

@@ -114,7 +114,7 @@ public class PlayerStats : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Invoke("EnableMainCamera", 8f);
-        Invoke("enableMove", 12f);
+        Invoke("enableMove", 8f);//default 12
     }
 
     public void disableGame()

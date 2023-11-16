@@ -19,6 +19,7 @@ public class BasementPuzzle : MonoBehaviour
     [SerializeField] GameObject PuzzleCamera;
     [SerializeField] GameObject PlayerCamera;
     [SerializeField] GameObject SecretDoorCamera;
+    CharacterController PlayerController;
     GameObject SecretDoor;
     public AudioSource doorOpen;
     public GameObject Priest;
@@ -50,6 +51,7 @@ public class BasementPuzzle : MonoBehaviour
         Player = Magistrate.transform.GetChild(0).gameObject;
         PlayerHair = Player.transform.GetChild(1).gameObject;
         PlayerMesh = Player.transform.GetChild(0).gameObject;
+        PlayerController = Player.GetComponent<CharacterController>();
         Priest = GameObject.Find("PriestTest");
         StoneRed = GameObject.Find("Stone_Red");
         StonePurple = GameObject.Find("Stone_Purple");
@@ -91,6 +93,7 @@ public class BasementPuzzle : MonoBehaviour
             PuzzleCamera.SetActive(true);
             PlayerMesh.SetActive(false);
             PlayerHair.SetActive(false);
+            PlayerController.enabled = false;
 
 
             Cursor.lockState = CursorLockMode.None;
@@ -151,6 +154,7 @@ public class BasementPuzzle : MonoBehaviour
             PlayerCamera.SetActive(true);
             PlayerHair.SetActive(true);
             PlayerMesh.SetActive(true);
+            PlayerController.enabled = true;
             Player.GetComponent<PlayerStats>().canMove = true;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -192,6 +196,7 @@ public class BasementPuzzle : MonoBehaviour
             PuzzleCamera.SetActive(false);
             PlayerMesh.SetActive(true);
             PlayerHair.SetActive(true);
+            PlayerController.enabled = true;
             PlayerCamera.SetActive(true);
             Player.GetComponent<PlayerStats>().canMove = true;
             interacting = false;

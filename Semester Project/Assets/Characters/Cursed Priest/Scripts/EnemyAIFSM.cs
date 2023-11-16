@@ -65,6 +65,8 @@ public class EnemyAIFSM : BaseFSM
         animations = gameObject.GetComponentInChildren<AnimationHandler>();
         screamAudio = GetComponent<AudioSource>();
         pointList = GameObject.FindGameObjectsWithTag("PatrolPoint");
+
+        SetStateToPatrol();
     }
 
     //------------------------------ Transitions ------------------------------
@@ -148,7 +150,7 @@ public class EnemyAIFSM : BaseFSM
     {
         while (currentState == FSMState.Patrol)
         {
-            //animaanimations.PlayWalkAnimation(); // change animation to "walk"
+            animations.PlayWalkAnimation(); // change animation to "walk"
             GameObject destination = pointList[i];
             agent.SetDestination(destination.transform.position);
             yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
@@ -157,7 +159,7 @@ public class EnemyAIFSM : BaseFSM
                 yield return null;
             }
             i = (i + 1) % pointList.Length;
-            //animations.PlayIdleAnimation(); // change animation to "idle"
+            animations.PlayIdleAnimation(); // change animation to "idle"
             yield return new WaitForSeconds(4.0f);  // pause briefly at the destination (2 default)
         }
     }
@@ -167,7 +169,7 @@ public class EnemyAIFSM : BaseFSM
     //   - Transition to Patrol if an amount of time has passed and no sound was heard.
     private IEnumerator AlertCoroutine()
     {
-        //animations.PlayIdleAnimation(); // change animation to "idle"
+        animations.PlayIdleAnimation(); // change animation to "idle"
         yield return new WaitForSeconds(1.0f);
         float elapsedTime = 0.0f;
 
@@ -216,7 +218,7 @@ public class EnemyAIFSM : BaseFSM
     // handle radius patrol movement so transition checks happen alongside enemy movement
     private IEnumerator RadiusPatrolMovementCoroutine()
     {
-        //animations.PlayWalkAnimation(); // change animation to "walk"
+        animations.PlayWalkAnimation(); // change animation to "walk"
         // move to last heard position
         agent.SetDestination(earshot.GetLastHeardPos());
         yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
@@ -263,16 +265,15 @@ public class EnemyAIFSM : BaseFSM
     // TODO calculate radius patrol destination points
     private Vector3[] FindRPatrolDest()
     {
-        // temp test values
         Vector3 position = earshot.GetLastHeardPos();
-        //return new Vector3[] { position + new Vector3(0, 0, 3), position + new Vector3(0, 0, -3) };
 
-        Vector3[] points = { }; // will hold the radius patrol points to be returned
+        Vector3[] points = new Vector3[4]; // will hold the radius patrol points to be returned
         for(int i = 0; i < 4; i++)
         {
-            int x = Random.Range(0, 5);
-            int z = Random.Range(0, 5);
-            points[i] = new Vector3(x, position.y, z);
+            int x = Random.Range(-7, 7);
+            int z = Random.Range(-7, 7);
+            points[i] = new Vector3(position.x + x, position.y, position.z + z);
+            Debug.Log("x = " + x + "   and   y = " + z);
         }
 
         return points;
@@ -282,13 +283,12 @@ public class EnemyAIFSM : BaseFSM
     //   - Transition to Silent if line of sight is broken for a specified time.
     private IEnumerator ChaseCoroutine()
     {
-        //animations.PlayRunAnimation(); // change animation to "run"
+        animations.PlayRunAnimation(); // change animation to "run"
         float notSeenTime = 0.0f;
 
         while (currentState == FSMState.Chase)
         {
             agent.SetDestination(player.position);  // chase player
-                // something about changing the animation + speed
             
             // if player is not in view
             if (eyesight.IsInView() == false)
@@ -316,7 +316,7 @@ public class EnemyAIFSM : BaseFSM
     //   - Transition to Patrol if a specified time has passed and the player was not seen.
     private IEnumerator SilentCoroutine()
     {
-        //animations.PlayIdleAnimation(); // change animation to "idle"
+        animations.PlayIdleAnimation(); // change animation to "idle"
         yield return new WaitForSeconds(1.0f);
         float elapsedTime = 0.0f;
 

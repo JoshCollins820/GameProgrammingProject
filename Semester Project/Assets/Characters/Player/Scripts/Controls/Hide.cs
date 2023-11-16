@@ -33,7 +33,7 @@ public class Hide : MonoBehaviour
         // Get the player so we can grab the InputsManager script
         player = GameObject.Find("Magistrate");
         // Get the InputsManager script
-        input = player.GetComponent<InputsManager>();
+        //input = player.GetComponent<InputsManager>();
         // Get the "Normal VCamera" object
         normalCam = GameObject.Find("Normal VCamera");
         // Get the "Hiding VCamera" object OF the hiding spot

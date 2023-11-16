@@ -7,7 +7,6 @@ public class AnimationHandler : MonoBehaviour
 {
     public Animator animator;
     public NavMeshAgent agent;
-    public float moveSpeed;
 
 
     // Start is called before the first frame update
@@ -34,7 +33,7 @@ public class AnimationHandler : MonoBehaviour
     public void PlayRunAnimation()
     {
         animator.SetFloat("speed", 2);
-        agent.speed = 5.25f;
+        agent.speed = 4f;
     }
 
     public void PlayAttackAnimation()
