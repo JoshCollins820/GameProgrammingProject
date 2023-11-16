@@ -4464,7 +4464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3977176743855367081, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
       propertyPath: m_Speed
-      value: 1.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3977176743855367081, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
       propertyPath: m_BaseOffset
@@ -4595,8 +4595,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8eac7748e75793409b9b33eeb3a5775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  agent: {fileID: 0}
+  animator: {fileID: 1338185679}
+  agent: {fileID: 1338185676}
+--- !u!195 &1338185676 stripped
+NavMeshAgent:
+  m_CorrespondingSourceObject: {fileID: 3977176743855367081, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
+  m_PrefabInstance: {fileID: 1338185653}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1338185679 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 37183500112280143, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
+  m_PrefabInstance: {fileID: 1338185653}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1367498686
 GameObject:
   m_ObjectHideFlags: 0

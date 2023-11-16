@@ -38,7 +38,7 @@ public class AnimationHandler : MonoBehaviour
 
     public void PlayAttackAnimation()
     {
-
+        animator.SetBool("IsAttack", true);
     }
 
     public void PlayGrabAnimation()
