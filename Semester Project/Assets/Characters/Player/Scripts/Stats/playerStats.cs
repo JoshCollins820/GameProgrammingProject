@@ -103,6 +103,7 @@ public class PlayerStats : MonoBehaviour
     public void enableMove()
     {
         canMove = true;
+        theRealMainCamera.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0.4f;
     }
 
     public void disableMove()
@@ -115,9 +116,8 @@ public class PlayerStats : MonoBehaviour
         gameStarted = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        theRealMainCamera.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0.4f;
         Invoke("EnableMainCamera", 8f);
-        Invoke("enableMove", 8f);//default 12
+        Invoke("enableMove", 12f);//default 12
     }
 
     public void disableGame()
