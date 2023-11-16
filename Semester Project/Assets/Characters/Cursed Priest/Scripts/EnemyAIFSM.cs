@@ -402,7 +402,7 @@ public class EnemyAIFSM : BaseFSM
     {
         if(other.CompareTag("Player"))
         {
-            Debug.Log("YOU ARE DEAD!");
+            Application.Quit();
         }
     }
 }
