@@ -206,7 +206,7 @@ public class EnemyAIFSM : BaseFSM
                 seenTime += Time.deltaTime;
             }
             // transition to chase state if player is seen for longer than 2s
-            if (seenTime >= 1f) // default 2
+            if (seenTime >= 0.5f) // default 2
             {
                 StopCoroutine(RadiusPatrolMovementCoroutine());
                 //screamAudio.Play();
@@ -255,7 +255,7 @@ public class EnemyAIFSM : BaseFSM
         //          until transition to patrol state
 
         // turn around
-        /////////////////////////yield return StartCoroutine(Rotate180()); temp
+        //yield return StartCoroutine(Rotate180()); //temp
 
         // return to last position before noise was heard
         agent.SetDestination(lastPos);
@@ -336,7 +336,7 @@ public class EnemyAIFSM : BaseFSM
         yield return new WaitForSeconds(1.0f);
         float elapsedTime = 0.0f;
 
-        while (currentState == FSMState.Silent && elapsedTime < 3.0f)
+        while (currentState == FSMState.Silent && elapsedTime < 2.0f)//default 3
         {
             if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
@@ -392,6 +392,17 @@ public class EnemyAIFSM : BaseFSM
             {
                 yield return null;
             }
+        }
+    }
+
+
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Player"))
+        {
+            Debug.Log("YOU ARE DEAD!");
         }
     }
 }
