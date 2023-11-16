@@ -153,7 +153,7 @@ public class EnemyAIFSM : BaseFSM
             animations.PlayWalkAnimation(); // change animation to "walk"
             GameObject destination = pointList[i];
             agent.SetDestination(destination.transform.position);
-            yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
+            //yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
             while (agent.pathPending || agent.remainingDistance > 0.1f)
             {
                 yield return null;
@@ -205,7 +205,7 @@ public class EnemyAIFSM : BaseFSM
                 seenTime += Time.deltaTime;
             }
             // transition to chase state if player is seen for longer than 2s
-            if (seenTime >= 2.0f)
+            if (seenTime >= 1f) // default 2
             {
                 StopCoroutine(RadiusPatrolMovementCoroutine());
                 //screamAudio.Play();
@@ -218,14 +218,15 @@ public class EnemyAIFSM : BaseFSM
     // handle radius patrol movement so transition checks happen alongside enemy movement
     private IEnumerator RadiusPatrolMovementCoroutine()
     {
-        animations.PlayWalkAnimation(); // change animation to "walk"
         // move to last heard position
         agent.SetDestination(earshot.GetLastHeardPos());
-        yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
+        animations.PlayWalkAnimation(); // change animation to "walk"
+        //yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
         while (agent.pathPending || agent.remainingDistance > 0.1f) 
         {
             yield return null; 
         }
+        yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
 
         Vector3[] patrolPoints = FindRPatrolDest();
 
@@ -233,17 +234,21 @@ public class EnemyAIFSM : BaseFSM
         foreach (Vector3 destination in patrolPoints)
         {
             agent.SetDestination(destination);
-            yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
+            animations.PlayWalkAnimation(); // change animation to "walk"
+            Debug.Log("Moving to: " + destination);
+            yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval)); // wait a random amount of time at the point
             while (agent.pathPending || agent.remainingDistance > 0.1f)
             {
                 yield return null;
             }
+            animations.PlayIdleAnimation(); // change animation to "idle"
+            yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval)); // wait a random amount of time at the point
         }
 
         // if radius patrol is complete and player was not seen
 
         // stop radius patrol coroutine
-        StopCoroutine(RadiusPatrolCoroutine());
+        //StopCoroutine(RadiusPatrolCoroutine());
 
         // TODO --> blind spot - enemy is neither listening nor looking for player from here
         //          until transition to patrol state
@@ -251,12 +256,15 @@ public class EnemyAIFSM : BaseFSM
         // turn around
         /////////////////////////yield return StartCoroutine(Rotate180()); temp
 
-        // return to last position
+        // return to last position before noise was heard
         agent.SetDestination(lastPos);
+        animations.PlayWalkAnimation(); // change animation to "walk"
         while (agent.pathPending || agent.remainingDistance > 0.1f)
         {
             yield return null;
         }
+        animations.PlayIdleAnimation(); // change animation to "idle"
+        yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval)); // wait a random amount of time at the point
 
         // transition to patrol state
         SetStateToPatrol();
@@ -267,13 +275,20 @@ public class EnemyAIFSM : BaseFSM
     {
         Vector3 position = earshot.GetLastHeardPos();
 
-        Vector3[] points = new Vector3[4]; // will hold the radius patrol points to be returned
-        for(int i = 0; i < 4; i++)
+        int numOfPoints = 3; // number of points the enemy will patrol in that location
+        Vector3[] points = new Vector3[numOfPoints]; // will hold the radius patrol points to be returned
+        for(int i = 0; i < numOfPoints; i++)
         {
-            int x = Random.Range(-7, 7);
-            int z = Random.Range(-7, 7);
-            points[i] = new Vector3(position.x + x, position.y, position.z + z);
-            Debug.Log("x = " + x + "   and   y = " + z);
+            float x = Random.Range(-4, 4);
+            float z = Random.Range(-4, 4);
+            Vector3 point = new Vector3(position.x + x, position.y, position.z + z);
+            points[i] = point;
+        }
+
+        // debugging
+        for (int i = 0; i < numOfPoints; i++)
+        {
+            Debug.Log(points[i]);
         }
 
         return points;

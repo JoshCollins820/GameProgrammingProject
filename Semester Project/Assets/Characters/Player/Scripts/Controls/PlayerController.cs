@@ -84,16 +84,16 @@ public class PlayerController : MonoBehaviour
             CameraRotation();
 
             // Switch between default camera/aim camera
-            //if (input.aim && !aimCam.activeInHierarchy)
-            //{
-            //    aimCam.SetActive(true);
-            //    normalCam.SetActive(false);
-            //}
-            //else if (!input.aim && !normalCam.activeInHierarchy)
-            //{
-            //    aimCam.SetActive(false);
-            //    normalCam.SetActive(true);
-            //}
+            if (input.aim && !aimCam.activeInHierarchy)
+            {
+                aimCam.SetActive(true);
+                normalCam.SetActive(false);
+            }
+            else if (!input.aim && !normalCam.activeInHierarchy)
+            {
+                aimCam.SetActive(false);
+                normalCam.SetActive(true);
+            }
         }
 
         /*
