@@ -33,7 +33,7 @@ public class AnimationHandler : MonoBehaviour
     public void PlayRunAnimation()
     {
         animator.SetFloat("speed", 2);
-        agent.speed = 4f;//4
+        agent.speed = 3.25f;//4
     }
 
     public void PlayAttackAnimation()
