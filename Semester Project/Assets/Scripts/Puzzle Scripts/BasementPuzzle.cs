@@ -152,8 +152,9 @@ public class BasementPuzzle : MonoBehaviour
     {
         if (orderActive == "rygcbp")
         {
-            Priest.GetComponent<NavMeshAgent>().enabled = true;
-            Priest.GetComponent<Animator>().enabled = true;
+            //Priest.GetComponent<NavMeshAgent>().enabled = true;
+            //Priest.GetComponent<Animator>().enabled = true;
+            Priest.GetComponent<EnemyAIFSM>().SetStateToPatrol();
             Debug.Log("Puzzle Solved");
             opening = true;
             PuzzleCamera.SetActive(false);
