@@ -193,7 +193,7 @@ public class BasementPuzzle : MonoBehaviour
             interacting = false;
             activeStones = 0;
             Invoke("delayDoor", 1f);
-            Invoke("delayPriest", 2f);
+            Invoke("delayPriest", 4f);
         }
         else
         {

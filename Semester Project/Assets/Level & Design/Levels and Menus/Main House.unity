@@ -21636,7 +21636,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Play
+  m_Text: 
 --- !u!222 &889490728
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -21777,6 +21777,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerDamaged: 0
+  isRecovering: 0
+  recoverTime: 10
   playerStamina: 100
   maxStamina: 100
   isExausted: 0

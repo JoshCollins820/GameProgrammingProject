@@ -81,6 +81,7 @@ public class Hide : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             collisionEntered = true;
+            Player.GetComponent<PlayerUI>().DisplayInteractUI("Hide");
         }
     }
 
@@ -90,6 +91,7 @@ public class Hide : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             collisionEntered = false;
+            Player.GetComponent<PlayerUI>().DisableInteractUI();
         }
     }
 
@@ -134,6 +136,8 @@ public class Hide : MonoBehaviour
             // Open the door
             GetComponent<HideWardrobe>().open = true;
         }
+        Player.GetComponent<PlayerUI>().DisableHintUI(); // hide hint ui
+        Player.GetComponent<PlayerUI>().DisplayInteractUI("Exit"); // display exit text
     }
 
     // Leave hiding spot
@@ -156,6 +160,7 @@ public class Hide : MonoBehaviour
             // Close the door
             GetComponent<HideWardrobe>().open = false;
         }
+        Player.GetComponent<PlayerUI>().DisplayInteractUI("Hide"); // display hide text
     }
 
 
