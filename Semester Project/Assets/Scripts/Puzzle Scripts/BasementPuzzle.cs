@@ -6,7 +6,10 @@ using UnityEngine.AI;
 
 public class BasementPuzzle : MonoBehaviour
 {
+    GameObject Magistrate;
     GameObject Player;
+    GameObject PlayerMesh;
+    GameObject PlayerHair;
     GameObject StoneRed;
     GameObject StonePurple;
     GameObject StoneBlue;
@@ -43,7 +46,10 @@ public class BasementPuzzle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Player = GameObject.Find("Magistrate");
+        Magistrate = GameObject.Find("Magistrate");
+        Player = Magistrate.transform.GetChild(0).gameObject;
+        PlayerHair = Player.transform.GetChild(1).gameObject;
+        PlayerMesh = Player.transform.GetChild(0).gameObject;
         Priest = GameObject.Find("PriestTest");
         StoneRed = GameObject.Find("Stone_Red");
         StonePurple = GameObject.Find("Stone_Purple");
@@ -52,7 +58,7 @@ public class BasementPuzzle : MonoBehaviour
         StoneGreen = GameObject.Find("Stone_Green");
         StoneYellow = GameObject.Find("Stone_Yellow");
         PuzzleCamera = this.transform.gameObject.transform.Find("Puzzle Camera").gameObject;
-        PlayerCamera = Player.transform.gameObject.transform.Find("Normal VCamera").gameObject;
+        PlayerCamera = Magistrate.transform.gameObject.transform.Find("Normal VCamera").gameObject;
         SecretDoorCamera = this.transform.gameObject.transform.Find("SecretDoorCamera").gameObject;
         SecretDoor = GameObject.Find("SecretDoor");
 
@@ -80,9 +86,12 @@ public class BasementPuzzle : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && interacting)
         {
+            Player.GetComponent<PlayerStats>().canMove = false;
             PlayerCamera.SetActive(false);
             PuzzleCamera.SetActive(true);
-            Player.SetActive(false);
+            PlayerMesh.SetActive(false);
+            PlayerHair.SetActive(false);
+
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -140,7 +149,9 @@ public class BasementPuzzle : MonoBehaviour
             Debug.Log("Give camera back.");
             SecretDoorCamera.SetActive(false);
             PlayerCamera.SetActive(true);
-            Player.SetActive(true);
+            PlayerHair.SetActive(true);
+            PlayerMesh.SetActive(true);
+            Player.GetComponent<PlayerStats>().canMove = true;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             changeCamera = false;
@@ -179,8 +190,10 @@ public class BasementPuzzle : MonoBehaviour
             puzzleFailed = true;
             resetPuzzle();
             PuzzleCamera.SetActive(false);
-            Player.SetActive(true);
+            PlayerMesh.SetActive(true);
+            PlayerHair.SetActive(true);
             PlayerCamera.SetActive(true);
+            Player.GetComponent<PlayerStats>().canMove = true;
             interacting = false;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
