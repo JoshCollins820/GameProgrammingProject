@@ -65,7 +65,6 @@ public class EnemyAIFSM : BaseFSM
         animations = gameObject.GetComponentInChildren<AnimationHandler>();
         screamAudio = GetComponent<AudioSource>();
         pointList = GameObject.FindGameObjectsWithTag("PatrolPoint");
-        SetStateToPatrol();
     }
 
     //------------------------------ Transitions ------------------------------
@@ -149,7 +148,7 @@ public class EnemyAIFSM : BaseFSM
     {
         while (currentState == FSMState.Patrol)
         {
-            animations.PlayWalkAnimation(); // change animation to "walk"
+            //animaanimations.PlayWalkAnimation(); // change animation to "walk"
             GameObject destination = pointList[i];
             agent.SetDestination(destination.transform.position);
             yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
@@ -158,7 +157,7 @@ public class EnemyAIFSM : BaseFSM
                 yield return null;
             }
             i = (i + 1) % pointList.Length;
-            animations.PlayIdleAnimation(); // change animation to "idle"
+            //animations.PlayIdleAnimation(); // change animation to "idle"
             yield return new WaitForSeconds(4.0f);  // pause briefly at the destination (2 default)
         }
     }
@@ -168,9 +167,9 @@ public class EnemyAIFSM : BaseFSM
     //   - Transition to Patrol if an amount of time has passed and no sound was heard.
     private IEnumerator AlertCoroutine()
     {
+        //animations.PlayIdleAnimation(); // change animation to "idle"
         yield return new WaitForSeconds(1.0f);
         float elapsedTime = 0.0f;
-        animations.PlayIdleAnimation(); // change animation to "idle"
 
         while (currentState == FSMState.Alert && elapsedTime < 5f) //4 seconds default
         {
@@ -217,7 +216,7 @@ public class EnemyAIFSM : BaseFSM
     // handle radius patrol movement so transition checks happen alongside enemy movement
     private IEnumerator RadiusPatrolMovementCoroutine()
     {
-        animations.PlayWalkAnimation(); // change animation to "walk"
+        //animations.PlayWalkAnimation(); // change animation to "walk"
         // move to last heard position
         agent.SetDestination(earshot.GetLastHeardPos());
         yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
@@ -283,7 +282,7 @@ public class EnemyAIFSM : BaseFSM
     //   - Transition to Silent if line of sight is broken for a specified time.
     private IEnumerator ChaseCoroutine()
     {
-        animations.PlayRunAnimation(); // change animation to "run"
+        //animations.PlayRunAnimation(); // change animation to "run"
         float notSeenTime = 0.0f;
 
         while (currentState == FSMState.Chase)
@@ -317,7 +316,7 @@ public class EnemyAIFSM : BaseFSM
     //   - Transition to Patrol if a specified time has passed and the player was not seen.
     private IEnumerator SilentCoroutine()
     {
-        animations.PlayIdleAnimation(); // change animation to "idle"
+        //animations.PlayIdleAnimation(); // change animation to "idle"
         yield return new WaitForSeconds(1.0f);
         float elapsedTime = 0.0f;
 
