@@ -66,7 +66,6 @@ public class EnemyAIFSM : BaseFSM
         screamAudio = GetComponent<AudioSource>();
         pointList = GameObject.FindGameObjectsWithTag("PatrolPoint");
 
-        SetStateToPatrol();
     }
 
     //------------------------------ Transitions ------------------------------
@@ -349,7 +348,7 @@ public class EnemyAIFSM : BaseFSM
         }
 
         // if time elapses and player is no longer seen, transition to patrol state
-        SetStateToPatrol();
+        SetStateToSilent();
     }
 
     //------------------------------ Helper ------------------------------

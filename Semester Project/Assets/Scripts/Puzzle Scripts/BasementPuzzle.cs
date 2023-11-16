@@ -52,7 +52,7 @@ public class BasementPuzzle : MonoBehaviour
         PlayerHair = Player.transform.GetChild(1).gameObject;
         PlayerMesh = Player.transform.GetChild(0).gameObject;
         PlayerController = Player.GetComponent<CharacterController>();
-        Priest = GameObject.Find("PriestTest");
+        Priest = GameObject.Find("Priest");
         StoneRed = GameObject.Find("Stone_Red");
         StonePurple = GameObject.Find("Stone_Purple");
         StoneBlue = GameObject.Find("Stone_Blue");
@@ -63,6 +63,7 @@ public class BasementPuzzle : MonoBehaviour
         PlayerCamera = Magistrate.transform.gameObject.transform.Find("Normal VCamera").gameObject;
         SecretDoorCamera = this.transform.gameObject.transform.Find("SecretDoorCamera").gameObject;
         SecretDoor = GameObject.Find("SecretDoor");
+        doorOpen = SecretDoor.transform.GetChild(1).gameObject.GetComponent<AudioSource>();
 
         closedPos = SecretDoor.transform.position;
         openPos = new Vector3(SecretDoor.transform.position.x, SecretDoor.transform.position.y, -29.248f);
@@ -88,6 +89,7 @@ public class BasementPuzzle : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && interacting)
         {
+            Player.GetComponent<PlayerUI>().DisableInteractUI();
             Player.GetComponent<PlayerStats>().canMove = false;
             PlayerCamera.SetActive(false);
             PuzzleCamera.SetActive(true);
@@ -154,7 +156,11 @@ public class BasementPuzzle : MonoBehaviour
             PlayerCamera.SetActive(true);
             PlayerHair.SetActive(true);
             PlayerMesh.SetActive(true);
+
             PlayerController.enabled = true;
+
+            Player.GetComponent<PlayerUI>().DisplayHintUI("THE PRIEST! I must hide under the bed before he sees me!");
+
             Player.GetComponent<PlayerStats>().canMove = true;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -185,8 +191,8 @@ public class BasementPuzzle : MonoBehaviour
             SecretDoorCamera.SetActive(true);
             interacting = false;
             activeStones = 0;
-            Invoke("delayDoor", 6f);
-            Invoke("delayPriest", 8f);
+            Invoke("delayDoor", 1f);
+            Priest.GetComponent<EnemyAIFSM>().SetStateToPatrol();
         }
         else
         {
@@ -209,6 +215,7 @@ public class BasementPuzzle : MonoBehaviour
     {
         if (other.name == "Player")
         {
+            Player.GetComponent<PlayerUI>().DisplayInteractUI("Touch Stones");
             Debug.Log("Puzzle zone entered.");
             interacting = true;
         }
@@ -219,6 +226,8 @@ public class BasementPuzzle : MonoBehaviour
         if (other.name == "Player")
         {
             interacting = false;
+            Player.GetComponent<PlayerUI>().DisableInteractUI();
+            Player.GetComponent<PlayerUI>().DisableHintUI();
         }
     }
 
@@ -232,12 +241,12 @@ public class BasementPuzzle : MonoBehaviour
         cyanActive = false;
         greenActive = false;
         yellowActive = false;
-        StoneYellow.GetComponent<StoneOnClick>().reset();
-        StoneRed.GetComponent<StoneOnClick>().reset();
-        StoneBlue.GetComponent<StoneOnClick>().reset();
-        StoneCyan.GetComponent<StoneOnClick>().reset();
-        StoneGreen.GetComponent<StoneOnClick>().reset();
-        StonePurple.GetComponent<StoneOnClick>().reset();
+        StoneYellow.GetComponent<StoneOnClick>().resetStone();
+        StoneRed.GetComponent<StoneOnClick>().resetStone();
+        StoneBlue.GetComponent<StoneOnClick>().resetStone();
+        StoneCyan.GetComponent<StoneOnClick>().resetStone();
+        StoneGreen.GetComponent<StoneOnClick>().resetStone();
+        StonePurple.GetComponent<StoneOnClick>().resetStone();
         activeStones = 0;
         orderActive = "";
 

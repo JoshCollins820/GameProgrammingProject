@@ -11,6 +11,7 @@ public class PlayerUI : MonoBehaviour
     public GameObject stamina_bar; // stamina ui element
     public GameObject blood_screen; // blood screen ui element
     public GameObject interact_e; // interact E ui element
+    public GameObject hint; // hint from clue that was picked up
 
 
     // script local variables
@@ -18,6 +19,7 @@ public class PlayerUI : MonoBehaviour
     private bool blood_cycle_on; // true if the blood screen currently on/cycle is running
     private float blood_cycle_speed; // speed of blood cycle/pulse
     private bool show_interact_ui; // true if the interact UI [E] is being shown
+    private bool show_hint; // true if clue has been picked up and within clue collider
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +29,7 @@ public class PlayerUI : MonoBehaviour
         stamina_bar = GameObject.Find("stamina");
         blood_screen = GameObject.Find("blood_screen");
         interact_e = GameObject.Find("interact_e");
+        hint = GameObject.Find("hint");
         // blood screen initialization
         blood_cycle_on = false;
         blood_cycle_speed = 0.08f;
@@ -53,10 +56,22 @@ public class PlayerUI : MonoBehaviour
 
         // display interact UI
         if (show_interact_ui == true){
+            Debug.Log("Showing interactUI");
             interact_e.SetActive(true); // show interact UI
         }
         else{
             interact_e.SetActive(false); // hide interact UI
+        }
+
+        // display hint UI
+        if (show_hint)
+        {
+            Debug.Log("Showing hintUI");
+            hint.SetActive(true);   // show hint UI
+        }
+        else
+        {
+            hint.SetActive(false);  // hide hint UI
         }
     }
 
@@ -165,5 +180,17 @@ public class PlayerUI : MonoBehaviour
     {
         show_interact_ui = false; // disable show interact bool, this will trigger Update function to enable interact ui game object
         interact_e.GetComponent<TextMeshProUGUI>().text = "[E]"; // reset text to just "[E]"
+    }
+
+    // public API for displaying hint UI when object has been picked up
+    public void DisplayHintUI(string hintText)
+    {
+        show_hint = true;
+        hint.GetComponent<TextMeshProUGUI>().text = hintText;   
+    }
+
+    public void DisableHintUI()
+    {
+        show_hint = false;
     }
 }
