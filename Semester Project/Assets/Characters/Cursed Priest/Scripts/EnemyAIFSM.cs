@@ -131,12 +131,14 @@ public class EnemyAIFSM : BaseFSM
 
         while (currentState == FSMState.Patrol)
         {
-            if (eyesight.IsInView() == true)
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
                 StopCoroutine(PatrolMovementCoroutine());
                 SetStateToChase(); // transition to chase state
             }
-            else if (earshot.IsInEarshot() == true)
+            else if (earshot.IsInEarshot() == true
+                && !player.GetComponent<PlayerController>().hiding
+                && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
                 StopCoroutine(PatrolMovementCoroutine());
                 SetStateToAlert();  // transition to alert state
@@ -318,7 +320,7 @@ public class EnemyAIFSM : BaseFSM
                 }
             }
             // if player is in view
-            else if (notSeenTime > 0)
+            else if (notSeenTime > 0 && !player.GetComponent<PlayerController>().hiding)
             {
                 notSeenTime = 0;        // reset time counter
             }
@@ -337,7 +339,7 @@ public class EnemyAIFSM : BaseFSM
 
         while (currentState == FSMState.Silent && elapsedTime < 3.0f)
         {
-            if (eyesight.IsInView() == true)
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
                 SetStateToChase();  // change state
                 yield break;

@@ -24,6 +24,7 @@ public class PlayerStats : MonoBehaviour
 
     public GameObject maincamera; // player "Normal VCamera"
     public GameObject theRealMainCamera; // Main Camera
+    public GameObject player; // Player
 
     // weapons
 
@@ -36,7 +37,7 @@ public class PlayerStats : MonoBehaviour
     void Start()
     {
         theRealMainCamera = GameObject.Find("Main Camera");
-
+        player = GameObject.Find("Player");
     }
 
     // Update is called once per frame
@@ -134,5 +135,10 @@ public class PlayerStats : MonoBehaviour
         {
             maincamera.SetActive(true);
         }
+    }
+
+    private void DisablePlayer()
+    {
+
     }
 }

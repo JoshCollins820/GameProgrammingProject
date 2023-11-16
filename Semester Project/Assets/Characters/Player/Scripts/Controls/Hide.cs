@@ -6,10 +6,13 @@ using UnityEngine.TextCore.Text;
 
 public class Hide : MonoBehaviour
 {
-    private GameObject player; // Needed to grab InputsManager script
+    //private GameObject player;
+    GameObject Magistrate;
+    GameObject Player;
+    GameObject PlayerMesh;
+    GameObject PlayerHair;
 
-    private InputsManager input; // Reference to InputsManager for controls
-    //private PlayerController controller; // Get instance of the PlayerController class
+    private PlayerController controller; // Reference to PlayerController class
 
     [SerializeField] GameObject normalCam; // Virtual Normal Camera
     [SerializeField] GameObject hidingCam; // Virtual Hiding Camera
@@ -30,12 +33,14 @@ public class Hide : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Get the player so we can grab the InputsManager script
-        player = GameObject.Find("Magistrate");
-        // Get the InputsManager script
-        input = player.GetComponent<InputsManager>();
+        Magistrate = GameObject.Find("Magistrate");
+        Player = Magistrate.transform.GetChild(0).gameObject;
+        PlayerHair = Player.transform.GetChild(1).gameObject;
+        PlayerMesh = Player.transform.GetChild(0).gameObject;
+
         // Get the "Normal VCamera" object
-        normalCam = GameObject.Find("Normal VCamera");
+        //normalCam = GameObject.Find("Normal VCamera");
+        normalCam = Magistrate.transform.gameObject.transform.Find("Normal VCamera").gameObject;
         // Get the "Hiding VCamera" object OF the hiding spot
         hidingCam = this.transform.parent.gameObject.transform.Find("Hide VCamera").gameObject;
 
@@ -105,13 +110,20 @@ public class Hide : MonoBehaviour
     void EnterHidingSpot()
     {
         // Reset player movement
-        player.GetComponent<InputsManager>().move = Vector2.zero;
-        player.GetComponent<InputsManager>().look = Vector2.zero;
+        Player.GetComponent<InputsManager>().move = Vector2.zero;
+        Player.GetComponent<InputsManager>().look = Vector2.zero;
 
+        Player.GetComponent<Animator>().SetFloat("speed", 0);
+        Player.GetComponent<PlayerController>().hiding = true;
         normalCam.SetActive(false);
         hidingCam.SetActive(true);
-        player.SetActive(false);
-        player.GetComponent<PlayerController>().hiding = true;
+        //player.SetActive(false);
+        //Player.SetActive(false);
+
+        Player.GetComponent<PlayerController>().enabled = false;
+        PlayerMesh.SetActive(false);
+        PlayerHair.SetActive(false);
+        //controller.enabled = false;
 
         // If the hiding spot is a Wardrobe
         if (this.transform.parent.gameObject.name.Contains("(Hinge)")) //== "Hideable Wardrobe")
@@ -127,10 +139,16 @@ public class Hide : MonoBehaviour
     // Leave hiding spot
     void LeaveHidingSpot()
     {
+        Player.GetComponent<PlayerController>().hiding = false;
         normalCam.SetActive(true);
         hidingCam.SetActive(false);
-        player.SetActive(true);
-        player.GetComponent<PlayerController>().hiding = false;
+        //player.SetActive(true);
+        //Player.SetActive(true);
+
+        Player.GetComponent<PlayerController>().enabled = true;
+        PlayerMesh.SetActive(true);
+        PlayerHair.SetActive(true);
+        //controller.enabled = true;
 
         // If the hiding spot is a Wardrobe
         if (this.transform.parent.gameObject.name.Contains("(Hinge)"))
