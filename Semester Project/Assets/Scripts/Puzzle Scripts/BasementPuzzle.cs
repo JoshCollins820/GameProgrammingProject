@@ -52,7 +52,7 @@ public class BasementPuzzle : MonoBehaviour
         PlayerHair = Player.transform.GetChild(1).gameObject;
         PlayerMesh = Player.transform.GetChild(0).gameObject;
         PlayerController = Player.GetComponent<CharacterController>();
-        Priest = GameObject.Find("PriestTest");
+        Priest = GameObject.Find("Priest");
         StoneRed = GameObject.Find("Stone_Red");
         StonePurple = GameObject.Find("Stone_Purple");
         StoneBlue = GameObject.Find("Stone_Blue");
@@ -185,8 +185,8 @@ public class BasementPuzzle : MonoBehaviour
             SecretDoorCamera.SetActive(true);
             interacting = false;
             activeStones = 0;
-            Invoke("delayDoor", 6f);
-            Invoke("delayPriest", 8f);
+            Invoke("delayDoor", 1f);
+            Priest.GetComponent<EnemyAIFSM>().SetStateToPatrol();
         }
         else
         {
