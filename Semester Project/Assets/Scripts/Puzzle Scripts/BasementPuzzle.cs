@@ -95,6 +95,7 @@ public class BasementPuzzle : MonoBehaviour
             PuzzleCamera.SetActive(true);
             PlayerMesh.SetActive(false);
             PlayerHair.SetActive(false);
+            Player.GetComponent<CharacterController>().enabled = false;
             PlayerController.enabled = false;
 
 
@@ -156,7 +157,7 @@ public class BasementPuzzle : MonoBehaviour
             PlayerCamera.SetActive(true);
             PlayerHair.SetActive(true);
             PlayerMesh.SetActive(true);
-
+            Player.GetComponent<CharacterController>().enabled = true;
             PlayerController.enabled = true;
 
             Player.GetComponent<PlayerUI>().DisplayHintUI("THE PRIEST! I must hide under the bed before he sees me!");
@@ -192,7 +193,7 @@ public class BasementPuzzle : MonoBehaviour
             interacting = false;
             activeStones = 0;
             Invoke("delayDoor", 1f);
-            Priest.GetComponent<EnemyAIFSM>().SetStateToPatrol();
+            Invoke("delayPriest", 2f);
         }
         else
         {
@@ -202,6 +203,7 @@ public class BasementPuzzle : MonoBehaviour
             PuzzleCamera.SetActive(false);
             PlayerMesh.SetActive(true);
             PlayerHair.SetActive(true);
+            Player.GetComponent<CharacterController>().enabled = true;
             PlayerController.enabled = true;
             PlayerCamera.SetActive(true);
             Player.GetComponent<PlayerStats>().canMove = true;
