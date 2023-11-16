@@ -20,11 +20,7 @@ public class StoneOnClick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (BasementPuzzle.GetComponent<BasementPuzzle>().puzzleFailed)
-        {
-            activated = false;
-            Glyph.SetActive(false);
-        }
+
 
     }
 
@@ -40,7 +36,7 @@ public class StoneOnClick : MonoBehaviour
 
     }
 
-    public void reset()
+    public void resetStone()
     {
         activated = false;
         Glyph.SetActive(false);
