@@ -146,6 +146,17 @@ public class BasementPuzzle : MonoBehaviour
             changeCamera = false;
         }
     }
+    private void delayDoor()
+    {
+        opening = true;
+        doorOpen.Play();
+
+    }
+
+    private void delayPriest()
+    {
+        Priest.GetComponent<EnemyAIFSM>().SetStateToPatrol();
+    }
 
     // Check order when finished and give control back to player
     private void checkOrder()
@@ -154,14 +165,13 @@ public class BasementPuzzle : MonoBehaviour
         {
             //Priest.GetComponent<NavMeshAgent>().enabled = true;
             //Priest.GetComponent<Animator>().enabled = true;
-            Priest.GetComponent<EnemyAIFSM>().SetStateToPatrol();
             Debug.Log("Puzzle Solved");
-            opening = true;
             PuzzleCamera.SetActive(false);
             SecretDoorCamera.SetActive(true);
             interacting = false;
             activeStones = 0;
-            doorOpen.Play();
+            Invoke("delayDoor", 6f);
+            Invoke("delayPriest", 8f);
         }
         else
         {
