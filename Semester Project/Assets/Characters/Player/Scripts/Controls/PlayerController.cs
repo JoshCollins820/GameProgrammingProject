@@ -57,7 +57,11 @@ public class PlayerController : MonoBehaviour
         mainCam = GameObject.Find("Main Camera"); // Main Camera
         // Get the "Normal VCamera" object
         normalCam = GameObject.Find("Normal VCamera");
+<<<<<<< Updated upstream
         normalCam.SetActive(false); // disable
+=======
+        normalCam.SetActive(false);
+>>>>>>> Stashed changes
         // Get the "Aim VCamera" object
         aimCam = GameObject.Find("Aim VCamera");
         aimCam.SetActive(false);

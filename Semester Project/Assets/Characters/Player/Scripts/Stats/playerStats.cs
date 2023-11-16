@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,8 @@ public class PlayerStats : MonoBehaviour
     public bool canMove = false;                                // indicates if player is free to move
     public bool gameStarted = false;
 
-    public GameObject maincamera;
+    public GameObject maincamera; // player "Normal VCamera"
+    public GameObject theRealMainCamera; // Main Camera
 
     // weapons
 
@@ -33,7 +35,7 @@ public class PlayerStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        theRealMainCamera = GameObject.Find("Main Camera");
 
     }
 
@@ -113,6 +115,7 @@ public class PlayerStats : MonoBehaviour
         gameStarted = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        theRealMainCamera.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0.4f;
         Invoke("EnableMainCamera", 8f);
         Invoke("enableMove", 8f);//default 12
     }
