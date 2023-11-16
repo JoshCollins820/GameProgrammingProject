@@ -123,7 +123,7 @@ MonoBehaviour:
     value: 0.1
   contrast:
     overrideState: 1
-    value: 0
+    value: 1.7
   mixerRedOutRedIn:
     overrideState: 1
     value: 100
@@ -150,7 +150,7 @@ MonoBehaviour:
     value: 0
   mixerBlueOutBlueIn:
     overrideState: 1
-    value: 100
+    value: 90
   lift:
     overrideState: 1
     value: {x: 1, y: 0.9664181, z: 0.9515233, w: 0}
@@ -1360,6 +1360,28 @@ MonoBehaviour:
       - 0.5
       - 0.5
       - 0.5
+--- !u!114 &-2275334650126300615
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b94fcd11afffcb142908bfcb1e261fba, type: 3}
+  m_Name: MotionBlur
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  shutterAngle:
+    overrideState: 1
+    value: 197
+  sampleCount:
+    overrideState: 1
+    value: 14
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1380,6 +1402,8 @@ MonoBehaviour:
   - {fileID: 8735220087079187446}
   - {fileID: -4497984661916466030}
   - {fileID: 7921353008801077631}
+  - {fileID: 8871698608379370648}
+  - {fileID: -2275334650126300615}
 --- !u!114 &5177769637673558377
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1402,7 +1426,7 @@ MonoBehaviour:
     defaultState: 1
   intensity:
     overrideState: 1
-    value: 0.107
+    value: 0.153
   fastMode:
     overrideState: 1
     value: 0
@@ -1424,10 +1448,10 @@ MonoBehaviour:
     value: 1
   filtering:
     overrideState: 1
-    value: {x: 50, y: 95}
+    value: {x: 54.00001, y: 99}
   minLuminance:
     overrideState: 1
-    value: -0.4
+    value: -0.47
   maxLuminance:
     overrideState: 1
     value: 9
@@ -1467,19 +1491,19 @@ MonoBehaviour:
     value: 1
   softKnee:
     overrideState: 1
-    value: 0.491
+    value: 0.44
   clamp:
     overrideState: 1
     value: 65472
   diffusion:
     overrideState: 1
-    value: 5.68
+    value: 8.33
   anamorphicRatio:
     overrideState: 1
     value: -1
   color:
     overrideState: 1
-    value: {r: 1, g: 1, b: 1, a: 1}
+    value: {r: 1, g: 0.9742292, b: 0.9386792, a: 1}
   fastMode:
     overrideState: 1
     value: 0
@@ -1511,10 +1535,10 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 0.513
+    value: 0.685
   size:
     overrideState: 1
-    value: 0.3
+    value: 0.75
   lumContrib:
     overrideState: 1
     value: 1
@@ -1551,7 +1575,51 @@ MonoBehaviour:
     value: 100
   distanceFade:
     overrideState: 1
-    value: 0.026
+    value: 0.008
   vignette:
     overrideState: 1
     value: 0
+--- !u!114 &8871698608379370648
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b924e2dad56384a8df2a1e111bb675, type: 3}
+  m_Name: Vignette
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  mode:
+    overrideState: 1
+    value: 0
+  color:
+    overrideState: 1
+    value: {r: 0, g: 0, b: 0, a: 1}
+  center:
+    overrideState: 1
+    value: {x: 0.5, y: 0.5}
+  intensity:
+    overrideState: 1
+    value: 0.333
+  smoothness:
+    overrideState: 1
+    value: 0.534
+  roundness:
+    overrideState: 1
+    value: 1
+  rounded:
+    overrideState: 1
+    value: 0
+  mask:
+    overrideState: 1
+    value: {fileID: 0}
+    defaultState: 1
+  opacity:
+    overrideState: 1
+    value: 1

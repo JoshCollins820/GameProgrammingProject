@@ -5,6 +5,8 @@ using UnityEngine;
 public class Attack : MonoBehaviour
 {
     // Start is called before the first frame update
+
+    public PlayerController playerController;
     void Start()
     {
         
@@ -18,7 +20,7 @@ public class Attack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && (playerController.hiding == false))
         {
             #if UNITY_STANDALONE
                 Application.Quit();

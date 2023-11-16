@@ -56,7 +56,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.30749354
+        functionName: EnemyFootstep
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 67c6ce8f5099927439013180898ea3d6, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.8010336
+        functionName: EnemyFootstep
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 67c6ce8f5099927439013180898ea3d6, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
