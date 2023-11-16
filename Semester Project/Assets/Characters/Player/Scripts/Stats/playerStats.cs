@@ -8,6 +8,8 @@ public class PlayerStats : MonoBehaviour
     // PLAYER STATS
     [Header("Health")] // HEALTH section -----------------------
     public bool playerDamaged = false;                          // indicates if the player is currently damaged
+    public bool isRecovering = false;                           // indicates if player is in process of being healed
+    public float recoverTime = 10f;                             // time it takes to recover from being damaged
 
     [Header("Stamina")] // STAMINA section ---------------------
     public float playerStamina = 100f;                          // current stamina
@@ -46,6 +48,12 @@ public class PlayerStats : MonoBehaviour
         if(isRunning == false) // if player isn't running
         {
             staminaRegenerate(); // regen stamina
+        }
+        // if player is damaged, start healing timer
+        if (playerDamaged == true && isRecovering == false)
+        {
+            isRecovering = true; // player is healing
+            Invoke(nameof(healPlayer), 10); // heal player after 10 seconds
         }
     }
 
@@ -98,6 +106,7 @@ public class PlayerStats : MonoBehaviour
         if (playerDamaged == true)
         {
             playerDamaged = false; // player no longer damaged
+            isRecovering = false; // player is no longer recovering
         }
     }
 
