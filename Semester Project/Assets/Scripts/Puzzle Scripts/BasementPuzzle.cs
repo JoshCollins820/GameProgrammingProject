@@ -203,8 +203,15 @@ public class BasementPuzzle : MonoBehaviour
         cyanActive = false;
         greenActive = false;
         yellowActive = false;
+        StoneYellow.GetComponent<StoneOnClick>().reset();
+        StoneRed.GetComponent<StoneOnClick>().reset();
+        StoneBlue.GetComponent<StoneOnClick>().reset();
+        StoneCyan.GetComponent<StoneOnClick>().reset();
+        StoneGreen.GetComponent<StoneOnClick>().reset();
+        StonePurple.GetComponent<StoneOnClick>().reset();
         activeStones = 0;
         orderActive = "";
+
     }
 
     IEnumerator OpenDoor()

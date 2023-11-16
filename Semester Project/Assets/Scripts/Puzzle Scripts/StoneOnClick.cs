@@ -39,4 +39,10 @@ public class StoneOnClick : MonoBehaviour
         }
 
     }
+
+    public void reset()
+    {
+        activated = false;
+        Glyph.SetActive(false);
+    }
 }
