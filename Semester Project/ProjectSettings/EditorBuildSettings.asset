@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Level & Design/Levels and Menus/Main House.unity
+    guid: bb58b351b8ea7134b97dcd2f5a65792e
   m_configObjects: {}

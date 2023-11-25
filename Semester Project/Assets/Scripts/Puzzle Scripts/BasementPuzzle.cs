@@ -23,6 +23,7 @@ public class BasementPuzzle : MonoBehaviour
     GameObject SecretDoor;
     public AudioSource doorOpen;
     public GameObject Priest;
+    public GameObject breathing;
 
     public bool puzzleStarted;
     public bool puzzleFailed;
@@ -177,6 +178,7 @@ public class BasementPuzzle : MonoBehaviour
 
     private void delayPriest()
     {
+        breathing.SetActive(true);
         Priest.GetComponent<EnemyAIFSM>().SetStateToPatrol();
     }
 
