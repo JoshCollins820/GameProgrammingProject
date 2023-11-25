@@ -6,6 +6,11 @@ public class PlayerInventory : MonoBehaviour
 {
     [SerializeField] int inventorySlots = 5; // number of inventory slots
 
+    // item counts
+    public int count_rock = 0;
+
+    // holding bools
+    public bool holdingThrowable = false;
 
     // Start is called before the first frame update
     void Start()
