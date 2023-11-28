@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public bool inReach = false;
 
-    public PlayerController playerController;
-    void Start()
-    {
-        
-    }
+    public bool IsInReach() { return inReach; }
+
 
     // Update is called once per frame
     void Update()
@@ -18,16 +15,23 @@ public class Attack : MonoBehaviour
         
     }
 
+    // Player enters enemy's attack zone
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && (playerController.hiding == false))
+        if(other.tag == "Player")
         {
-            #if UNITY_STANDALONE
-                Application.Quit();
-            #endif
-            #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-            #endif
+            Debug.Log("Attack zone entered.");
+            inReach = true;
+        }
+    }
+
+    // Player leaves enemy's attack zone
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            Debug.Log("Attack zone exited.");
+            inReach = false;
         }
     }
 }
