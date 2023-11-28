@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -56,6 +57,8 @@ public class EnemyAIFSM : BaseFSM
     private float lerpDuration;
     int i = 0;
 
+    private bool testing;
+
     protected override void Initialize()
     {
         player = GameObject.Find("Player").GetComponent<Transform>();
@@ -66,6 +69,10 @@ public class EnemyAIFSM : BaseFSM
         screamAudio = GetComponent<AudioSource>();
         pointList = GameObject.FindGameObjectsWithTag("PatrolPoint");
 
+        string scenePath = SceneManager.GetActiveScene().path;
+        testing = SceneUtility.GetScenePathByBuildIndex(0) != scenePath;
+        Debug.Log("Test: " + testing + ", path: " + scenePath);
+        if (testing) SetStateToPatrol();
     }
 
     //------------------------------ Transitions ------------------------------
@@ -348,7 +355,7 @@ public class EnemyAIFSM : BaseFSM
         }
 
         // if time elapses and player is no longer seen, transition to patrol state
-        SetStateToSilent();
+        SetStateToPatrol();
     }
 
     //------------------------------ Helper ------------------------------
