@@ -62,7 +62,7 @@ public class PlayerStats : MonoBehaviour
         {
             deathSequence = true; // make it so this cannot be called again
             // call death stuff
-            // ???
+            killPlayer();
         }
     }
 
@@ -121,6 +121,11 @@ public class PlayerStats : MonoBehaviour
             playerDamaged = false; // player no longer damaged
             isRecovering = false; // player is no longer recovering
         }
+    }
+
+    public void killPlayer()
+    {
+        // ???
     }
 
     public void enableMove()
