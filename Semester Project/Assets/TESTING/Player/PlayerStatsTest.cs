@@ -53,7 +53,7 @@ public class PlayerStatsTest : MonoBehaviour
         if (playerDamaged == true && isRecovering == false)
         {
             isRecovering = true; // player is healing
-            Invoke(nameof(healPlayer), 10); // heal player after 10 seconds
+            Invoke(nameof(healPlayer), 5); // heal player after 10 seconds
         }
     }
 

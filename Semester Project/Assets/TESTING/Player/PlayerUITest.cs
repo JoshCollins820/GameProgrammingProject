@@ -40,7 +40,7 @@ public class PlayerUITest : MonoBehaviour
     void Update()
     {
         // stamina bar
-        if(player.GetComponent<PlayerStats>().playerStamina < 100){ // if player is using stamina
+        if(player.GetComponent<PlayerStatsTest>().playerStamina < 100){ // if player is using stamina
             stamina_bar.SetActive(true); // show stamina UI
             StaminaBar(); // update stamina bar
         }
@@ -49,7 +49,7 @@ public class PlayerUITest : MonoBehaviour
         }
 
         // blood screen
-        if (player.GetComponent<PlayerStats>().playerDamaged == true){ // if player is damaged
+        if (player.GetComponent<PlayerStatsTest>().playerDamaged == true){ // if player is damaged
             BloodScreen(); // show blood screen
         }
 
@@ -65,12 +65,12 @@ public class PlayerUITest : MonoBehaviour
     void StaminaBar()
     {
         // normalize player stamina from 0-100 to 0-1
-        normalized_stamina = (player.GetComponent<PlayerStats>().playerStamina) / (player.GetComponent<PlayerStats>().maxStamina);
+        normalized_stamina = (player.GetComponent<PlayerStatsTest>().playerStamina) / (player.GetComponent<PlayerStatsTest>().maxStamina);
         // set bar to player stamina
         //stamina_bar.GetComponent<Image>().fillAmount = normalized_stamina;
         stamina_bar.transform.GetChild(1).GetComponent<Image>().fillAmount = normalized_stamina;
 
-        if(player.GetComponent<PlayerStats>().isExausted == false) // if player has not used entire stamina bar
+        if(player.GetComponent<PlayerStatsTest>().isExausted == false) // if player has not used entire stamina bar
         {
             stamina_bar.transform.GetChild(1).GetComponent<Image>().color = new Color32(255, 255, 255, 255); // show white bar
         }
@@ -86,7 +86,7 @@ public class PlayerUITest : MonoBehaviour
         //Debug.Log("PulseUp");
         var blood_screen_color = blood_screen.GetComponent<Image>().color; // get the current color of blood_screen
 
-        if (player.GetComponent<PlayerStats>().playerDamaged == true) // if player is damaged
+        if (player.GetComponent<PlayerStatsTest>().playerDamaged == true) // if player is damaged
         {
             if(blood_screen_color.a < 0.7f) // if the blood_screen color's alpha is less than 1f (max)
             {
@@ -111,7 +111,7 @@ public class PlayerUITest : MonoBehaviour
         //Debug.Log("PulseDown");
         var blood_screen_color = blood_screen.GetComponent<Image>().color; // get the current color of blood_screen
 
-        if (player.GetComponent<PlayerStats>().playerDamaged == true) // if player is damaged
+        if (player.GetComponent<PlayerStatsTest>().playerDamaged == true) // if player is damaged
         {
             if (blood_screen_color.a > 0.2f) // if the blood_screen color's alpha is greater than 0.5f
             {

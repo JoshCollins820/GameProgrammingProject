@@ -105,18 +105,18 @@ public class PlayerControllerTest : MonoBehaviour
         if (input.move != Vector2.zero)
         {
             // If player sprints
-            if (input.sprint && !GetComponent<PlayerStats>().isExausted)
+            if (input.sprint && !GetComponent<PlayerStatsTest>().isExausted)
             {
                 animator.SetFloat("speed", 2); // Sprint animation
                 speed = sprintSpeed; // Change speed to sprint speed
-                GetComponent<PlayerStats>().useStamina(); // Use stamina
+                GetComponent<PlayerStatsTest>().useStamina(); // Use stamina
             }
             // If player walks
             else
             {
                 animator.SetFloat("speed", 1); // Walk animation
                 speed = walkSpeed; // Change speed to walk speed
-                GetComponent<PlayerStats>().isRunning = false; // Let stamina controller know player is not running
+                GetComponent<PlayerStatsTest>().isRunning = false; // Let stamina controller know player is not running
             }
             targetRotation = Quaternion.LookRotation(inputDirection).eulerAngles.y + mainCam.transform.rotation.eulerAngles.y;
             Quaternion rotation = Quaternion.Euler(0, targetRotation, 0);
@@ -127,7 +127,7 @@ public class PlayerControllerTest : MonoBehaviour
         {
             // 0 For Idle animation
             animator.SetFloat("speed", 0);
-            GetComponent<PlayerStats>().isRunning = false; // Let stamina controller know player is not running
+            GetComponent<PlayerStatsTest>().isRunning = false; // Let stamina controller know player is not running
         }
 
         // Move player
