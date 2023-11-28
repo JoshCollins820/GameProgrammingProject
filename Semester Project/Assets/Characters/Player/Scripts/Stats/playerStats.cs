@@ -8,6 +8,8 @@ public class PlayerStats : MonoBehaviour
     // PLAYER STATS
     [Header("Health")] // HEALTH section -----------------------
     public bool playerDamaged = false;                          // indicates if the player is currently damaged
+    public bool playerDead = false;                             // indicates if the player is alive/dead
+    public bool deathSequence = false;                          // if the death sequence has begun, makes sure the player can only die once
     public bool isRecovering = false;                           // indicates if player is in process of being healed
     public float recoverTime = 10f;                             // time it takes to recover from being damaged
 
@@ -50,10 +52,17 @@ public class PlayerStats : MonoBehaviour
             staminaRegenerate(); // regen stamina
         }
         // if player is damaged, start healing timer
-        if (playerDamaged == true && isRecovering == false)
+        if (playerDamaged == true && isRecovering == false && playerDead == false)
         {
             isRecovering = true; // player is healing
             Invoke(nameof(healPlayer), 10); // heal player after 10 seconds
+        }
+        // if player is dead and hasn't died before
+        if (playerDead == true && deathSequence == false)
+        {
+            deathSequence = true; // make it so this cannot be called again
+            // call death stuff
+            // ???
         }
     }
 
@@ -96,6 +105,10 @@ public class PlayerStats : MonoBehaviour
         if (playerDamaged == false)
         {
             playerDamaged = true ; // player is now damaged
+        }
+        if(playerDamaged == true && playerDead == false)
+        {
+            playerDead = true;
         }
     }
 
