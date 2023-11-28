@@ -35,6 +35,7 @@ public class EnemyAIFSMTest : BaseFSM
         RadiusPatrol,
         Chase,
         Attack,
+        Grab,
         Silent,
         Dead
     }
@@ -47,8 +48,10 @@ public class EnemyAIFSMTest : BaseFSM
     private EnemyEarshot earshot;
     private LineOfSight eyesight;
     private AnimationHandler animations;
+
     private Attack range;//new
     public Animator animator;//new
+    private GameObject hitbox;
 
     private AudioSource screamAudio;
     private Vector3 lastPos;
@@ -65,11 +68,14 @@ public class EnemyAIFSMTest : BaseFSM
         agent = GetComponent<NavMeshAgent>();
         earshot = gameObject.GetComponentInChildren<EnemyEarshot>();
         eyesight = gameObject.GetComponentInChildren<LineOfSight>();
-        range = transform.GetChild(4).gameObject.GetComponent<Attack>();
         animations = gameObject.GetComponentInChildren<AnimationHandler>();
         screamAudio = GetComponent<AudioSource>();
         pointList = GameObject.FindGameObjectsWithTag("PatrolPoint");
+
         animator = GetComponentInChildren<Animator>();
+        range = transform.GetChild(4).gameObject.GetComponent<Attack>();
+        hitbox = GameObject.Find("HandHitbox");
+        hitbox.SetActive(false);
 
         SetStateToPatrol();
     }
@@ -116,6 +122,13 @@ public class EnemyAIFSMTest : BaseFSM
         agent.isStopped = false;
         StartCoroutine(AttackCoroutine());
         Debug.Log("Transitioned to attack state");
+    }
+    public void SetStateToGrab()
+    {
+        currentState = FSMState.Grab;
+        agent.isStopped = true;
+        StartCoroutine(GrabCoroutine());
+        Debug.Log("Transitioned to grab state");
     }
     public void SetStateToSilent()
     {
@@ -343,20 +356,41 @@ public class EnemyAIFSMTest : BaseFSM
                 SetStateToAttack(); // transitition to attack state
             }
 
+            // if player is in view and then player.hiding becomes true
+            // chase to the hiding spot (either last known location or a designated spot at hiding spot)
+            // go to grab state
+
             yield return null;
         }
     }
-
+    
+    // Attack: Swing at the player
+    //  - Transition to Chase if player is out of melee range
+    // Would like to have randomized attacks
     private IEnumerator AttackCoroutine()
     {
         while(range.IsInReach())
         {
             animations.PlayAttackAnimation();
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.45f);
+            hitbox.SetActive(true);
             animator.SetBool("IsAttack", false);
         }
 
+        hitbox.SetActive(false);
         SetStateToChase();
+
+        yield return null;
+    }
+
+    // Grab: Pull player out of hiding spot
+    // - Transition to Chase once player is out of hiding spot
+    private IEnumerator GrabCoroutine()
+    {
+        // play the grab animation
+        // probably call some function from a Grab script
+        // wait some time before going to chase
+        // go to chase
 
         yield return null;
     }
