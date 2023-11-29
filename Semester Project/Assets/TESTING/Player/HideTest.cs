@@ -117,6 +117,7 @@ public class HideTest : MonoBehaviour
 
         Player.GetComponent<Animator>().SetFloat("speed", 0);
         Player.GetComponent<PlayerControllerTest>().hiding = true;
+        Debug.Log("Player is hiding: " + Player.GetComponent<PlayerControllerTest>().hiding);
         normalCam.SetActive(false);
         hidingCam.SetActive(true);
         //player.SetActive(false);
@@ -144,6 +145,7 @@ public class HideTest : MonoBehaviour
     void LeaveHidingSpot()
     {
         Player.GetComponent<PlayerControllerTest>().hiding = false;
+        Debug.Log("Player is hiding: " + Player.GetComponent<PlayerControllerTest>().hiding);
         normalCam.SetActive(true);
         hidingCam.SetActive(false);
         //player.SetActive(true);

@@ -39,7 +39,7 @@ public class AnimationHandler : MonoBehaviour
     public void PlayAttackAnimation()
     {
         animator.SetBool("IsAttack", true);
-        agent.speed = 0.5f;
+        agent.speed = 1.5f;//1.25
     }
 
     public void PlayGrabAnimation()

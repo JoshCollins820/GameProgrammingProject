@@ -8,6 +8,8 @@ public class PlayerStatsTest : MonoBehaviour
     // PLAYER STATS
     [Header("Health")] // HEALTH section -----------------------
     public bool playerDamaged = false;                          // indicates if the player is currently damaged
+    public bool playerDead = false;                             // indicates if the player is alive/dead
+    public bool deathSequence = false;                          // if the death sequence has begun, makes sure the player can only die once
     public bool isRecovering = false;                           // indicates if player is in process of being healed
     public float recoverTime = 10f;                             // time it takes to recover from being damaged
 
@@ -95,7 +97,11 @@ public class PlayerStatsTest : MonoBehaviour
         // if player is not damaged
         if (playerDamaged == false)
         {
-            playerDamaged = true ; // player is now damaged
+            playerDamaged = true; // player is now damaged
+        }
+        if (playerDamaged == true && playerDead == false)
+        {
+            playerDead = true;
         }
     }
 

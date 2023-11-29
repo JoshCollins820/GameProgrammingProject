@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -49,8 +50,8 @@ public class EnemyAIFSMTest : BaseFSM
     private LineOfSight eyesight;
     private AnimationHandler animations;
 
-    private Attack range;//new
-    public Animator animator;//new
+    private Attack range;
+    public Animator animator;
     private GameObject hitbox;
 
     private AudioSource screamAudio;
@@ -126,7 +127,7 @@ public class EnemyAIFSMTest : BaseFSM
     public void SetStateToGrab()
     {
         currentState = FSMState.Grab;
-        agent.isStopped = true;
+        agent.isStopped = false;
         StartCoroutine(GrabCoroutine());
         Debug.Log("Transitioned to grab state");
     }
@@ -336,6 +337,7 @@ public class EnemyAIFSMTest : BaseFSM
             if (eyesight.IsInView() == false)
             {
                 notSeenTime += Time.deltaTime;
+                hitbox.SetActive(false);///HEEEEEEELLO
 
                 // transition to silent state if line of sight is broken for 8s
                 if (notSeenTime >= 8.0f)
@@ -346,7 +348,7 @@ public class EnemyAIFSMTest : BaseFSM
             }
             
             // if player is in view
-            else if (notSeenTime > 0 && !player.GetComponent<PlayerControllerTest>().hiding)
+            else if (notSeenTime > 0)// && !player.GetComponent<PlayerControllerTest>().hiding)
             {
                 notSeenTime = 0;        // reset time counter
             }
@@ -359,6 +361,13 @@ public class EnemyAIFSMTest : BaseFSM
             // if player is in view and then player.hiding becomes true
             // chase to the hiding spot (either last known location or a designated spot at hiding spot)
             // go to grab state
+            if (eyesight.IsInView() == true && player.GetComponent<PlayerControllerTest>().hiding)
+            {
+                Debug.Log("Player hid while in sight.");
+                SetStateToGrab();
+            }
+
+
 
             yield return null;
         }
@@ -369,15 +378,15 @@ public class EnemyAIFSMTest : BaseFSM
     // Would like to have randomized attacks
     private IEnumerator AttackCoroutine()
     {
-        while(range.IsInReach())
+        while (range.IsInReach())
         {
             animations.PlayAttackAnimation();
-            yield return new WaitForSeconds(0.45f);
+            yield return new WaitForSeconds(0.35f);
             hitbox.SetActive(true);
             animator.SetBool("IsAttack", false);
         }
 
-        hitbox.SetActive(false);
+        //hitbox.SetActive(false);
         SetStateToChase();
 
         yield return null;
@@ -392,7 +401,29 @@ public class EnemyAIFSMTest : BaseFSM
         // wait some time before going to chase
         // go to chase
 
-        yield return null;
+        while (currentState == FSMState.Grab)
+        {
+            agent.SetDestination(player.position);
+
+            if (!agent.pathPending)
+            {
+                Debug.Log("Destination reached.");
+            }
+
+            yield return null;
+        }
+
+        /*
+        agent.SetDestination(player.position);
+        while (agent.pathPending || agent.remainingDistance > 0.1f)
+        {
+            yield return null;
+        }
+        animations.PlayIdleAnimation();
+        */
+
+
+        //yield return null;
     }
 
     // Silent: Pause after chasing the player.
@@ -406,7 +437,7 @@ public class EnemyAIFSMTest : BaseFSM
 
         while (currentState == FSMState.Silent && elapsedTime < 2.0f)//default 3
         {
-            if (eyesight.IsInView() == true && !player.GetComponent<PlayerControllerTest>().hiding)
+            if (eyesight.IsInView() == true)// && !player.GetComponent<PlayerControllerTest>().hiding)
             {
                 SetStateToChase();  // change state
                 yield break;
