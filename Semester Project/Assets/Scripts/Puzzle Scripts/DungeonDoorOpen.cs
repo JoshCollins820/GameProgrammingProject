@@ -21,6 +21,7 @@ public class DungeonDoorOpen : MonoBehaviour
     {
         DungeonDoorKey = GameObject.Find("DungeonDoorKey");
         Player = GameObject.Find("Magistrate").transform.GetChild(0).gameObject;
+        slerpDuration = 2f;
         opening = false;
         opened = false;
         showClue = true;
