@@ -71,7 +71,18 @@ public class ReadJournal : MonoBehaviour
                 pressedJ++;
             }
         }
-
+        // If there is a next journal page, view next page
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            if (NextPage.activeSelf)
+                NextJournalEntry();
+        }
+        // If there is a previous journal page, view previous page
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (PreviousPage.activeSelf)
+                PreviousJournalEntry();
+        }
     }
 
     // when journal opens show relevant entry
