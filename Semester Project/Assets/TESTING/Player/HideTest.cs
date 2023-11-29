@@ -142,7 +142,7 @@ public class HideTest : MonoBehaviour
     }
 
     // Leave hiding spot
-    void LeaveHidingSpot()
+    public void LeaveHidingSpot()
     {
         Player.GetComponent<PlayerControllerTest>().hiding = false;
         Debug.Log("Player is hiding: " + Player.GetComponent<PlayerControllerTest>().hiding);

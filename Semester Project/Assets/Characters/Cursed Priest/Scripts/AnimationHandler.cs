@@ -33,17 +33,24 @@ public class AnimationHandler : MonoBehaviour
     public void PlayRunAnimation()
     {
         animator.SetFloat("speed", 2);
-        agent.speed = 3.25f;//4
+        agent.speed = 3.25f;
     }
 
     public void PlayAttackAnimation()
     {
         animator.SetBool("IsAttack", true);
-        agent.speed = 1.5f;//1.25
+        agent.speed = 1.5f;
     }
 
     public void PlayGrabAnimation()
     {
+        animator.SetBool("IsGrab", true);
+        agent.speed = 0;
+    }
 
+    public void PlayThrowAnimation()
+    {
+        animator.SetBool("IsThrow", true);
+        agent.speed = 0;
     }
 }

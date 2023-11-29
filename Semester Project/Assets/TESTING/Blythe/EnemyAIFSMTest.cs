@@ -53,6 +53,8 @@ public class EnemyAIFSMTest : BaseFSM
     private Attack range;
     public Animator animator;
     private GameObject hitbox;
+    private Vector3 lastSeen;
+    private HideTest pullOut;
 
     private AudioSource screamAudio;
     private Vector3 lastPos;
@@ -77,6 +79,7 @@ public class EnemyAIFSMTest : BaseFSM
         range = transform.GetChild(4).gameObject.GetComponent<Attack>();
         hitbox = GameObject.Find("HandHitbox");
         hitbox.SetActive(false);
+        pullOut = GameObject.Find("HideTrigger").GetComponent<HideTest>();
 
         SetStateToPatrol();
     }
@@ -361,12 +364,12 @@ public class EnemyAIFSMTest : BaseFSM
             // if player is in view and then player.hiding becomes true
             // chase to the hiding spot (either last known location or a designated spot at hiding spot)
             // go to grab state
+            lastSeen = player.GetComponent<Transform>().position;
             if (eyesight.IsInView() == true && player.GetComponent<PlayerControllerTest>().hiding)
             {
                 Debug.Log("Player hid while in sight.");
                 SetStateToGrab();
             }
-
 
 
             yield return null;
@@ -381,12 +384,13 @@ public class EnemyAIFSMTest : BaseFSM
         while (range.IsInReach())
         {
             animations.PlayAttackAnimation();
-            yield return new WaitForSeconds(0.35f);
+            yield return new WaitForSeconds(0.35f);//0.35
             hitbox.SetActive(true);
             animator.SetBool("IsAttack", false);
         }
 
-        //hitbox.SetActive(false);
+        animator.SetBool("IsAttack", false);
+        hitbox.SetActive(false);
         SetStateToChase();
 
         yield return null;
@@ -401,29 +405,44 @@ public class EnemyAIFSMTest : BaseFSM
         // wait some time before going to chase
         // go to chase
 
-        while (currentState == FSMState.Grab)
+        bool reached = false;
+        while (reached == false)
         {
-            agent.SetDestination(player.position);
-
-            if (!agent.pathPending)
+            if (!player.GetComponent<PlayerControllerTest>().hiding)
             {
-                Debug.Log("Destination reached.");
+                SetStateToChase();
+            }
+
+            agent.SetDestination(lastSeen);
+
+            if (agent.remainingDistance < 0.5)
+            {
+                reached = true;
             }
 
             yield return null;
         }
 
-        /*
-        agent.SetDestination(player.position);
-        while (agent.pathPending || agent.remainingDistance > 0.1f)
-        {
-            yield return null;
-        }
-        animations.PlayIdleAnimation();
-        */
+        Debug.Log("Destination reached.");
 
+        Debug.Log("Grabbing.");
+        animations.PlayGrabAnimation();
+        yield return new WaitForSeconds(1f);
 
-        //yield return null;
+        Debug.Log("Throwing.");
+        animations.PlayThrowAnimation();
+        yield return new WaitForSeconds(1f);
+
+        pullOut.LeaveHidingSpot();
+
+        Debug.Log("Finished.");
+
+        animator.SetBool("IsThrow", false);
+        animator.SetBool("IsGrab", false);
+
+        SetStateToChase();
+
+        yield return null;
     }
 
     // Silent: Pause after chasing the player.
@@ -447,7 +466,7 @@ public class EnemyAIFSMTest : BaseFSM
         }
 
         // if time elapses and player is no longer seen, transition to patrol state
-        SetStateToSilent();
+        SetStateToPatrol();
     }
 
     //------------------------------ Helper ------------------------------
