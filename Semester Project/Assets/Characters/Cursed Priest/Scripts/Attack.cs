@@ -9,12 +9,6 @@ public class Attack : MonoBehaviour
     public bool IsInReach() { return inReach; }
 
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     // Player enters enemy's attack zone
     private void OnTriggerEnter(Collider other)
     {

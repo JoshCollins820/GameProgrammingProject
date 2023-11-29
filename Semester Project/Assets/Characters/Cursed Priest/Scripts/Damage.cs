@@ -5,7 +5,9 @@ using UnityEngine;
 public class Damage : MonoBehaviour
 {
     private GameObject player;
-    private AudioSource sound;
+
+    public AudioSource sound;
+    public AudioClip swingSound;
 
 
     // Start is called before the first frame update
@@ -19,7 +21,7 @@ public class Damage : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Player punched!");
-        sound.Play();
+        sound.PlayOneShot(swingSound, 1.25f);
         player.GetComponent<PlayerStatsTest>().damagePlayer();
     }
 }
