@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class DungeonDoorOpen : MonoBehaviour
+public class OpenSittingRoom : MonoBehaviour
 {
-
-    GameObject DungeonDoorKey;
+    GameObject SittingRoomKey;
     GameObject Player;
 
 
@@ -16,10 +14,12 @@ public class DungeonDoorOpen : MonoBehaviour
     public bool showClue;      // true if UI should display clue about door, false if showing
     public bool showAction;    // true if UI should display action that can be taken on door, false if showing currently
     public bool opened;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        DungeonDoorKey = GameObject.Find("DungeonDoorKey");
+        SittingRoomKey = GameObject.Find("SittingRoomKey");
         Player = GameObject.Find("Magistrate").transform.GetChild(0).gameObject;
         slerpDuration = 2f;
         opening = false;
@@ -28,7 +28,6 @@ public class DungeonDoorOpen : MonoBehaviour
         showAction = true;
     }
 
-
     // Update is called once per frame
     void Update()
     {
@@ -36,7 +35,7 @@ public class DungeonDoorOpen : MonoBehaviour
         {
 
             Player.GetComponent<PlayerUI>().DisableInteractUI(); // action taken stop display
-            if (DungeonDoorKey.GetComponent<PickUpClue>().pickedUp)
+            if (SittingRoomKey.GetComponent<PickUpClue>().pickedUp)
             {
                 Debug.Log("opening marked");
                 opening = true;
@@ -46,7 +45,7 @@ public class DungeonDoorOpen : MonoBehaviour
                 Player.GetComponent<PlayerUI>().DisplayHintUI("Locked...");
                 showClue = false;
             }
-            
+
         }
         if (opening)
         {
@@ -61,22 +60,21 @@ public class DungeonDoorOpen : MonoBehaviour
         }
     }
 
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.name == "Player")
         {
             interacting = true;
             Debug.Log("Magistrate entered collider");
-            if (DungeonDoorKey.GetComponent<PickUpClue>().pickedUp && showAction)
+            if (SittingRoomKey.GetComponent<PickUpClue>().pickedUp && showAction)
             {
-                Player.GetComponent<PlayerUI>().DisplayInteractUI("Use Key on Cell Door");
+                Player.GetComponent<PlayerUI>().DisplayInteractUI("Use Key on Sitting Room Door");
                 showAction = false;
             }
             else if (showAction)
             {
                 Debug.Log("Key not picked up yet, display open cell door interact");
-                Player.GetComponent<PlayerUI>().DisplayInteractUI("Open Cell Door");
+                Player.GetComponent<PlayerUI>().DisplayInteractUI("Open Door");
                 showAction = false;
             }
         }
@@ -94,20 +92,12 @@ public class DungeonDoorOpen : MonoBehaviour
             Player.GetComponent<PlayerUI>().DisableInteractUI();
         }
     }
-    void OnMouseDown()
-    {
-        // only open if player has found the key
-        if (DungeonDoorKey.GetComponent<PickUpClue>().pickedUp)
-        {
-            opening = true;
-        }
-    }
 
     IEnumerator Rotate90()
     {
         float timeElapsed = 0;
         Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = transform.rotation * Quaternion.Euler(0, 90, 0);
+        Quaternion targetRotation = transform.rotation * Quaternion.Euler(0, 0, 0);
         while (timeElapsed < slerpDuration)
         {
             transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / slerpDuration);
