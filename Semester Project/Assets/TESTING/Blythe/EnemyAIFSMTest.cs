@@ -81,7 +81,7 @@ public class EnemyAIFSMTest : BaseFSM
         hitbox.SetActive(false);
         pullOut = GameObject.Find("HideTrigger").GetComponent<HideTest>();
 
-        SetStateToPatrol();
+        SetStateToSilent();
     }
 
     //------------------------------ Transitions ------------------------------
