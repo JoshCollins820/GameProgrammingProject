@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class BasementPuzzle : MonoBehaviour
 {
     GameObject Magistrate;
-    GameObject Player;
+    public GameObject Player;
     GameObject PlayerMesh;
     GameObject PlayerHair;
     GameObject StoneRed;
@@ -60,11 +60,12 @@ public class BasementPuzzle : MonoBehaviour
         StoneCyan = GameObject.Find("Stone_Cyan");
         StoneGreen = GameObject.Find("Stone_Green");
         StoneYellow = GameObject.Find("Stone_Yellow");
-        PuzzleCamera = this.transform.gameObject.transform.Find("Basement Puzzle VCamera").gameObject;
-        PlayerCamera = Magistrate.transform.gameObject.transform.Find("Normal VCamera").gameObject;
-        SecretDoorCamera = this.transform.gameObject.transform.Find("Basement Secret Door VCamera").gameObject;
+        PuzzleCamera = this.transform.Find("Basement Puzzle VCamera").gameObject;
+        PlayerCamera = Magistrate.transform.Find("Normal VCamera").gameObject;
+        SecretDoorCamera = this.transform.Find("Basement Secret Door VCamera").gameObject;
         SecretDoor = GameObject.Find("SecretDoor");
         doorOpen = SecretDoor.transform.GetChild(1).gameObject.GetComponent<AudioSource>();
+        breathing = Priest.transform.Find("Breathing").gameObject;
 
         closedPos = SecretDoor.transform.position;
         openPos = new Vector3(SecretDoor.transform.position.x, SecretDoor.transform.position.y, -29.248f);
