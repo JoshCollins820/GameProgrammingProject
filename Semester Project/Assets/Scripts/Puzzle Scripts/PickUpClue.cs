@@ -84,6 +84,12 @@ public class PickUpClue : MonoBehaviour
     private void setJournalContent()
     {
         // check for correct clue to show
+        if (this.name == "MissingCornerPipe")
+        {
+            leftPageContent = "It is a corner pipe. Maybe I can use this for\n" +
+                "something?";
+            rightPageContent = "";
+        }
         if (this.name == "SecretDoorBook")
         {
             leftPageContent = "As light refracts from Infrared to Ultraviolet,\n" +
