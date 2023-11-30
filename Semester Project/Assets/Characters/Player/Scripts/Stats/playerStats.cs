@@ -26,6 +26,16 @@ public class PlayerStats : MonoBehaviour
     public bool canMove = false;                                // indicates if player is free to move
     public bool gameStarted = false;
 
+    [Header("Other")] // OTHER section -------------------------
+    public bool throwMode = false;                              // indicates if player is in throw mode
+    public Animator anim;
+
+    [Header("Throwable")] // THROWABLE section -----------------
+    public GameObject rockPrefab;                               // rock prefab
+    public Transform rockSpawn;                                 // rock spawn location
+    public float rock_speed = 100;                               // rock speed
+    public bool canThrow = true;                                // can throw rock?
+
     public GameObject maincamera; // player "Normal VCamera"
     public GameObject theRealMainCamera; // Main Camera
     public GameObject player; // Player
@@ -42,6 +52,7 @@ public class PlayerStats : MonoBehaviour
     {
         theRealMainCamera = GameObject.Find("Main Camera");
         player = GameObject.Find("Player");
+        rockSpawn = GameObject.Find("RockSpawn").transform;
     }
 
     // Update is called once per frame
@@ -64,6 +75,20 @@ public class PlayerStats : MonoBehaviour
             // call death stuff
             killPlayer();
         }
+        // throw mode: if player presses a specific button (currently F) switch to throw mode
+        if (Input.GetKey(KeyCode.F))
+        {
+            if (player.GetComponent<PlayerInventory>().count_rock > 0 && canThrow == true)
+            {
+                canThrow = false; // make it so player can't throw again until cooldown is met
+                Invoke(nameof(ThrowRock),0.58f); // call the throw rock function
+                player.GetComponent<PlayerController>().walkSpeed = 0f;
+                player.GetComponent<PlayerController>().sprintSpeed = 0f;
+                anim.SetTrigger("Throw");// trigger throw animation
+            }
+        }   
+
+
     }
 
 
@@ -167,5 +192,26 @@ public class PlayerStats : MonoBehaviour
     private void DisablePlayer()
     {
 
+    }
+
+    // enables canthrow so that player can throw again
+    private void EnableCanThrow()
+    {
+        canThrow = true; // reset can throw to true so that player can throw rock
+        anim.ResetTrigger("Throw");
+        player.GetComponent<PlayerController>().walkSpeed = 2f;
+        player.GetComponent<PlayerController>().sprintSpeed = 7f;
+    }
+
+    // throws a rock projectile
+    private void ThrowRock()
+    {
+        player.GetComponent<PlayerInventory>().count_rock -= 1; // decrease rock count
+        Invoke(nameof(EnableCanThrow), 0.3f); // rock throw cooldown
+        var rock = (GameObject)Instantiate(
+                rockPrefab,
+                rockSpawn.position,
+                rockSpawn.rotation); // instantiate rock
+        rock.GetComponent<Rigidbody>().velocity = rock.transform.forward * rock_speed; // apply force to rock
     }
 }

@@ -6,6 +6,7 @@ public class RockPickup : MonoBehaviour
 {
     public GameObject player; // player object
     public bool collected; // bool for if rock is collected by player
+    public bool canBeCollected; // bool for if rock can be collected, fixes player being able to grab rock right when they throw it
     private bool inVicinity;
 
     // Start is called before the first frame update
@@ -26,6 +27,7 @@ public class RockPickup : MonoBehaviour
             {
                 collected = true; // rock is picked up
                 player.GetComponent<PlayerInventory>().count_rock += 1; // add a rock to players inventory
+                player.GetComponent<PlayerUI>().DisableInteractUI(); // hidetext
                 Destroy(this.gameObject); // destroy object
             }
         }
@@ -34,7 +36,7 @@ public class RockPickup : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // if player enters rock vicinity
-        if(other.tag == "Player")
+        if(other.tag == "Player" && player.GetComponent<PlayerStats>().canMove == true) // if can move is so that player can't grab rock while throwing it
         {
             player.GetComponent<PlayerUI>().DisplayInteractUI("Pick up Rock"); // show text
             inVicinity = true; // player is in vicinity
