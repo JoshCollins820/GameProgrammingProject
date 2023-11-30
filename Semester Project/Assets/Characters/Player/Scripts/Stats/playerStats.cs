@@ -85,6 +85,7 @@ public class PlayerStats : MonoBehaviour
                 player.GetComponent<PlayerController>().walkSpeed = 0f;
                 player.GetComponent<PlayerController>().sprintSpeed = 0f;
                 anim.SetTrigger("Throw");// trigger throw animation
+                player.GetComponent<PlayerUI>().DisableInteractUI(); // hidetext
             }
         }   
 
