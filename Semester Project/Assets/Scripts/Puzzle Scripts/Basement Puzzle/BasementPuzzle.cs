@@ -43,6 +43,7 @@ public class BasementPuzzle : MonoBehaviour
     float lerpDuration;
     bool opening;
     bool changeCamera = false;
+    public int enter;
 
 
     // Start is called before the first frame update
@@ -93,6 +94,7 @@ public class BasementPuzzle : MonoBehaviour
         {
             if (interacting)
             {
+                Debug.Log("Pressed E interacting start puzzle");
                 Player.GetComponent<PlayerUI>().DisableInteractUI();
                 Player.GetComponent<PlayerStats>().canMove = false;
                 PlayerCamera.SetActive(false);
@@ -107,21 +109,22 @@ public class BasementPuzzle : MonoBehaviour
                 Cursor.visible = true;
                 puzzleStarted = true;
             }
-            if (puzzleStarted) // player is stopping the puzzle
-            {
-                resetPuzzle();
-                puzzleStarted = false;
-                PuzzleCamera.SetActive(false);
-                PlayerMesh.SetActive(true);
-                PlayerHair.SetActive(true);
-                Player.GetComponent<CharacterController>().enabled = true;
-                PlayerController.enabled = true;
-                PlayerCamera.SetActive(true);
-                Player.GetComponent<PlayerStats>().canMove = true;
-                Player.GetComponent<PlayerUI>().DisplayInteractUI("Touch Stones");
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;       
-            }
+            //if (puzzleStarted) // player is stopping the puzzle
+            //{
+            //    Debug.Log("Puzzle Started and Pressed E, leave puzzle");
+            //    resetPuzzle();
+            //    puzzleStarted = false;
+            //    PuzzleCamera.SetActive(false);
+            //    PlayerMesh.SetActive(true);
+            //    PlayerHair.SetActive(true);
+            //    Player.GetComponent<CharacterController>().enabled = true;
+            //    PlayerController.enabled = true;
+            //    PlayerCamera.SetActive(true);
+            //    Player.GetComponent<PlayerStats>().canMove = true;
+            //    Player.GetComponent<PlayerUI>().DisplayInteractUI("Touch Stones");
+            //    Cursor.lockState = CursorLockMode.Locked;
+            //    Cursor.visible = false;       
+            //}
             
         }
 
