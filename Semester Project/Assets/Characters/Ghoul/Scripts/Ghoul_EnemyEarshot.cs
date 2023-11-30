@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class EnemyEarshot : MonoBehaviour
+public class Ghoul_EnemyEarshot : MonoBehaviour
 {
     public bool inEarshot = false;     // enemy can hear player
     public bool IsInEarshot() {  return inEarshot; }
 
-    public Vector3 lastHeard;
+    private Vector3 lastHeard;
 
     private GameObject player; // For checking if player is moving
 

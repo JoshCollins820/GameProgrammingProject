@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
@@ -27,17 +28,14 @@ using Random = UnityEngine.Random;
 ///   - Transition to Patrol if a specified time has passed and the player was not seen.
 /// </summary>
 
-public class EnemyAIFSMTest : BaseFSM
+public class Ghoul_EnemyAIFSM : BaseFSM
 {
     public enum FSMState
     {
         Patrol,
         Alert,
         RadiusPatrol,
-        Chase,
-        Attack,
-        Grab,
-        Silent,
+        Scream,
         Dead
     }
 
@@ -46,18 +44,17 @@ public class EnemyAIFSMTest : BaseFSM
     private Transform player;
     private NavMeshAgent agent;
 
-    private EnemyEarshot earshot;
-    private LineOfSight eyesight;
-    private AnimationHandler animations;
+    private Ghoul_EnemyEarshot earshot;
+    private Ghoul_LineOfSight eyesight;
+    private Ghoul_AnimationHandler animations;
 
-    private Attack range;
     public Animator animator;
-    private GameObject hitbox;
-    private Vector3 lastSeen;
-    private HideTest pullOut;
+
+    private GameObject blythe;
 
     private AudioSource screamAudio;
     private Vector3 lastPos;
+    private Vector3 lastSeen;
 
     private float minMoveInterval = 2f;
     private float maxMoveInterval = 5f;
@@ -69,17 +66,15 @@ public class EnemyAIFSMTest : BaseFSM
     {
         player = GameObject.Find("Player").GetComponent<Transform>();
         agent = GetComponent<NavMeshAgent>();
-        earshot = gameObject.GetComponentInChildren<EnemyEarshot>();
-        eyesight = gameObject.GetComponentInChildren<LineOfSight>();
-        animations = gameObject.GetComponentInChildren<AnimationHandler>();
-        screamAudio = GetComponent<AudioSource>();
+        earshot = gameObject.GetComponentInChildren<Ghoul_EnemyEarshot>();
+        eyesight = gameObject.GetComponentInChildren<Ghoul_LineOfSight>();
+        animations = gameObject.GetComponentInChildren<Ghoul_AnimationHandler>();
+        screamAudio = transform.GetChild(5).gameObject.GetComponent<AudioSource>();
         pointList = GameObject.FindGameObjectsWithTag("PatrolPoint");
 
         animator = GetComponentInChildren<Animator>();
-        range = transform.GetChild(4).gameObject.GetComponent<Attack>();
-        hitbox = GameObject.Find("HandHitbox");
-        hitbox.SetActive(false);
-        pullOut = GameObject.Find("HideTrigger").GetComponent<HideTest>();
+
+        blythe = GameObject.Find("Priest");
 
         SetStateToPatrol();
     }
@@ -112,35 +107,12 @@ public class EnemyAIFSMTest : BaseFSM
         StartCoroutine(RadiusPatrolCoroutine());
         Debug.Log("Transitioned to radius patrol state");
     }
-    public void SetStateToChase()
+    public void SetStateToScream()
     {
-        currentState = FSMState.Chase;
+        currentState = FSMState.Scream;
         agent.isStopped = false;
-        // set walking/running animation
-        StartCoroutine(ChaseCoroutine());
-        Debug.Log("Transitioned to chase state");
-    }
-    public void SetStateToAttack()
-    {
-        currentState = FSMState.Attack;
-        agent.isStopped = false;
-        StartCoroutine(AttackCoroutine());
-        Debug.Log("Transitioned to attack state");
-    }
-    public void SetStateToGrab()
-    {
-        currentState = FSMState.Grab;
-        agent.isStopped = false;
-        StartCoroutine(GrabCoroutine());
-        Debug.Log("Transitioned to grab state");
-    }
-    public void SetStateToSilent()
-    {
-        currentState = FSMState.Silent;
-        agent.isStopped = true;
-        // set idle animation
-        StartCoroutine(SilentCoroutine());
-        Debug.Log("Transitioned to silent state");
+        StartCoroutine(ScreamCoroutine());
+        Debug.Log("Transitioned to scream state");
     }
     public void SetStateToDead()
     {
@@ -156,20 +128,22 @@ public class EnemyAIFSMTest : BaseFSM
     //   - Transition to Alert if sound is heard.
     IEnumerator PatrolCoroutine()
     {
-        StartCoroutine(PatrolMovementCoroutine());  // handle movement separately
+        //StartCoroutine(PatrolMovementCoroutine());  // handle movement separately
+        StartCoroutine(MoveRandomly());
 
         while (currentState == FSMState.Patrol)
         {
             if (eyesight.IsInView() == true && !player.GetComponent<PlayerControllerTest>().hiding)
             {
-                StopCoroutine(PatrolMovementCoroutine());
-                SetStateToChase(); // transition to chase state
+                lastSeen = player.GetComponent<Transform>().position;
+                //StopCoroutine(PatrolMovementCoroutine());
+                StopCoroutine(MoveRandomly());
+                SetStateToScream(); // transition to scream state
             }
-            else if (earshot.IsInEarshot() == true
-                && !player.GetComponent<PlayerControllerTest>().hiding
-                && player.GetComponent<InputsManager>().move != Vector2.zero)
+            else if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
-                StopCoroutine(PatrolMovementCoroutine());
+                //StopCoroutine(PatrolMovementCoroutine());
+                StopCoroutine(MoveRandomly());
                 SetStateToAlert();  // transition to alert state
             }
             yield return null;
@@ -221,7 +195,7 @@ public class EnemyAIFSMTest : BaseFSM
     }
 
     // Radius Patrol: Walk to sound source, patrol in radius.
-    //   - Transition to Chase if the player is seen for more than a specified time.
+    //   - Transition to Scream if the player is seen for more than a specified time.
     //   - Transition to Patrol if patrol is completed and the player is not seen.
     private IEnumerator RadiusPatrolCoroutine()
     {
@@ -238,9 +212,10 @@ public class EnemyAIFSMTest : BaseFSM
             // transition to chase state if player is seen for longer than 2s
             if (seenTime >= 0.5f) // default 2
             {
+                lastSeen = player.GetComponent<Transform>().position;
                 StopCoroutine(RadiusPatrolMovementCoroutine());
                 //screamAudio.Play();
-                SetStateToChase();  // transition to chase state
+                SetStateToScream();  // transition to scream state
             }
             yield return null;
         }
@@ -325,163 +300,61 @@ public class EnemyAIFSMTest : BaseFSM
         return points;
     }
 
-    // Chase State: Scream and chase the player.
-    //   - Transition to Silent if line of sight is broken for a specified time.
-    private IEnumerator ChaseCoroutine()
+    private IEnumerator ScreamCoroutine()
     {
-        animations.PlayRunAnimation(); // change animation to "run"
-        float notSeenTime = 0.0f;
+        StartCoroutine(StareAtPlayer()); // keep staring at player
+        blythe.GetComponent<EnemyAIFSMTest>().StopAllCoroutines(); // stop whatever Blythe is doing
+        StartCoroutine(BlytheKeepMoving());
 
-        while (currentState == FSMState.Chase)
+        int count = 0;
+        while (count < 2) // play scream 2 times
         {
-            agent.SetDestination(player.position);  // chase player
+            animations.PlayScreamAnimation(); // change animation to "scream"
+            screamAudio.Play(); // play scream audio
+            yield return new WaitForSeconds(7); // wait 7 seconds (scream is 7 seconds long)
 
-            // if player is not in view
-            if (eyesight.IsInView() == false)
-            {
-                notSeenTime += Time.deltaTime;
-                //hitbox.SetActive(false);///HEEEEEEELLO
-
-                // if player enters hiding spot while hiding
-                if (player.GetComponent<PlayerControllerTest>().hiding == true)
-                {
-                    SetStateToAlert();
-                }
-
-                // transition to silent state if line of sight is broken for 8s
-                if (notSeenTime >= 8.0f)
-                {
-                    SetStateToSilent(); // transition to silent state
-                    yield break;
-                }
-            }
-            
-            // if player is in view
-            else if (notSeenTime > 0)// && !player.GetComponent<PlayerControllerTest>().hiding)
-            {
-                notSeenTime = 0;        // reset time counter
-            }
-
-            if (range.IsInReach() == true)
-            {
-                SetStateToAttack(); // transitition to attack state
-            }
-
-            // if player is in view and then player.hiding becomes true
-            // chase to the hiding spot (either last known location or a designated spot at hiding spot)
-            // go to grab state
-            lastSeen = player.GetComponent<Transform>().position;
-            if (eyesight.IsInView() == true && player.GetComponent<PlayerControllerTest>().hiding)
-            {
-                Debug.Log("Player hid while in sight.");
-                SetStateToGrab();
-            }
-
-
+            count++;
             yield return null;
         }
-    }
-    
-    // Attack: Swing at the player
-    //  - Transition to Chase if player is out of melee range
-    // Would like to have randomized attacks
-    private IEnumerator AttackCoroutine()
-    {
-        while (range.IsInReach())
-        {
-            animations.PlayAttackAnimation();
-            yield return new WaitForSeconds(0.35f);//0.35
-            hitbox.SetActive(true);
-            animator.SetBool("IsAttack", false);
-        }
 
-        animator.SetBool("IsAttack", false);
-        hitbox.SetActive(false);
-        SetStateToChase();
-
-        yield return null;
+        StopCoroutine(StareAtPlayer()); // stop staring at player
+        SetStateToPatrol(); // go back to patrolling
     }
 
-    // Grab: Pull player out of hiding spot
-    // - Transition to Chase once player is out of hiding spot
-    private IEnumerator GrabCoroutine()
+    //------------------------------ Helper ------------------------------
+
+    private IEnumerator BlytheKeepMoving()
     {
-        // play the grab animation
-        // probably call some function from a Grab script
-        // wait some time before going to chase
-        // go to chase
+        blythe.GetComponent<AnimationHandler>().PlayRunAnimation(); // make Blythe run
 
         bool reached = false;
         while (reached == false)
         {
-            if (!player.GetComponent<PlayerControllerTest>().hiding)
+            blythe.GetComponent<NavMeshAgent>().SetDestination(lastSeen); // move Blythe to player's last seen position
+
+            // if player is seen while moving to ghoul
+            if (blythe.GetComponent<LineOfSight>().inView == true && !player.GetComponent<PlayerControllerTest>().hiding)
             {
-                SetStateToChase();
+                blythe.GetComponent<EnemyAIFSMTest>().SetStateToChase(); // chase player
+                yield break; // stop this coroutine
             }
 
-            agent.SetDestination(lastSeen);
-
-            if (agent.remainingDistance < 0.5)
+            if (blythe.GetComponent<NavMeshAgent>().remainingDistance < 0.5)
             {
+                Debug.Log("Player's last seen position reached.");
                 reached = true;
             }
 
             yield return null;
         }
 
-        Debug.Log("Destination reached.");
-
-        Debug.Log("Grabbing.");
-        animations.PlayGrabAnimation();
-        yield return new WaitForSeconds(1f);
-
-        Debug.Log("Throwing.");
-        animations.PlayThrowAnimation();
-        yield return new WaitForSeconds(1f);
-
-        animator.SetBool("IsGrab", false);
-        animator.SetBool("IsThrow", false);
-        animations.PlayIdleAnimation();
-
-        pullOut.LeaveHidingSpot();
-
-        Debug.Log("Finished.");
-
-        //animator.SetBool("IsGrab", false);
-        //animator.SetBool("IsThrow", false);
-
-        yield return new WaitForSeconds(1.25f); //give time for player to run away
-
-        SetStateToChase();
+        blythe.transform.GetChild(2).gameObject.GetComponent<EnemyEarshot>().lastHeard = lastSeen; // helper for patrol radius
+        blythe.GetComponent<EnemyAIFSMTest>().SetStateToRadiusPatrol(); // go to where player was seen, patrol radius
+        yield return new WaitForSeconds(0.5f);
+        blythe.GetComponent<AnimationHandler>().PlayIdleAnimation(); // change animation to "idle"
 
         yield return null;
     }
-
-    // Silent: Pause after chasing the player.
-    //   - Transition to Chase if the player is seen again for more than a specified time.
-    //   - Transition to Patrol if a specified time has passed and the player was not seen.
-    private IEnumerator SilentCoroutine()
-    {
-        animations.PlayIdleAnimation(); // change animation to "idle"
-        yield return new WaitForSeconds(1.0f);
-        float elapsedTime = 0.0f;
-
-        while (currentState == FSMState.Silent && elapsedTime < 2.0f)//default 3
-        {
-            if (eyesight.IsInView() == true)// && !player.GetComponent<PlayerControllerTest>().hiding)
-            {
-                SetStateToChase();  // change state
-                yield break;
-            }
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        // if time elapses and player is no longer seen, transition to patrol state
-        SetStateToPatrol();
-    }
-
-    //------------------------------ Helper ------------------------------
 
     private Vector3 GetRandomPositionOnNavMesh()
     {
@@ -508,8 +381,18 @@ public class EnemyAIFSMTest : BaseFSM
         transform.rotation = targetRotation;
     }
 
+    private IEnumerator StareAtPlayer()
+    {
+        while(currentState == FSMState.Scream)
+        {
+            agent.SetDestination(player.position); // "rotate" to face player (walking very slowly)
+            yield return null;
+        }
+    }
+
     private IEnumerator MoveRandomly()
     {
+        animations.PlayWalkAnimation(); // change animation to "walk"
         while (true)
         {
             Vector3 randomPosition = GetRandomPositionOnNavMesh();

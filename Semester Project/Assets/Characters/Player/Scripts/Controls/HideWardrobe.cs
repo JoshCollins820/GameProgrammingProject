@@ -9,7 +9,7 @@ public class HideWardrobe : MonoBehaviour
     [SerializeField] Transform closedPos;
     [SerializeField] Transform peekPos;
 
-    public float doorSpeed = 2f;
+    public float doorSpeed = 8f;
     public bool open = false;
 
 
