@@ -5,19 +5,19 @@ using UnityEngine;
 public class MusicRoomPuzzle : MonoBehaviour
 {
     // Player Objects
-    GameObject Magistrate;
-    GameObject Player;
-    GameObject PlayerMesh;
-    GameObject PlayerHair;
+    public GameObject Magistrate;
+    public GameObject Player;
+    public GameObject PlayerMesh;
+    public GameObject PlayerHair;
 
     // Puzzle Rune Objects
-    GameObject Rune_A;
-    GameObject Rune_B;
-    GameObject Rune_C;
-    GameObject Rune_D;
-    GameObject Rune_E;
-    GameObject Rune_F;
-    GameObject Rune_G;
+    public GameObject Rune_A;
+    public GameObject Rune_B;
+    public GameObject Rune_C;
+    public GameObject Rune_D;
+    public GameObject Rune_E;
+    public GameObject Rune_F;
+    public GameObject Rune_G;
 
     [SerializeField] GameObject PuzzleCamera;
     [SerializeField] GameObject PlayerCamera;
@@ -85,46 +85,53 @@ public class MusicRoomPuzzle : MonoBehaviour
                 Cursor.visible = true;
                 puzzleStarted = true;
             }
-            if (puzzleStarted) // player is stopping the puzzle
-            {
-                returnPlayerControl();             
-            }   
+            //if (puzzleStarted) // player is stopping the puzzle
+            //{
+            //    returnPlayerControl();             
+            //}   
         }
         // handle rune pressed
         if (Rune_A.GetComponent<RuneOnClick>().activated)
         {
             puzzleOrder += "A";
             notesAttempted++;
+            Rune_A.GetComponent<RuneOnClick>().activated = false;
         }
         if (Rune_B.GetComponent<RuneOnClick>().activated)
         {
             puzzleOrder += "B";
             notesAttempted++;
+            Rune_B.GetComponent<RuneOnClick>().activated = false;
         }
         if (Rune_C.GetComponent<RuneOnClick>().activated)
         {
             puzzleOrder += "C";
             notesAttempted++;
+            Rune_C.GetComponent<RuneOnClick>().activated = false;
         }
         if (Rune_D.GetComponent<RuneOnClick>().activated)
         {
             puzzleOrder += "D";
             notesAttempted++;
+            Rune_D.GetComponent<RuneOnClick>().activated = false;
         }
         if (Rune_E.GetComponent<RuneOnClick>().activated)
         {
             puzzleOrder += "E";
             notesAttempted++;
+            Rune_E.GetComponent<RuneOnClick>().activated = false;
         }
         if (Rune_F.GetComponent<RuneOnClick>().activated)
         {
             puzzleOrder += "F";
             notesAttempted++;
+            Rune_F.GetComponent<RuneOnClick>().activated = false;
         }
         if (Rune_G.GetComponent<RuneOnClick>().activated)
         {
             puzzleOrder += "G";
             notesAttempted++;
+            Rune_G.GetComponent<RuneOnClick>().activated = false;
         }
 
         // once 6 notes have been played check if puzzle is solved
