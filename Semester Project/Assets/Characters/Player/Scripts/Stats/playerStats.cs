@@ -207,11 +207,11 @@ public class PlayerStats : MonoBehaviour
     private void ThrowRock()
     {
         player.GetComponent<PlayerInventory>().count_rock -= 1; // decrease rock count
-        Invoke(nameof(EnableCanThrow), 0.3f); // rock throw cooldown
         var rock = (GameObject)Instantiate(
                 rockPrefab,
                 rockSpawn.position,
                 rockSpawn.rotation); // instantiate rock
         rock.GetComponent<Rigidbody>().velocity = rock.transform.forward * rock_speed; // apply force to rock
+        Invoke(nameof(EnableCanThrow), 0.3f); // rock throw cooldown
     }
 }
