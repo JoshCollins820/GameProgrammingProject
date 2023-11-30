@@ -26,6 +26,7 @@ public class RuneOnClick : MonoBehaviour
 
     private void OnMouseDown()
     {
+        Debug.Log(this.name + " clicked");
         // play note
         note.Play();
 
