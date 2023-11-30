@@ -7,12 +7,14 @@ public class PickUpClue : MonoBehaviour
     // Get any necessary GameObjects for Inventory
     GameObject Player;
     GameObject JournalUI;
-    GameObject Journal;
 
+    // Bools to help with interacting with clue or lore
     public bool pickedUp;
     public bool showClue;
     public bool showInteract;
     public bool interacting;
+
+    // Writing to go into journal about the clue or lore
     string leftPageContent;
     string rightPageContent;
 
@@ -27,7 +29,6 @@ public class PickUpClue : MonoBehaviour
         interacting = false;
         Player = GameObject.Find("Magistrate").transform.GetChild(0).gameObject;
         JournalUI = GameObject.Find("JournalUI");
-        Journal = JournalUI.transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
@@ -120,6 +121,30 @@ public class PickUpClue : MonoBehaviour
                 "the order of the visible light spectrum. Good Luck and..." +
                 "BEWARE THE PRIEST!!!!";
 
+        }
+        if (this.name == "FeronsMusicJournal")
+        {
+            leftPageContent = "Journal of one Feron Blythe\n" +
+                "I found arcane stone runes in my most recent adventure\n" +
+                "abroad. They are made of a material that had a most peculiar\n" +
+                "ability to resonate with sound. So naturally I had to have them\n" +
+                "for my latest contraption. After discovering that recordings of\n" +
+                "sounds could be kept on a cylinder, that when spun with the\n" +
+                "pressure of air, will emit their melodious tones from horns\n" +
+                "I made special for the task, I knew I would be immortalized.";
+            rightPageContent = "Bahahaha, the contraption is complete! By pressing the\n" +
+                "runes, which I have laid in order to represent musical notation\n" +
+                "rather than those horridly mundane letters ABCDEFG, tones will\n" +
+                "sound gloriously from the resonating device I have set up within!\n" +
+                "By playing the notes DGFEFD, a haunting tune of mine, one will\n" +
+                "gain access to my sitting room... Ingenious no?";
+        }
+
+        if (this.name == "SittingRoomKey")
+        {
+            leftPageContent = "The key to Feron's Sitting Room...\n" +
+                "Whatever a Sitting Room is...";
+            rightPageContent = "";
         }
         showClue = false;   // stop updating
     }
