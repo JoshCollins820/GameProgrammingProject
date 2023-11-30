@@ -60,9 +60,9 @@ public class BasementPuzzle : MonoBehaviour
         StoneCyan = GameObject.Find("Stone_Cyan");
         StoneGreen = GameObject.Find("Stone_Green");
         StoneYellow = GameObject.Find("Stone_Yellow");
-        PuzzleCamera = this.transform.gameObject.transform.Find("Puzzle Camera").gameObject;
+        PuzzleCamera = this.transform.gameObject.transform.Find("Basement Puzzle VCamera").gameObject;
         PlayerCamera = Magistrate.transform.gameObject.transform.Find("Normal VCamera").gameObject;
-        SecretDoorCamera = this.transform.gameObject.transform.Find("SecretDoorCamera").gameObject;
+        SecretDoorCamera = this.transform.gameObject.transform.Find("Basement Secret Door VCamera").gameObject;
         SecretDoor = GameObject.Find("SecretDoor");
         doorOpen = SecretDoor.transform.GetChild(1).gameObject.GetComponent<AudioSource>();
 
