@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -51,13 +53,13 @@ public class EnemyAIFSM : BaseFSM
     private AudioSource screamAudio;
     private Vector3 lastPos;
 
-    private float minMoveInterval = 2f;
-    private float maxMoveInterval = 5f;
+    private float minMoveInterval = 1f;
+    private float maxMoveInterval = 2.5f;
 
     private float lerpDuration;
     int i = 0;
 
-    private bool testing;
+    public bool testing;
 
     protected override void Initialize()
     {
@@ -168,7 +170,7 @@ public class EnemyAIFSM : BaseFSM
             }
             i = (i + 1) % pointList.Length;
             animations.PlayIdleAnimation(); // change animation to "idle"
-            yield return new WaitForSeconds(4.0f);  // pause briefly at the destination (2 default)
+            yield return new WaitForSeconds(5.0f);  // pause briefly at the destination (2 default)
         }
     }
 
@@ -178,7 +180,7 @@ public class EnemyAIFSM : BaseFSM
     private IEnumerator AlertCoroutine()
     {
         animations.PlayIdleAnimation(); // change animation to "idle"
-        yield return new WaitForSeconds(1.0f);
+        //yield return new WaitForSeconds(1.0f);
         float elapsedTime = 0.0f;
 
         while (currentState == FSMState.Alert && elapsedTime < 5f) //4 seconds default
@@ -250,19 +252,11 @@ public class EnemyAIFSM : BaseFSM
                 yield return null;
             }
             animations.PlayIdleAnimation(); // change animation to "idle"
-            yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval)); // wait a random amount of time at the point
+            yield return new WaitForSeconds(5.0f);
+            //yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval)); // wait a random amount of time at the point
         }
 
         // if radius patrol is complete and player was not seen
-
-        // stop radius patrol coroutine
-        //StopCoroutine(RadiusPatrolCoroutine());
-
-        // TODO --> blind spot - enemy is neither listening nor looking for player from here
-        //          until transition to patrol state
-
-        // turn around
-        //yield return StartCoroutine(Rotate180()); //temp
 
         // return to last position before noise was heard
         agent.SetDestination(lastPos);
@@ -272,7 +266,7 @@ public class EnemyAIFSM : BaseFSM
             yield return null;
         }
         animations.PlayIdleAnimation(); // change animation to "idle"
-        yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval)); // wait a random amount of time at the point
+        //yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval)); // wait a random amount of time at the point
 
         // transition to patrol state
         SetStateToPatrol();
@@ -283,20 +277,35 @@ public class EnemyAIFSM : BaseFSM
     {
         Vector3 position = earshot.GetLastHeardPos();
 
-        int numOfPoints = 3; // number of points the enemy will patrol in that location
+        int distance = 3;
+        int numOfPoints = 2; // number of points the enemy will patrol in that location
         Vector3[] points = new Vector3[numOfPoints]; // will hold the radius patrol points to be returned
-        for(int i = 0; i < numOfPoints; i++)
-        {
-            float x = Random.Range(-4, 4);
-            float z = Random.Range(-4, 4);
-            Vector3 point = new Vector3(position.x + x, position.y, position.z + z);
-            points[i] = point;
-        }
-
-        // debugging
         for (int i = 0; i < numOfPoints; i++)
         {
-            Debug.Log(points[i]);
+            int attempts = 0;
+            int maxAttempts = 10;
+
+            do
+            {
+                float x = Random.Range(-distance, distance);
+                float z = Random.Range(-distance, distance);
+                Vector3 point = new Vector3(position.x + x, position.y, position.z + z);
+                points[i] = point;
+
+                if (NavMesh.SamplePosition(points[i], out NavMeshHit hit, 4.0f, NavMesh.AllAreas))
+                {
+                    Debug.Log("point " + i + " is on the NavMesh");
+                    break; // the point is on the NavMesh
+                }
+
+                attempts++;
+            } while (attempts < maxAttempts);
+
+            if (attempts == maxAttempts)
+            {
+                Debug.Log("Unable to find valid patrol point " + i);
+                points[i] = position;
+            }
         }
 
         return points;
@@ -324,6 +333,11 @@ public class EnemyAIFSM : BaseFSM
                     SetStateToSilent(); // transition to silent state
                     yield break;
                 }
+            }
+            else if (player.GetComponent<PlayerController>().hiding)
+            {
+                SetStateToSilent();
+                yield break;
             }
             // if player is in view
             else if (notSeenTime > 0 && !player.GetComponent<PlayerController>().hiding)
