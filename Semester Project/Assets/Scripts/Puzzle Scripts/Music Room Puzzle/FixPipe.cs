@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class FixPipe : MonoBehaviour
 {
-    GameObject Player;
-    GameObject MissingCornerPipe;
-    GameObject FixedMissingCornerPipe;
+    public GameObject Player;
+    public GameObject MissingCornerPipe;
+    public GameObject FixedMissingCornerPipe;
 
     public bool interacting;
     public bool pipeFixed;
@@ -20,7 +20,7 @@ public class FixPipe : MonoBehaviour
     {
         Player = GameObject.Find("Magistrate").transform.GetChild(0).gameObject;
         MissingCornerPipe = GameObject.Find("MissingCornerPipe");
-        FixedMissingCornerPipe = GameObject.Find("FixedMissingCornerPipe");
+        FixedMissingCornerPipe = GameObject.Find("Music Player").transform.GetChild(1).gameObject;
 
         interacting = false;
         pipeFixed = false;
@@ -35,6 +35,8 @@ public class FixPipe : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && interacting)
         {
+            // check if player picked up pipe
+            hasPipe = MissingCornerPipe.GetComponent<PickUpClue>().pickedUp;
             if (hasPipe)
             {
                 FixedMissingCornerPipe.SetActive(true);
@@ -45,6 +47,7 @@ public class FixPipe : MonoBehaviour
                 Player.GetComponent<PlayerUI>().DisplayHintUI("Seems like a pipe is missing...");
             }
         }
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -53,8 +56,7 @@ public class FixPipe : MonoBehaviour
         {
             interacting = true;
             Player.GetComponent<PlayerUI>().DisplayInteractUI("Check contraption");
-            // check if player picked up pipe
-            hasPipe = MissingCornerPipe.GetComponent<PickUpClue>().pickedUp;
+            
         }
     }
 

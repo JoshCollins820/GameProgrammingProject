@@ -95,6 +95,8 @@ public class BasementPuzzle : MonoBehaviour
             if (interacting)
             {
                 Debug.Log("Pressed E interacting start puzzle");
+
+                Player.GetComponent<PlayerUI>().DisableHintUI();
                 Player.GetComponent<PlayerUI>().DisableInteractUI();
                 Player.GetComponent<PlayerStats>().canMove = false;
                 PlayerCamera.SetActive(false);
@@ -222,6 +224,7 @@ public class BasementPuzzle : MonoBehaviour
         else
         {
             Debug.Log("Puzzle Failed");
+            Player.GetComponent<PlayerUI>().DisplayHintUI("Puzzle Failed");
             puzzleFailed = true;
             resetPuzzle();
             PuzzleCamera.SetActive(false);

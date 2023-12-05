@@ -6,8 +6,8 @@ using UnityEngine;
 public class DungeonDoorOpen : MonoBehaviour
 {
 
-    GameObject DungeonDoorKey;
-    GameObject Player;
+    [SerializeField] GameObject DungeonDoorKey;
+    [SerializeField] GameObject Player;
 
 
     float slerpDuration;

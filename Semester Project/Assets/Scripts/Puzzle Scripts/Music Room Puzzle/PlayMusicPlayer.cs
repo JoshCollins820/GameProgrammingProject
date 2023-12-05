@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PlayMusicPlayer : MonoBehaviour
 {
-    GameObject Player;
-    GameObject PipeInteraction;
-    GameObject MusicHorn;
-    GameObject Handle;
+    public GameObject Player;
+    public GameObject PipeInteraction;
+    public GameObject MusicHorn;
+
 
     AudioSource melody;
 
@@ -24,7 +24,7 @@ public class PlayMusicPlayer : MonoBehaviour
         Player = GameObject.Find("Magistrate").transform.GetChild(0).gameObject;
         PipeInteraction = GameObject.Find("PipeInteraction");
         MusicHorn = GameObject.Find("Music Player Horn");
-        Handle = transform.GetChild(0).gameObject;
+
         melody = MusicHorn.GetComponent<AudioSource>();
 
         pipeFixed = false;
@@ -60,7 +60,7 @@ public class PlayMusicPlayer : MonoBehaviour
         }
         if (leverPulled)
         {
-            Invoke(nameof(ReturnLever), 1.5f);
+            Invoke(nameof(ReturnLever), 0.5f);
         }
         if (returning)
         {
@@ -100,7 +100,7 @@ public class PlayMusicPlayer : MonoBehaviour
     {
         float timeElapsed = 0;
         Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = transform.rotation * Quaternion.Euler(25, 0, 0);
+        Quaternion targetRotation = transform.rotation * Quaternion.Euler(24, 0, 0);
         while (timeElapsed < slerpDuration)
         {
             transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / slerpDuration);
@@ -108,7 +108,7 @@ public class PlayMusicPlayer : MonoBehaviour
             yield return null;
         }
         transform.rotation = targetRotation;
-        Debug.Log("Cell door opened");
+        Debug.Log("Lever Pulled");
         rotating = false;
         leverPulled = true;
     }
@@ -117,7 +117,7 @@ public class PlayMusicPlayer : MonoBehaviour
     {
         float timeElapsed = 0;
         Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = transform.rotation * Quaternion.Euler(-25, 0, 0);
+        Quaternion targetRotation = transform.rotation * Quaternion.Euler(-12, 0, 0);
         while (timeElapsed < slerpDuration)
         {
             transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / slerpDuration);
@@ -125,7 +125,7 @@ public class PlayMusicPlayer : MonoBehaviour
             yield return null;
         }
         transform.rotation = targetRotation;
-        Debug.Log("Cell door opened");
+        Debug.Log("Lever Returned");
         returning = false;
         leverPulled = false;
     }

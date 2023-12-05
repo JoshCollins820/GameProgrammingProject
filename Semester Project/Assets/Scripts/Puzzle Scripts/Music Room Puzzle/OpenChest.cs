@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class OpenChest : MonoBehaviour
 {
-    GameObject MusicRoomPuzzle;
-    GameObject SittingRoomKey;
-    GameObject Player;
-    GameObject Magistrate;
-    GameObject PlayerMesh;
-    GameObject PlayerHair;
+
+    public GameObject MusicRoomPuzzle;
+    public GameObject SittingRoomKey;
+    public GameObject Player;
+    public GameObject Magistrate;
+    public GameObject PlayerMesh;
+    public GameObject PlayerHair;
 
     [SerializeField] GameObject PlayerCamera;
     [SerializeField] GameObject ChestCamera;
@@ -28,12 +29,14 @@ public class OpenChest : MonoBehaviour
     void Start()
     {
         MusicRoomPuzzle = GameObject.Find("Music Room Puzzle");
-        SittingRoomKey = GameObject.Find("SittingRoomKey");
+        
+
         Magistrate = GameObject.Find("Magistrate");
         Player = Magistrate.transform.GetChild(0).gameObject;
         PlayerHair = Player.transform.GetChild(1).gameObject;
         PlayerMesh = Player.transform.GetChild(0).gameObject;
         PlayerController = Player.GetComponent<CharacterController>();
+        SittingRoomKey = GameObject.Find("Clues").transform.GetChild(2).gameObject;
         PlayerCamera = Magistrate.transform.gameObject.transform.Find("Normal VCamera").gameObject;
         ChestCamera = MusicRoomPuzzle.transform.gameObject.transform.Find("Chest VCamera").gameObject;
         KeyCamera = MusicRoomPuzzle.transform.gameObject.transform.Find("Key VCamera").gameObject;
@@ -60,18 +63,13 @@ public class OpenChest : MonoBehaviour
             }
 
         }
-        if (MusicRoomPuzzle.GetComponent<MusicRoomPuzzle>().puzzleSolved)
-        {
-            opening = true;
-        }
         if (opening)
         {
             Debug.Log("opening chest");
-            // disable lock
-            this.gameObject.transform.GetChild(1).gameObject.SetActive(false);
             SittingRoomKey.SetActive(true);
-            Invoke(nameof(OpeningSequence), 3f);
             StartCoroutine(Rotate90());
+            Invoke(nameof(OpeningSequence), 3f);
+            
             
         }
         if (opened) // get camera back to player
@@ -131,19 +129,23 @@ public class OpenChest : MonoBehaviour
         Cursor.visible = false;
     }
 
+    public void Open()
+    {
+        opening = true;
+    }
     IEnumerator Rotate90()
     {
         float timeElapsed = 0;
         Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = transform.rotation * Quaternion.Euler(-90, 0, 0);
+        Quaternion targetRotation = transform.rotation * Quaternion.Euler(-45, 0, 0);
         while (timeElapsed < slerpDuration)
         {
             transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / slerpDuration);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-        transform.rotation = targetRotation;
-        Debug.Log("Cell door opened");
+        
+        Debug.Log("Chest opened");
         opening = false;
         opened = true;
     }

@@ -19,7 +19,7 @@ public class OpenSittingRoom : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SittingRoomKey = GameObject.Find("SittingRoomKey");
+        SittingRoomKey = GameObject.Find("Clues").transform.GetChild(2).gameObject;
         Player = GameObject.Find("Magistrate").transform.GetChild(0).gameObject;
         slerpDuration = 2f;
         opening = false;
@@ -49,9 +49,8 @@ public class OpenSittingRoom : MonoBehaviour
         }
         if (opening)
         {
-            Debug.Log("opening cell");
-            // disable lock
-            this.gameObject.transform.GetChild(1).gameObject.SetActive(false);
+            Debug.Log("opening SR door");
+           
             StartCoroutine(Rotate90());
         }
         if (opened)
@@ -97,7 +96,7 @@ public class OpenSittingRoom : MonoBehaviour
     {
         float timeElapsed = 0;
         Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = transform.rotation * Quaternion.Euler(0, 0, 0);
+        Quaternion targetRotation = transform.rotation * Quaternion.Euler(0, 45, 0);
         while (timeElapsed < slerpDuration)
         {
             transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / slerpDuration);
@@ -105,7 +104,7 @@ public class OpenSittingRoom : MonoBehaviour
             yield return null;
         }
         transform.rotation = targetRotation;
-        Debug.Log("Cell door opened");
+        Debug.Log("SR door opened");
         opening = false;
         opened = true;
     }

@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class RuneOnClick : MonoBehaviour
 {
-    AudioSource note;
-    GameObject MusicRoomPuzzle;
+    //public AudioSource note;
+    public GameObject MusicRoomPuzzle;
+    public GameObject ActivateSound;
 
     public bool activated;
 
@@ -13,8 +14,9 @@ public class RuneOnClick : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        note = this.gameObject.GetComponent<AudioSource>();
+        //note = this.gameObject.GetComponent<AudioSource>();
         MusicRoomPuzzle = GameObject.Find("Music Room Puzzle");
+        ActivateSound = transform.GetChild(0).gameObject;
         activated = false;
     }
 
@@ -24,17 +26,23 @@ public class RuneOnClick : MonoBehaviour
         
     }
 
-    private void OnMouseDown()
+    public void ActivateRune()
     {
-        Debug.Log(this.name + " clicked");
-        // play note
-        note.Play();
-
-        // add note to puzzle solution
-        MusicRoomPuzzle.GetComponent<MusicRoomPuzzle>();
-
-        // let music puzzle script know this has been clicked
-        activated = true;
+        if (activated == false)
+        {
+            Debug.Log("Activated Rune");
+            activated = true;
+            ActivateSound.SetActive(true);
+        }
     }
 
+    public void DeactivateRune()
+    {
+        if (activated == true)
+        {
+            Debug.Log("Deactivated Rune");
+            activated = false;
+            ActivateSound.SetActive(false);
+        }
+    }
 }

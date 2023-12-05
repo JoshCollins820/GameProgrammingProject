@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class MusicRoomPuzzle : MonoBehaviour
 {
@@ -19,6 +20,12 @@ public class MusicRoomPuzzle : MonoBehaviour
     public GameObject Rune_F;
     public GameObject Rune_G;
 
+    // To open Puzzle Chest
+    public GameObject ChestHinge;
+
+    // UI Notes Pressed Hint
+    public GameObject NotesPressed;
+
     [SerializeField] GameObject PuzzleCamera;
     [SerializeField] GameObject PlayerCamera;
     [SerializeField] GameObject ChestCamera;
@@ -28,13 +35,20 @@ public class MusicRoomPuzzle : MonoBehaviour
     public bool puzzleStarted;
     public bool puzzleSolved;
     public bool interacting;
+    public bool aActive;
+    public bool bActive;
+    public bool cActive;
+    public bool dActive;
+    public bool eActive;
+    public bool fActive;
+    public bool gActive;
 
     // keep track of and compare to solution string DGFEFD
-    string puzzleOrder;
+    public string puzzleOrder;
     string puzzleSolution;
 
     // check how many notes player has tried
-    int notesAttempted;
+    public int notesAttempted;
 
     // Start is called before the first frame update
     void Start()
@@ -56,9 +70,21 @@ public class MusicRoomPuzzle : MonoBehaviour
         Rune_F = GameObject.Find("Rune_F");
         Rune_G = GameObject.Find("Rune_G");
 
+        ChestHinge = GameObject.Find("MusicRoomChest").transform.GetChild(2).gameObject;
+
+        NotesPressed = GameObject.Find("NotesPressed");
+        NotesPressed.GetComponent<TextMeshProUGUI>().text = "";
+
         puzzleStarted = false;
         puzzleSolved = false;
         interacting = false;
+        aActive = false;
+        bActive = false;
+        cActive = false;
+        dActive = false;
+        eActive = false;
+        fActive = false;
+        gActive = false;
 
         puzzleOrder = "";
         puzzleSolution = "DGFEFD";
@@ -73,6 +99,7 @@ public class MusicRoomPuzzle : MonoBehaviour
         {
             if (interacting && !puzzleSolved)  // player is starting the puzzle
             {
+                Player.GetComponent<PlayerUI>().DisableHintUI();
                 Player.GetComponent<PlayerUI>().DisableInteractUI();
                 Player.GetComponent<PlayerStats>().canMove = false;
                 PlayerCamera.SetActive(false);
@@ -91,47 +118,46 @@ public class MusicRoomPuzzle : MonoBehaviour
             //}   
         }
         // handle rune pressed
-        if (Rune_A.GetComponent<RuneOnClick>().activated)
+        if (Rune_A.GetComponent<RuneOnClick>().activated && !aActive)
         {
-            puzzleOrder += "A";
-            notesAttempted++;
-            Rune_A.GetComponent<RuneOnClick>().activated = false;
+            aActive = true;
+            Invoke(nameof(ActivateRuneA), 0.1f);
         }
-        if (Rune_B.GetComponent<RuneOnClick>().activated)
+        if (Rune_B.GetComponent<RuneOnClick>().activated && !bActive)
         {
-            puzzleOrder += "B";
-            notesAttempted++;
-            Rune_B.GetComponent<RuneOnClick>().activated = false;
+            bActive = true;
+            Invoke(nameof(ActivateRuneB), 0.1f);
         }
-        if (Rune_C.GetComponent<RuneOnClick>().activated)
+        if (Rune_C.GetComponent<RuneOnClick>().activated && !cActive)
         {
-            puzzleOrder += "C";
-            notesAttempted++;
-            Rune_C.GetComponent<RuneOnClick>().activated = false;
+            cActive = true;
+            Invoke(nameof(ActivateRuneC), 0.1f);
         }
-        if (Rune_D.GetComponent<RuneOnClick>().activated)
+        if (Rune_D.GetComponent<RuneOnClick>().activated && !dActive)
         {
-            puzzleOrder += "D";
-            notesAttempted++;
-            Rune_D.GetComponent<RuneOnClick>().activated = false;
+            dActive = true;
+            Invoke(nameof(ActivateRuneD), 0.1f);
         }
-        if (Rune_E.GetComponent<RuneOnClick>().activated)
+        if (Rune_E.GetComponent<RuneOnClick>().activated && !eActive)
         {
-            puzzleOrder += "E";
-            notesAttempted++;
-            Rune_E.GetComponent<RuneOnClick>().activated = false;
+            eActive = true;
+            Invoke(nameof(ActivateRuneE), 0.1f);
         }
-        if (Rune_F.GetComponent<RuneOnClick>().activated)
+        if (Rune_F.GetComponent<RuneOnClick>().activated && !fActive)
         {
-            puzzleOrder += "F";
-            notesAttempted++;
-            Rune_F.GetComponent<RuneOnClick>().activated = false;
+            fActive = true;
+            Invoke(nameof(ActivateRuneF), 0.1f);
         }
-        if (Rune_G.GetComponent<RuneOnClick>().activated)
+        if (Rune_G.GetComponent<RuneOnClick>().activated && !gActive)
         {
-            puzzleOrder += "G";
-            notesAttempted++;
-            Rune_G.GetComponent<RuneOnClick>().activated = false;
+            gActive = true;
+            Invoke(nameof(ActivateRuneG), 0.1f);
+        }
+
+        // update notes pressed
+        if (interacting && !puzzleSolved)
+        {
+            NotesPressed.GetComponent<TextMeshProUGUI>().text = puzzleOrder;
         }
 
         // once 6 notes have been played check if puzzle is solved
@@ -167,13 +193,19 @@ public class MusicRoomPuzzle : MonoBehaviour
         if (puzzleOrder == puzzleSolution)
         {
             Debug.Log("Puzzle Solved");
+            // move camera over to chest
             PuzzleCamera.SetActive(false);
             ChestCamera.SetActive(true);
             interacting = false;
-            notesAttempted = 0;
+            resetPuzzle();
+            // open chest
+            ChestHinge.GetComponent<OpenChest>().Open();
         }
         else
         {
+            Debug.Log("Puzzle Failed");
+            resetPuzzle();
+            Player.GetComponent<PlayerUI>().DisplayHintUI("Failed Puzzle");
             returnPlayerControl();
         }
     }
@@ -196,6 +228,116 @@ public class MusicRoomPuzzle : MonoBehaviour
             interacting = false;
             Player.GetComponent<PlayerUI>().DisableInteractUI();
             Player.GetComponent<PlayerUI>().DisableHintUI();
+            resetPuzzle();
         }
+    }
+
+    private void resetPuzzle()
+    {
+        aActive = false;
+        bActive = false;
+        cActive = false;
+        dActive = false;
+        eActive = false;
+        fActive = false;
+        gActive = false;
+        puzzleOrder = "";
+        notesAttempted = 0;
+    }
+
+    private void ActivateRuneA()
+    {
+        Rune_A.GetComponent<RuneOnClick>().ActivateRune();
+        Invoke(nameof(DeactivateRuneA), 1f);
+    }
+
+    private void ActivateRuneB()
+    {
+        Rune_B.GetComponent<RuneOnClick>().ActivateRune();
+        Invoke(nameof(DeactivateRuneB), 1f);
+    }
+
+    private void ActivateRuneC()
+    { 
+        Rune_C.GetComponent<RuneOnClick>().ActivateRune();
+        Invoke(nameof(DeactivateRuneC), 1f);
+    }
+
+    private void ActivateRuneD()
+    {  
+        Rune_D.GetComponent<RuneOnClick>().ActivateRune();
+        Invoke(nameof(DeactivateRuneD), 1f);
+    }
+
+    private void ActivateRuneE()
+    {
+        Rune_E.GetComponent<RuneOnClick>().ActivateRune();
+        Invoke(nameof(DeactivateRuneE), 1f);
+    }
+    private void ActivateRuneF()
+    {       
+        Rune_F.GetComponent<RuneOnClick>().ActivateRune();
+        Invoke(nameof(DeactivateRuneF), 1f);
+    }
+
+    private void ActivateRuneG()
+    {
+        Rune_G.GetComponent<RuneOnClick>().ActivateRune();
+        Invoke(nameof(DeactivateRuneG), 1f);
+    }
+
+    private void DeactivateRuneA()
+    {
+        puzzleOrder += "A";
+        notesAttempted++;
+        aActive = false;
+        Rune_A.GetComponent<RuneOnClick>().DeactivateRune();
+    }
+
+    private void DeactivateRuneB()
+    {
+        puzzleOrder += "B";
+        notesAttempted++;
+        bActive = false;
+        Rune_B.GetComponent<RuneOnClick>().DeactivateRune();
+    }
+
+    private void DeactivateRuneC()
+    {
+        puzzleOrder += "C";
+        notesAttempted++;
+        cActive = false;
+        Rune_C.GetComponent<RuneOnClick>().DeactivateRune();
+    }
+
+    private void DeactivateRuneD()
+    {
+        puzzleOrder += "D";
+        notesAttempted++;
+        dActive = false;
+        Rune_D.GetComponent<RuneOnClick>().DeactivateRune();
+    }
+
+    private void DeactivateRuneE()
+    {
+        puzzleOrder += "E";
+        notesAttempted++;
+        eActive = false;
+        Rune_E.GetComponent<RuneOnClick>().DeactivateRune();
+    }
+    private void DeactivateRuneF()
+    {
+        puzzleOrder += "F";
+        notesAttempted++;
+        fActive = false;
+        Rune_F.GetComponent<RuneOnClick>().DeactivateRune();
+    }
+
+    private void DeactivateRuneG()
+    {
+        puzzleOrder += "G";
+        notesAttempted++;
+        gActive = false;
+        Rune_G.GetComponent<RuneOnClick>().DeactivateRune();
     }
 }
