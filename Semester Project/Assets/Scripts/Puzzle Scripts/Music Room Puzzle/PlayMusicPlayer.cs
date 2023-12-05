@@ -60,7 +60,7 @@ public class PlayMusicPlayer : MonoBehaviour
         }
         if (leverPulled)
         {
-            Invoke(nameof(ReturnLever), 0.5f);
+            Invoke(nameof(ReturnLever), 1f);
         }
         if (returning)
         {
@@ -117,7 +117,7 @@ public class PlayMusicPlayer : MonoBehaviour
     {
         float timeElapsed = 0;
         Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = transform.rotation * Quaternion.Euler(-12, 0, 0);
+        Quaternion targetRotation = transform.rotation * Quaternion.Euler(-24, 0, 0);
         while (timeElapsed < slerpDuration)
         {
             transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / slerpDuration);
