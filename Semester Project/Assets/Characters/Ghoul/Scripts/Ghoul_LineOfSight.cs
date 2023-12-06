@@ -46,7 +46,7 @@ public class Ghoul_LineOfSight : MonoBehaviour
                 if (inView == false)
                 {
                     inView = true;
-                    Debug.Log("Player is in view.");
+                    Debug.Log("Ghoul: Player is in view.");
                 }
             }
             else
@@ -54,7 +54,7 @@ public class Ghoul_LineOfSight : MonoBehaviour
                 if (inView == true)
                 {
                     inView = false;
-                    Debug.Log("Player is no longer in view.");
+                    Debug.Log("Ghoul: Player is no longer in view.");
                 }
             }
         }
@@ -63,7 +63,7 @@ public class Ghoul_LineOfSight : MonoBehaviour
             if (inView == true)
             {
                 inView = false;
-                Debug.Log("Player is no longer in view.");
+                Debug.Log("Ghoul: Player is no longer in view.");
             }
         }
     }
