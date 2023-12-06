@@ -62,7 +62,7 @@ public class EnemyAIFSMTest : BaseFSM
     private float minMoveInterval = 2f;
     private float maxMoveInterval = 5f;
 
-    private float lerpDuration;
+    //private float lerpDuration;
     int i = 0;
 
     protected override void Initialize()
@@ -81,7 +81,7 @@ public class EnemyAIFSMTest : BaseFSM
         hitbox.SetActive(false);
         pullOut = GameObject.Find("HideTrigger").GetComponent<HideTest>();
 
-        SetStateToSilent();
+        SetStateToPatrol();
     }
 
     //------------------------------ Transitions ------------------------------
@@ -364,8 +364,10 @@ public class EnemyAIFSMTest : BaseFSM
 
             if (range.IsInReach() == true)
             {
-                SetStateToAttack(); // transitition to attack state
+                //SetStateToAttack(); // transitition to attack state
+                StartCoroutine(AttackCoroutine());
             }
+            else { StopCoroutine(AttackCoroutine()); hitbox.SetActive(false); animator.SetBool("IsAttack", false); agent.speed = 3.25f; }
 
             // if player is in view and then player.hiding becomes true
             // chase to the hiding spot (either last known location or a designated spot at hiding spot)
@@ -387,17 +389,19 @@ public class EnemyAIFSMTest : BaseFSM
     // Would like to have randomized attacks
     private IEnumerator AttackCoroutine()
     {
+        hitbox.SetActive(true);
         while (range.IsInReach())
         {
             animations.PlayAttackAnimation();
-            yield return new WaitForSeconds(0.35f);//0.35
-            hitbox.SetActive(true);
-            animator.SetBool("IsAttack", false);
+            //yield return new WaitForSeconds(0.35f);//0.35
+            //hitbox.SetActive(true);
+            //yield return new WaitForSeconds(0.35f);//0.35
+            yield return null;
         }
 
-        animator.SetBool("IsAttack", false);
-        hitbox.SetActive(false);
-        SetStateToChase();
+        //animator.SetBool("IsAttack", false);
+        //hitbox.SetActive(false);
+        //SetStateToChase();
 
         yield return null;
     }
@@ -466,11 +470,18 @@ public class EnemyAIFSMTest : BaseFSM
         yield return new WaitForSeconds(1.0f);
         float elapsedTime = 0.0f;
 
-        while (currentState == FSMState.Silent && elapsedTime < 2.0f)//default 3
+        while (currentState == FSMState.Silent && elapsedTime < 5.0f)//default 3
         {
-            if (eyesight.IsInView() == true)// && !player.GetComponent<PlayerControllerTest>().hiding)
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerControllerTest>().hiding)
             {
                 SetStateToChase();  // change state
+                yield break;
+            }
+            else if (earshot.IsInEarshot() == true
+                && !player.GetComponent<PlayerControllerTest>().hiding
+                && player.GetComponent<InputsManager>().move != Vector2.zero)
+            {
+                SetStateToChase();
                 yield break;
             }
             elapsedTime += Time.deltaTime;
@@ -494,7 +505,8 @@ public class EnemyAIFSMTest : BaseFSM
         return randomPosition;
     }
 
-    private IEnumerator Rotate180()
+    /*
+    public IEnumerator Rotate180()
     {
         float timeElapsed = 0;
         Quaternion startRotation = transform.rotation;
@@ -506,6 +518,23 @@ public class EnemyAIFSMTest : BaseFSM
             yield return null;
         }
         transform.rotation = targetRotation;
+    }
+    */
+
+    public void Rotate180()
+    {
+        Debug.Log("Function entered.");
+        float timeElapsed = 0;
+        float lerpDuration = 3;
+        Quaternion targetRotation = transform.rotation * Quaternion.Euler(0, 180, 0);
+        while (timeElapsed < lerpDuration)
+        {
+            Debug.Log("Rotating.");
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, timeElapsed / lerpDuration);
+            timeElapsed += Time.deltaTime;
+        }
+
+        Debug.Log("180 Rotation finished.");
     }
 
     private IEnumerator MoveRandomly()

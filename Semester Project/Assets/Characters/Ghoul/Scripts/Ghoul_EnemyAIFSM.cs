@@ -353,6 +353,8 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         yield return new WaitForSeconds(0.5f);
         blythe.GetComponent<AnimationHandler>().PlayIdleAnimation(); // change animation to "idle"
 
+        //blythe.GetComponent<EnemyAIFSMTest>().SetStateToSilent();
+
         yield return null;
     }
 
