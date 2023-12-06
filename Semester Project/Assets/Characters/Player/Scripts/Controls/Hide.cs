@@ -141,7 +141,7 @@ public class Hide : MonoBehaviour
     }
 
     // Leave hiding spot
-    void LeaveHidingSpot()
+    public void LeaveHidingSpot()
     {
         Player.GetComponent<PlayerController>().hiding = false;
         normalCam.SetActive(true);

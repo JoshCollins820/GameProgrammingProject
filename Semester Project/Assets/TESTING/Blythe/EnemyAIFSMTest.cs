@@ -54,7 +54,7 @@ public class EnemyAIFSMTest : BaseFSM
     public Animator animator;
     private GameObject hitbox;
     private Vector3 lastSeen;
-    private HideTest pullOut;
+    private Hide pullOut;
 
     private AudioSource screamAudio;
     private Vector3 lastPos;
@@ -79,7 +79,7 @@ public class EnemyAIFSMTest : BaseFSM
         range = transform.GetChild(4).gameObject.GetComponent<Attack>();
         hitbox = GameObject.Find("HandHitbox");
         hitbox.SetActive(false);
-        pullOut = GameObject.Find("HideTrigger").GetComponent<HideTest>();
+        pullOut = GameObject.Find("HideTrigger").GetComponent<Hide>();
 
         SetStateToPatrol();
     }
@@ -160,13 +160,13 @@ public class EnemyAIFSMTest : BaseFSM
 
         while (currentState == FSMState.Patrol)
         {
-            if (eyesight.IsInView() == true && !player.GetComponent<PlayerControllerTest>().hiding)
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
                 StopCoroutine(PatrolMovementCoroutine());
                 SetStateToChase(); // transition to chase state
             }
             else if (earshot.IsInEarshot() == true
-                && !player.GetComponent<PlayerControllerTest>().hiding
+                && !player.GetComponent<PlayerController>().hiding
                 && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
                 StopCoroutine(PatrolMovementCoroutine());
@@ -231,7 +231,7 @@ public class EnemyAIFSMTest : BaseFSM
 
         while (currentState == FSMState.RadiusPatrol)
         {
-            if (eyesight.IsInView() == true && !player.GetComponent<PlayerControllerTest>().hiding)
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
                 seenTime += Time.deltaTime;
             }
@@ -343,7 +343,7 @@ public class EnemyAIFSMTest : BaseFSM
                 //hitbox.SetActive(false);///HEEEEEEELLO
 
                 // if player enters hiding spot while hiding
-                if (player.GetComponent<PlayerControllerTest>().hiding == true)
+                if (player.GetComponent<PlayerController>().hiding == true)
                 {
                     SetStateToAlert();
                 }
@@ -357,7 +357,7 @@ public class EnemyAIFSMTest : BaseFSM
             }
             
             // if player is in view
-            else if (notSeenTime > 0)// && !player.GetComponent<PlayerControllerTest>().hiding)
+            else if (notSeenTime > 0)// && !player.GetComponent<PlayerController>().hiding)
             {
                 notSeenTime = 0;        // reset time counter
             }
@@ -373,7 +373,7 @@ public class EnemyAIFSMTest : BaseFSM
             // chase to the hiding spot (either last known location or a designated spot at hiding spot)
             // go to grab state
             lastSeen = player.GetComponent<Transform>().position;
-            if (eyesight.IsInView() == true && player.GetComponent<PlayerControllerTest>().hiding)
+            if (eyesight.IsInView() == true && player.GetComponent<PlayerController>().hiding)
             {
                 Debug.Log("Player hid while in sight.");
                 SetStateToGrab();
@@ -418,7 +418,7 @@ public class EnemyAIFSMTest : BaseFSM
         bool reached = false;
         while (reached == false)
         {
-            if (!player.GetComponent<PlayerControllerTest>().hiding)
+            if (!player.GetComponent<PlayerController>().hiding)
             {
                 SetStateToChase();
             }
@@ -472,13 +472,13 @@ public class EnemyAIFSMTest : BaseFSM
 
         while (currentState == FSMState.Silent && elapsedTime < 5.0f)//default 3
         {
-            if (eyesight.IsInView() == true && !player.GetComponent<PlayerControllerTest>().hiding)
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
                 SetStateToChase();  // change state
                 yield break;
             }
             else if (earshot.IsInEarshot() == true
-                && !player.GetComponent<PlayerControllerTest>().hiding
+                && !player.GetComponent<PlayerController>().hiding
                 && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
                 SetStateToChase();

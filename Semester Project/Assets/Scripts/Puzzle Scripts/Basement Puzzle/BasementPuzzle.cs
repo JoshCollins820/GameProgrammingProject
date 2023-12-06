@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class BasementPuzzle : MonoBehaviour
 {
+    public UnityEvent SpawnEnemies;
+
     GameObject Magistrate;
     public GameObject Player;
     GameObject PlayerMesh;
@@ -66,7 +69,7 @@ public class BasementPuzzle : MonoBehaviour
         SecretDoorCamera = this.transform.Find("Basement Secret Door VCamera").gameObject;
         SecretDoor = GameObject.Find("SecretDoor");
         doorOpen = SecretDoor.transform.GetChild(1).gameObject.GetComponent<AudioSource>();
-        breathing = Priest.transform.Find("Breathing").gameObject;
+        //breathing = Priest.transform.Find("Breathing").gameObject;
 
         closedPos = SecretDoor.transform.position;
         openPos = new Vector3(SecretDoor.transform.position.x, SecretDoor.transform.position.y, -29.248f);
@@ -219,7 +222,8 @@ public class BasementPuzzle : MonoBehaviour
             interacting = false;
             activeStones = 0;
             Invoke("delayDoor", 1f);
-            Invoke("delayPriest", 4f);
+            //Invoke("delayPriest", 4f);
+            SpawnEnemies.Invoke();
         }
         else
         {

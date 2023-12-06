@@ -133,7 +133,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
 
         while (currentState == FSMState.Patrol)
         {
-            if (eyesight.IsInView() == true && !player.GetComponent<PlayerControllerTest>().hiding)
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
                 lastSeen = player.GetComponent<Transform>().position;
                 //StopCoroutine(PatrolMovementCoroutine());
@@ -205,7 +205,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
 
         while (currentState == FSMState.RadiusPatrol)
         {
-            if (eyesight.IsInView() == true && !player.GetComponent<PlayerControllerTest>().hiding)
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
                 seenTime += Time.deltaTime;
             }
@@ -333,7 +333,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
             blythe.GetComponent<NavMeshAgent>().SetDestination(lastSeen); // move Blythe to player's last seen position
 
             // if player is seen while moving to ghoul
-            if (blythe.GetComponent<LineOfSight>().inView == true && !player.GetComponent<PlayerControllerTest>().hiding)
+            if (blythe.GetComponent<LineOfSight>().inView == true && !player.GetComponent<PlayerController>().hiding)
             {
                 blythe.GetComponent<EnemyAIFSMTest>().SetStateToChase(); // chase player
                 yield break; // stop this coroutine

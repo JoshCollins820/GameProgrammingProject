@@ -22,6 +22,6 @@ public class Damage : MonoBehaviour
     {
         Debug.Log("Player punched!");
         sound.PlayOneShot(swingSound, 1.25f);
-        player.GetComponent<PlayerStatsTest>().damagePlayer();
+        player.GetComponent<PlayerStats>().damagePlayer();
     }
 }
