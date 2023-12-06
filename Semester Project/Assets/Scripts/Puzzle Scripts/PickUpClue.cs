@@ -7,12 +7,15 @@ public class PickUpClue : MonoBehaviour
     // Get any necessary GameObjects for Inventory
     GameObject Player;
     GameObject JournalUI;
+    GameObject SwordPieces;
 
     // Bools to help with interacting with clue or lore
     public bool pickedUp;
     public bool showClue;
     public bool showInteract;
     public bool interacting;
+
+
 
     // Writing to go into journal about the clue or lore
     string leftPageContent;
@@ -27,8 +30,10 @@ public class PickUpClue : MonoBehaviour
         showClue = true;
         showInteract = true;
         interacting = false;
+
         Player = GameObject.Find("Magistrate").transform.GetChild(0).gameObject;
         JournalUI = GameObject.Find("JournalUI");
+        SwordPieces = GameObject.Find("SwordPieces");
     }
 
     // Update is called once per frame
@@ -57,7 +62,9 @@ public class PickUpClue : MonoBehaviour
             setJournalContent();
             JournalUI.GetComponent<ReadJournal>().AddEntry(this.name, createEntryContent());
             showClue = false;
+            
         }
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -85,6 +92,57 @@ public class PickUpClue : MonoBehaviour
     private void setJournalContent()
     {
         // check for correct clue to show
+        if (this.name == "Piece1")
+        {
+            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece();
+            leftPageContent = "There is an ancient sword hilt inside!...\n\n" +
+                "Also this handwritten note:\n" +
+                "You undead idiot! I told you this sword could harm\n" +
+                "you! Get that blacksmith you captured to break it\n" +
+                "into pieces at the forge in the basement.\n" +
+                "Then I want you to hide the pieces out of the way\n" +
+                "so those other little imbeciles don't cut\n" +
+                "themselves on it like you did. Maybe in Feron's" +
+                "silly puzzles I don't care where. \n" +
+                "We are trying to RAISE an army of the dead,\n" +
+                "not collect body parts.\n" +
+                "\t-Lord Master";
+            rightPageContent = "I've got to find the rest of these\n" +
+                "sword pieces then re-forge them if I\n" +
+                "want to make it out of here alive!";
+        }
+        if (this.name == "Piece2")
+        {
+            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece();
+            leftPageContent = "I have found another piece of the sword!\n" +
+                "That makes " + SwordPieces.GetComponent<TrackPieces>().GetSwordPieces() +
+                " pieces so far. This looks like it goes\n" +
+                "just above the hilt...";
+            rightPageContent = "";
+        }
+        if (this.name == "Piece3")
+        {
+            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece();
+            leftPageContent = "I have found another piece of the sword!\n" +
+                "That makes " + SwordPieces.GetComponent<TrackPieces>().GetSwordPieces() +
+                " pieces so far. This looks like it goes\n" +
+                "in the middle. There is a channel as well.\n" +
+                "I've seen these in magic items before,\n" +
+                "this is meant to conduct magic current...";
+            rightPageContent = "";
+        }
+        if (this.name == "Piece4")
+        {
+            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece();
+            leftPageContent = "I have found another piece of the sword!\n" +
+                "That makes " + SwordPieces.GetComponent<TrackPieces>().GetSwordPieces() +
+                " pieces so far. This looks\n" +
+                "like it is the tip. I need to be very\n" +
+                "careful, even after all these years it\n" +
+                "is still incredibly sharp...";
+
+            rightPageContent = "";
+        }
         if (this.name == "MissingCornerPipe")
         {
             leftPageContent = "It is a corner pipe. Maybe I can use this for\n" +
