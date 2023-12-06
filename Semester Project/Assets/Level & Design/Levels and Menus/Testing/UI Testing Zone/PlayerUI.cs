@@ -56,7 +56,7 @@ public class PlayerUI : MonoBehaviour
 
         // display interact UI
         if (show_interact_ui == true){
-            Debug.Log("Showing interactUI");
+            //Debug.Log("Showing interactUI");
             interact_e.SetActive(true); // show interact UI
         }
         else{
