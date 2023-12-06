@@ -21,7 +21,7 @@ public class DungeonDoorOpen : MonoBehaviour
     {
         DungeonDoorKey = GameObject.Find("DungeonDoorKey");
         Player = GameObject.Find("Magistrate").transform.GetChild(0).gameObject;
-        slerpDuration = 2f;
+        slerpDuration = 1f;
         opening = false;
         opened = false;
         showClue = true;
@@ -107,7 +107,7 @@ public class DungeonDoorOpen : MonoBehaviour
     {
         float timeElapsed = 0;
         Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = transform.rotation * Quaternion.Euler(0, 90, 0);
+        Quaternion targetRotation = transform.rotation * Quaternion.Euler(0, 45, 0);
         while (timeElapsed < slerpDuration)
         {
             transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / slerpDuration);

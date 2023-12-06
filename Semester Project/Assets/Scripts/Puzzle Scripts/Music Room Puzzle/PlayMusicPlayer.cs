@@ -17,6 +17,8 @@ public class PlayMusicPlayer : MonoBehaviour
     public bool interacting;
     public bool leverPulled;
     public float slerpDuration;
+    public Quaternion leverStart;
+    public Quaternion leverEnd;
 
     // Start is called before the first frame update
     void Start()
@@ -26,13 +28,15 @@ public class PlayMusicPlayer : MonoBehaviour
         MusicHorn = GameObject.Find("Music Player Horn");
 
         melody = MusicHorn.GetComponent<AudioSource>();
+        leverStart = transform.rotation;
+        leverEnd = transform.rotation * Quaternion.Euler(50, 0, 0);
 
         pipeFixed = false;
         interacting = false;
         leverPulled = false;
         rotating = false;
         returning = false;
-        slerpDuration = 1.5f;
+        slerpDuration = 1f;
     }
 
     // Update is called once per frame
@@ -60,7 +64,7 @@ public class PlayMusicPlayer : MonoBehaviour
         }
         if (leverPulled)
         {
-            Invoke(nameof(ReturnLever), 1f);
+            Invoke(nameof(ReturnLever), 1.5f);
         }
         if (returning)
         {
@@ -99,15 +103,14 @@ public class PlayMusicPlayer : MonoBehaviour
     IEnumerator PullLeverOn()
     {
         float timeElapsed = 0;
-        Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = transform.rotation * Quaternion.Euler(24, 0, 0);
+        
         while (timeElapsed < slerpDuration)
         {
-            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / slerpDuration);
+            transform.rotation = Quaternion.Slerp(leverStart, leverEnd, timeElapsed / slerpDuration);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-        transform.rotation = targetRotation;
+        transform.rotation = leverEnd;
         Debug.Log("Lever Pulled");
         rotating = false;
         leverPulled = true;
@@ -116,15 +119,14 @@ public class PlayMusicPlayer : MonoBehaviour
     IEnumerator PullLeverOff()
     {
         float timeElapsed = 0;
-        Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = transform.rotation * Quaternion.Euler(-24, 0, 0);
+
         while (timeElapsed < slerpDuration)
         {
-            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, timeElapsed / slerpDuration);
+            transform.rotation = Quaternion.Slerp(leverEnd, leverStart, timeElapsed / slerpDuration);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-        transform.rotation = targetRotation;
+        transform.rotation = leverStart;
         Debug.Log("Lever Returned");
         returning = false;
         leverPulled = false;
