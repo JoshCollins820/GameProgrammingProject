@@ -92,9 +92,9 @@ public class PickUpClue : MonoBehaviour
     private void setJournalContent()
     {
         // check for correct clue to show
-        if (this.name == "Piece1")
+        if (this.name == "Bag1")
         {
-            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece();
+            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece("Hilt");
             leftPageContent = "There is an ancient sword hilt inside!...\n\n" +
                 "Also this handwritten note:\n" +
                 "You undead idiot! I told you this sword could harm\n" +
@@ -111,18 +111,18 @@ public class PickUpClue : MonoBehaviour
                 "sword pieces then re-forge them if I\n" +
                 "want to make it out of here alive!";
         }
-        if (this.name == "Piece2")
+        if (this.name == "Bag2")
         {
-            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece();
+            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece("Base");
             leftPageContent = "I have found another piece of the sword!\n" +
                 "That makes " + SwordPieces.GetComponent<TrackPieces>().GetSwordPieces() +
                 " pieces so far. This looks like it goes\n" +
                 "just above the hilt...";
             rightPageContent = "";
         }
-        if (this.name == "Piece3")
+        if (this.name == "Bag3")
         {
-            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece();
+            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece("Middle");
             leftPageContent = "I have found another piece of the sword!\n" +
                 "That makes " + SwordPieces.GetComponent<TrackPieces>().GetSwordPieces() +
                 " pieces so far. This looks like it goes\n" +
@@ -131,9 +131,9 @@ public class PickUpClue : MonoBehaviour
                 "this is meant to conduct magic current...";
             rightPageContent = "";
         }
-        if (this.name == "Piece4")
+        if (this.name == "Bag4")
         {
-            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece();
+            SwordPieces.GetComponent<TrackPieces>().AddSwordPiece("Tip");
             leftPageContent = "I have found another piece of the sword!\n" +
                 "That makes " + SwordPieces.GetComponent<TrackPieces>().GetSwordPieces() +
                 " pieces so far. This looks\n" +
