@@ -15,7 +15,10 @@ public class RockThrow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(midAir == true)
+        {
+            Debug.Log("TEST MIDAIR");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -23,7 +26,7 @@ public class RockThrow : MonoBehaviour
         // other.tag == "Floor"
         if (midAir == true) // if rock hits the floor and hasn't hit floor before
         {
-            //midAir = false; // rock is no longer mid air
+            midAir = false; // rock is no longer mid air
             Vector3 location_hit = this.transform.position;
             Debug.Log("Rock landed at: (" + location_hit.x + "," + location_hit.y + "," + location_hit.z);
             // call function that calls Priest to location_hit
