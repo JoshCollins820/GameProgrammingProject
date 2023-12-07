@@ -228,7 +228,7 @@ public class PlayerStats : MonoBehaviour
                 rockSpawn.position,
                 rockSpawn.rotation); // instantiate rock
         rock.GetComponent<Rigidbody>().velocity = rock.transform.forward * rock_speed; // apply force to rock
-        rock.GetComponent<RockThrow>().midAir = true;
+        rock.GetComponent<RockThrow>().enableRockMidAir();
         Invoke(nameof(EnableCanThrow), 0.3f); // rock throw cooldown
     }
 }
