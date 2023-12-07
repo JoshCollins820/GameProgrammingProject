@@ -184,7 +184,8 @@ public class Ghoul_EnemyAIFSM : BaseFSM
             if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
                 lastPos = GetComponent<Transform>().position;   // save enemy location
-                SetStateToRadiusPatrol();   // transition to radius patrol state
+                //SetStateToRadiusPatrol();   // transition to radius patrol state
+                SetStateToScream();
                 yield break;                // exit coroutine
             }
             elapsedTime += Time.deltaTime;
@@ -306,6 +307,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         blythe.GetComponent<EnemyAIFSMTest>().StopAllCoroutines(); // stop whatever Blythe is doing
         StartCoroutine(BlytheKeepMoving());
 
+        /*
         int count = 0;
         while (count < 2) // play scream 2 times
         {
@@ -316,6 +318,11 @@ public class Ghoul_EnemyAIFSM : BaseFSM
             count++;
             yield return null;
         }
+        */
+
+        animations.PlayScreamAnimation(); // change animation to "scream"
+        screamAudio.Play(); // play scream audio
+        yield return new WaitForSeconds(7); // wait 7 seconds (scream is 7 seconds long)
 
         StopCoroutine(StareAtPlayer()); // stop staring at player
         SetStateToPatrol(); // go back to patrolling
@@ -355,7 +362,8 @@ public class Ghoul_EnemyAIFSM : BaseFSM
 
         //blythe.GetComponent<EnemyAIFSMTest>().SetStateToSilent();
 
-        yield return null;
+        //yield return null;
+        yield break;
     }
 
     private Vector3 GetRandomPositionOnNavMesh()

@@ -9,7 +9,7 @@ using Cinemachine;
 public class PlayerController : MonoBehaviour
 {
     public float walkSpeed = 2f; // Player movement speed;
-    public float sprintSpeed = 7f;
+    public float sprintSpeed = 5f;
 
     [SerializeField] Transform cameraFollowTarget; // Transform of object the camera will rotate around
 
