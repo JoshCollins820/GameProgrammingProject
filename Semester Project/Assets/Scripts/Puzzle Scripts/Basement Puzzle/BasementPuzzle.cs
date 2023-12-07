@@ -97,7 +97,7 @@ public class BasementPuzzle : MonoBehaviour
         {
             if (interacting)
             {
-                Debug.Log("Pressed E interacting start puzzle");
+                //Debug.Log("Pressed E interacting start puzzle");
 
                 Player.GetComponent<PlayerUI>().DisableHintUI();
                 Player.GetComponent<PlayerUI>().DisableInteractUI();
@@ -180,7 +180,7 @@ public class BasementPuzzle : MonoBehaviour
         }
         if(changeCamera)
         {
-            Debug.Log("Give camera back.");
+            //Debug.Log("Give camera back.");
             SecretDoorCamera.SetActive(false);
             PlayerCamera.SetActive(true);
             PlayerHair.SetActive(true);
@@ -249,7 +249,7 @@ public class BasementPuzzle : MonoBehaviour
         if (other.name == "Player")
         {
             Player.GetComponent<PlayerUI>().DisplayInteractUI("Touch Stones");
-            Debug.Log("Puzzle zone entered.");
+            //Debug.Log("Puzzle zone entered.");
             interacting = true;
         }
     }
@@ -287,7 +287,7 @@ public class BasementPuzzle : MonoBehaviour
 
     IEnumerator OpenDoor()
     {
-        Debug.Log("Opening door!");
+        //Debug.Log("Opening door!");
         float timeElapsed = 0;
         while (timeElapsed < lerpDuration)
         {

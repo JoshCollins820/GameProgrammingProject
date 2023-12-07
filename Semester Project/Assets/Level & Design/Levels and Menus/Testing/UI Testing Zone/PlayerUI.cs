@@ -66,7 +66,7 @@ public class PlayerUI : MonoBehaviour
         // display hint UI
         if (show_hint)
         {
-            Debug.Log("Showing hintUI");
+            //Debug.Log("Showing hintUI");
             hint.SetActive(true);   // show hint UI
         }
         else
@@ -96,7 +96,7 @@ public class PlayerUI : MonoBehaviour
     // changes blood screen so it is high opacity
     void BloodScreenPulseUp()
     {
-        Debug.Log("PulseUp");
+        //Debug.Log("PulseUp");
         var blood_screen_color = blood_screen.GetComponent<Image>().color; // get the current color of blood_screen
 
         if (player.GetComponent<PlayerStats>().playerDamaged == true) // if player is damaged
@@ -121,7 +121,7 @@ public class PlayerUI : MonoBehaviour
     // changes blood screen so it is low opacity
     void BloodScreenPulseDown()
     {
-        Debug.Log("PulseDown");
+        //Debug.Log("PulseDown");
         var blood_screen_color = blood_screen.GetComponent<Image>().color; // get the current color of blood_screen
 
         if (player.GetComponent<PlayerStats>().playerDamaged == true) // if player is damaged
@@ -146,7 +146,7 @@ public class PlayerUI : MonoBehaviour
     // stops blood screen effect by gradually lowering opacity until 0f
     void BloodScreenPulseStop()
     {
-        Debug.Log("PulseStop");
+        //Debug.Log("PulseStop");
         var blood_screen_color = blood_screen.GetComponent<Image>().color; // get the current color of blood_screen
 
         if (blood_screen_color.a > 0f) // if the blood_screen color's alpha is greater than 0f (min)
