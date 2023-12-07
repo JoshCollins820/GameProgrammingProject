@@ -213,6 +213,11 @@ public class EnemyAIFSMTest : BaseFSM
                 SetStateToRadiusPatrol();   // transition to radius patrol state
                 yield break;                // exit coroutine
             }
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
+            {
+                SetStateToChase(); // transition to chase state
+                yield break;
+            }
             elapsedTime += Time.deltaTime;
             yield return null;
         }
@@ -227,14 +232,17 @@ public class EnemyAIFSMTest : BaseFSM
     {
         StartCoroutine(RadiusPatrolMovementCoroutine());    // handle movement separately
 
-        float seenTime = 0.0f;      // amount of time player is in view of enemy
+        //float seenTime = 0.0f;      // amount of time player is in view of enemy
 
         while (currentState == FSMState.RadiusPatrol)
         {
             if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
-                seenTime += Time.deltaTime;
+                //seenTime += Time.deltaTime;
+                StopCoroutine(RadiusPatrolMovementCoroutine());
+                SetStateToChase();
             }
+            /*
             // transition to chase state if player is seen for longer than 2s
             if (seenTime >= 0.5f) // default 2
             {
@@ -242,6 +250,7 @@ public class EnemyAIFSMTest : BaseFSM
                 //screamAudio.Play();
                 SetStateToChase();  // transition to chase state
             }
+            */
             yield return null;
         }
     }
@@ -257,8 +266,10 @@ public class EnemyAIFSMTest : BaseFSM
         {
             yield return null; 
         }
-        yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
+        Debug.Log("Player's last heard location reached.");
+        yield return new WaitForSeconds(5);
 
+        /*
         Vector3[] patrolPoints = FindRPatrolDest();
 
         // move between patrol destination points
@@ -275,17 +286,9 @@ public class EnemyAIFSMTest : BaseFSM
             animations.PlayIdleAnimation(); // change animation to "idle"
             yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval)); // wait a random amount of time at the point
         }
+        */
 
         // if radius patrol is complete and player was not seen
-
-        // stop radius patrol coroutine
-        //StopCoroutine(RadiusPatrolCoroutine());
-
-        // TODO --> blind spot - enemy is neither listening nor looking for player from here
-        //          until transition to patrol state
-
-        // turn around
-        //yield return StartCoroutine(Rotate180()); //temp
 
         // return to last position before noise was heard
         agent.SetDestination(lastPos);
@@ -295,7 +298,7 @@ public class EnemyAIFSMTest : BaseFSM
             yield return null;
         }
         animations.PlayIdleAnimation(); // change animation to "idle"
-        yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval)); // wait a random amount of time at the point
+        yield return new WaitForSeconds(5);//Random.Range(minMoveInterval, maxMoveInterval)); // wait a random amount of time at the point
 
         // transition to patrol state
         SetStateToPatrol();
