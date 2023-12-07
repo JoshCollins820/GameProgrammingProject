@@ -70,7 +70,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         eyesight = gameObject.GetComponentInChildren<Ghoul_LineOfSight>();
         animations = gameObject.GetComponentInChildren<Ghoul_AnimationHandler>();
         screamAudio = transform.GetChild(5).gameObject.GetComponent<AudioSource>();
-        pointList = GameObject.FindGameObjectsWithTag("PatrolPoint");
+        pointList = GameObject.FindGameObjectsWithTag("GhoulPatrol");
 
         animator = GetComponentInChildren<Animator>();
 
@@ -128,22 +128,22 @@ public class Ghoul_EnemyAIFSM : BaseFSM
     //   - Transition to Alert if sound is heard.
     IEnumerator PatrolCoroutine()
     {
-        //StartCoroutine(PatrolMovementCoroutine());  // handle movement separately
-        StartCoroutine(MoveRandomly());
+        StartCoroutine(PatrolMovementCoroutine());  // handle movement separately
+        //StartCoroutine(MoveRandomly());
 
         while (currentState == FSMState.Patrol)
         {
             if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
                 lastSeen = player.GetComponent<Transform>().position;
-                //StopCoroutine(PatrolMovementCoroutine());
-                StopCoroutine(MoveRandomly());
+                StopCoroutine(PatrolMovementCoroutine());
+                //StopCoroutine(MoveRandomly());
                 SetStateToScream(); // transition to scream state
             }
             else if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
-                //StopCoroutine(PatrolMovementCoroutine());
-                StopCoroutine(MoveRandomly());
+                StopCoroutine(PatrolMovementCoroutine());
+                //StopCoroutine(MoveRandomly());
                 SetStateToAlert();  // transition to alert state
             }
             yield return null;
