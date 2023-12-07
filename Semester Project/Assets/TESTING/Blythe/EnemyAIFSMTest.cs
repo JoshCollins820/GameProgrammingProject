@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -59,7 +60,7 @@ public class EnemyAIFSMTest : BaseFSM
     private AudioSource screamAudio;
     private Vector3 lastPos;
 
-    private float minMoveInterval = 2f;
+    private float minMoveInterval = 3f;
     private float maxMoveInterval = 5f;
 
     //private float lerpDuration;
@@ -555,6 +556,42 @@ public class EnemyAIFSMTest : BaseFSM
                 yield return null;
             }
         }
+    }
+
+    public IEnumerator GoToPoint(Vector3 point)
+    {
+        animations.PlayRunAnimation(); // make priest run
+
+        bool reached = false;
+        while (reached == false)
+        {
+            agent.SetDestination(point); // move priest to player's last seen position
+
+            // if player is seen while moving to point
+            if (eyesight.inView == true && !player.GetComponent<PlayerController>().hiding)
+            {
+                SetStateToChase(); // chase player
+            }
+
+            if (agent.remainingDistance < 0.5)
+            {
+                Debug.Log("Player's last seen position reached.");
+                reached = true;
+            }
+
+            yield return null;
+        }
+
+        animations.PlayIdleAnimation();
+        yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
+        SetStateToPatrol();
+
+        yield break;
+    }
+
+    public void StopCoroutines()
+    {
+        StopAllCoroutines();
     }
 
 }

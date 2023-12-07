@@ -184,8 +184,8 @@ public class Ghoul_EnemyAIFSM : BaseFSM
             if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
                 lastPos = GetComponent<Transform>().position;   // save enemy location
-                //SetStateToRadiusPatrol();   // transition to radius patrol state
-                SetStateToScream();
+                SetStateToRadiusPatrol();   // transition to radius patrol state
+                //SetStateToScream();
                 yield break;                // exit coroutine
             }
             elapsedTime += Time.deltaTime;
@@ -202,14 +202,17 @@ public class Ghoul_EnemyAIFSM : BaseFSM
     {
         StartCoroutine(RadiusPatrolMovementCoroutine());    // handle movement separately
 
-        float seenTime = 0.0f;      // amount of time player is in view of enemy
+        //float seenTime = 0.0f;      // amount of time player is in view of enemy
 
         while (currentState == FSMState.RadiusPatrol)
         {
             if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
-                seenTime += Time.deltaTime;
+                //seenTime += Time.deltaTime;
+                StopCoroutine(RadiusPatrolMovementCoroutine());
+                SetStateToScream();
             }
+            /*
             // transition to chase state if player is seen for longer than 2s
             if (seenTime >= 0.5f) // default 2
             {
@@ -218,6 +221,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
                 //screamAudio.Play();
                 SetStateToScream();  // transition to scream state
             }
+            */
             yield return null;
         }
     }
@@ -233,8 +237,10 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         {
             yield return null; 
         }
-        yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
+        Debug.Log("Player's last heard location reached.");
+        yield return new WaitForSeconds(5);
 
+        /*
         Vector3[] patrolPoints = FindRPatrolDest();
 
         // move between patrol destination points
@@ -262,6 +268,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
 
         // turn around
         //yield return StartCoroutine(Rotate180()); //temp
+        */
 
         // return to last position before noise was heard
         agent.SetDestination(lastPos);
@@ -271,7 +278,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
             yield return null;
         }
         animations.PlayIdleAnimation(); // change animation to "idle"
-        yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval)); // wait a random amount of time at the point
+        yield return new WaitForSeconds(5); // wait a random amount of time at the point
 
         // transition to patrol state
         SetStateToPatrol();
