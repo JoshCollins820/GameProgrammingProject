@@ -12,6 +12,8 @@ public class PlayerStats : MonoBehaviour
     public bool deathSequence = false;                          // if the death sequence has begun, makes sure the player can only die once
     public bool isRecovering = false;                           // indicates if player is in process of being healed
     public float recoverTime = 10f;                             // time it takes to recover from being damaged
+    public bool canBeHurt = true;                               // if the player can be hurt
+    public float invinc_period = 1f;                            // period of time in seconds that player is invincible
 
     [Header("Stamina")] // STAMINA section ---------------------
     public float playerStamina = 100f;                          // current stamina
@@ -35,6 +37,7 @@ public class PlayerStats : MonoBehaviour
     public Transform rockSpawn;                                 // rock spawn location
     public float rock_speed = 100;                               // rock speed
     public bool canThrow = true;                                // can throw rock?
+    // public AudioSource rock_throw_sound;
 
     public GameObject maincamera; // player "Normal VCamera"
     public GameObject theRealMainCamera; // Main Camera
@@ -124,17 +127,26 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    // way to turn off invicinciblity
+    public void canBeHurtToggle()
+    {
+        canBeHurt = true;
+    }
+
     // public API function to damaging player
     public void damagePlayer()
     {
         // if player is not damaged
-        if (playerDamaged == false)
+        if (playerDamaged == false && canBeHurt == true)
         {
             playerDamaged = true ; // player is now damaged
+            canBeHurt = false;
+            Invoke(nameof(canBeHurtToggle), invinc_period);
         }
-        if(playerDamaged == true && playerDead == false)
+        if(playerDamaged == true && playerDead == false && canBeHurt == true)
         {
             playerDead = true;
+            Invoke(nameof(canBeHurtToggle), invinc_period);
         }
     }
 
@@ -207,12 +219,16 @@ public class PlayerStats : MonoBehaviour
     // throws a rock projectile
     private void ThrowRock()
     {
+        //play rock throw sound effect
+        // ???
+        Debug.Log("Rock thrown");
         player.GetComponent<PlayerInventory>().count_rock -= 1; // decrease rock count
         var rock = (GameObject)Instantiate(
                 rockPrefab,
                 rockSpawn.position,
                 rockSpawn.rotation); // instantiate rock
         rock.GetComponent<Rigidbody>().velocity = rock.transform.forward * rock_speed; // apply force to rock
+        rock.GetComponent<RockThrow>().midAir = true;
         Invoke(nameof(EnableCanThrow), 0.3f); // rock throw cooldown
     }
 }
