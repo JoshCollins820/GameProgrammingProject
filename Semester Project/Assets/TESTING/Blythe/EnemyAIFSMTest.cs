@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
@@ -165,6 +166,7 @@ public class EnemyAIFSMTest : BaseFSM
             {
                 StopCoroutine(PatrolMovementCoroutine());
                 SetStateToChase(); // transition to chase state
+                yield break;
             }
             else if (earshot.IsInEarshot() == true
                 && !player.GetComponent<PlayerController>().hiding
@@ -172,6 +174,7 @@ public class EnemyAIFSMTest : BaseFSM
             {
                 StopCoroutine(PatrolMovementCoroutine());
                 SetStateToAlert();  // transition to alert state
+                yield break;
             }
             yield return null;
         }
@@ -207,23 +210,24 @@ public class EnemyAIFSMTest : BaseFSM
 
         while (currentState == FSMState.Alert && elapsedTime < 5f) //4 seconds default
         {
-            // change state if sound is heard from player movement
-            if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
-            {
-                lastPos = GetComponent<Transform>().position;   // save enemy location
-                SetStateToRadiusPatrol();   // transition to radius patrol state
-                yield break;                // exit coroutine
-            }
             if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
                 SetStateToChase(); // transition to chase state
                 yield break;
+            }
+            // change state if sound is heard from player movement
+            else if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
+            {
+                lastPos = GetComponent<Transform>().position;   // save enemy location
+                SetStateToRadiusPatrol();   // transition to radius patrol state
+                yield break;                // exit coroutine
             }
             elapsedTime += Time.deltaTime;
             yield return null;
         }
         // if time elapses and no other sounds were heard, transition to patrol state
         SetStateToPatrol();
+        yield break;
     }
 
     // Radius Patrol: Walk to sound source, patrol in radius.
@@ -242,6 +246,7 @@ public class EnemyAIFSMTest : BaseFSM
                 //seenTime += Time.deltaTime;
                 StopCoroutine(RadiusPatrolMovementCoroutine());
                 SetStateToChase();
+                yield break;
             }
             /*
             // transition to chase state if player is seen for longer than 2s
@@ -350,6 +355,7 @@ public class EnemyAIFSMTest : BaseFSM
                 if (player.GetComponent<PlayerController>().hiding == true)
                 {
                     SetStateToAlert();
+                    yield break;
                 }
 
                 // transition to silent state if line of sight is broken for 8s
@@ -371,18 +377,18 @@ public class EnemyAIFSMTest : BaseFSM
                 //SetStateToAttack(); // transitition to attack state
                 StartCoroutine(AttackCoroutine());
             }
-            else { StopCoroutine(AttackCoroutine()); hitbox.SetActive(false); animator.SetBool("IsAttack", false); agent.speed = 3.25f; }
+            //else { StopCoroutine(AttackCoroutine()); hitbox.SetActive(false); animator.SetBool("IsAttack", false); agent.speed = 3.25f; }
 
             // if player is in view and then player.hiding becomes true
-            // chase to the hiding spot (either last known location or a designated spot at hiding spot)
+            // chase to the hiding spot (either last known location)
             // go to grab state
             lastSeen = player.GetComponent<Transform>().position;
             if (eyesight.IsInView() == true && player.GetComponent<PlayerController>().hiding)
             {
                 Debug.Log("Player hid while in sight.");
                 SetStateToGrab();
+                yield break;
             }
-
 
             yield return null;
         }
@@ -406,8 +412,12 @@ public class EnemyAIFSMTest : BaseFSM
         //animator.SetBool("IsAttack", false);
         //hitbox.SetActive(false);
         //SetStateToChase();
+        hitbox.SetActive(false);
+        animator.SetBool("IsAttack", false);
+        agent.speed = 3.25f;
 
-        yield return null;
+        yield break;
+        //yield return null;
     }
 
     // Grab: Pull player out of hiding spot
@@ -425,6 +435,7 @@ public class EnemyAIFSMTest : BaseFSM
             if (!player.GetComponent<PlayerController>().hiding)
             {
                 SetStateToChase();
+                yield break;
             }
 
             agent.SetDestination(lastSeen);
@@ -494,6 +505,7 @@ public class EnemyAIFSMTest : BaseFSM
 
         // if time elapses and player is no longer seen, transition to patrol state
         SetStateToPatrol();
+        yield return null;
     }
 
     //------------------------------ Helper ------------------------------
@@ -568,9 +580,10 @@ public class EnemyAIFSMTest : BaseFSM
             agent.SetDestination(point); // move priest to player's last seen position
 
             // if player is seen while moving to point
-            if (eyesight.inView == true && !player.GetComponent<PlayerController>().hiding)
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
                 SetStateToChase(); // chase player
+                yield break;
             }
 
             if (agent.remainingDistance < 0.5)
@@ -583,10 +596,10 @@ public class EnemyAIFSMTest : BaseFSM
         }
 
         animations.PlayIdleAnimation();
-        yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
+        yield return new WaitForSeconds(7);
         SetStateToPatrol();
 
-        yield break;
+        yield return null;
     }
 
     public void StopCoroutines()

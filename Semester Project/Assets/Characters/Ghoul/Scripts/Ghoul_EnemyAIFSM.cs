@@ -129,22 +129,22 @@ public class Ghoul_EnemyAIFSM : BaseFSM
     IEnumerator PatrolCoroutine()
     {
         StartCoroutine(PatrolMovementCoroutine());  // handle movement separately
-        //StartCoroutine(MoveRandomly());
 
         while (currentState == FSMState.Patrol)
         {
             if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
+                Debug.Log("Player is in view.");
                 lastSeen = player.GetComponent<Transform>().position;
                 StopCoroutine(PatrolMovementCoroutine());
-                //StopCoroutine(MoveRandomly());
                 SetStateToScream(); // transition to scream state
+                yield break;
             }
             else if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
                 StopCoroutine(PatrolMovementCoroutine());
-                //StopCoroutine(MoveRandomly());
                 SetStateToAlert();  // transition to alert state
+                yield break;
             }
             yield return null;
         }
@@ -180,12 +180,17 @@ public class Ghoul_EnemyAIFSM : BaseFSM
 
         while (currentState == FSMState.Alert && elapsedTime < 5f) //4 seconds default
         {
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
+            {
+                lastSeen = player.GetComponent<Transform>().position;
+                SetStateToScream(); // transition to scream state
+                yield break;
+            }
             // change state if sound is heard from player movement
-            if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
+            else if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
                 lastPos = GetComponent<Transform>().position;   // save enemy location
                 SetStateToRadiusPatrol();   // transition to radius patrol state
-                //SetStateToScream();
                 yield break;                // exit coroutine
             }
             elapsedTime += Time.deltaTime;
@@ -210,7 +215,9 @@ public class Ghoul_EnemyAIFSM : BaseFSM
             {
                 //seenTime += Time.deltaTime;
                 StopCoroutine(RadiusPatrolMovementCoroutine());
+                lastSeen = player.GetComponent<Transform>().position;
                 SetStateToScream();
+                yield break;
             }
             /*
             // transition to chase state if player is seen for longer than 2s
@@ -311,8 +318,10 @@ public class Ghoul_EnemyAIFSM : BaseFSM
     private IEnumerator ScreamCoroutine()
     {
         StartCoroutine(StareAtPlayer()); // keep staring at player
-        blythe.GetComponent<EnemyAIFSMTest>().StopAllCoroutines(); // stop whatever Blythe is doing
-        StartCoroutine(BlytheKeepMoving());
+        //blythe.GetComponent<EnemyAIFSMTest>().StopAllCoroutines(); // stop whatever Blythe is doing
+        //StartCoroutine(BlytheKeepMoving());
+        blythe.GetComponent<EnemyAIFSMTest>().StopCoroutines();
+        StartCoroutine(blythe.GetComponent<EnemyAIFSMTest>().GoToPoint(lastSeen));
 
         /*
         int count = 0;
