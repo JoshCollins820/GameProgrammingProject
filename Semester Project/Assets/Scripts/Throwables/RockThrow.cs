@@ -42,7 +42,7 @@ public class RockThrow : MonoBehaviour
             // call stop routines function
             GameObject.Find("Priest").GetComponent<EnemyAIFSMTest>().StopCoroutines();
             // call function that calls Priest to location_hit
-            GameObject.Find("Priest").GetComponent<EnemyAIFSMTest>().GoToPoint(location_hit);
+            StartCoroutine(GameObject.Find("Priest").GetComponent<EnemyAIFSMTest>().GoToPoint(location_hit));
 
         }
     }
