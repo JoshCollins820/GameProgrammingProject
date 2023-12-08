@@ -5,11 +5,13 @@ using UnityEngine;
 public class RockThrow : MonoBehaviour
 {
     public bool midAir; // bool for if rock is midAir
+    public AudioSource audio_rockHit;
 
     // Start is called before the first frame update
     void Start()
     {
         midAir = true;
+        audio_rockHit = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -32,11 +34,16 @@ public class RockThrow : MonoBehaviour
         
         if (other.tag == "Floor" && midAir == true) // if rock hits the floor and hasn't hit floor before
         {
+            audio_rockHit.Play(); // play rock hit sound
             midAir = false; // rock is no longer mid air
             Vector3 location_hit = this.transform.position; // get pos
             Debug.Log("Rock landed at: (" + location_hit.x + "," + location_hit.y + "," + location_hit.z);
             GetComponent<SphereCollider>().enabled = true; // turn on sphere collider so player can pick it up
+            // call stop routines function
+            GameObject.Find("Priest").GetComponent<EnemyAIFSMTest>().StopCoroutines();
             // call function that calls Priest to location_hit
+            GameObject.Find("Priest").GetComponent<EnemyAIFSMTest>().GoToPoint(location_hit);
+
         }
     }
 }

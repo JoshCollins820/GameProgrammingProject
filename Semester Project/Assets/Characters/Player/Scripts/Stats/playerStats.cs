@@ -37,7 +37,7 @@ public class PlayerStats : MonoBehaviour
     public Transform rockSpawn;                                 // rock spawn location
     public float rock_speed = 100;                               // rock speed
     public bool canThrow = true;                                // can throw rock?
-    // public AudioSource rock_throw_sound;
+    public AudioSource audio_rockThrow;
 
     public GameObject maincamera; // player "Normal VCamera"
     public GameObject theRealMainCamera; // Main Camera
@@ -56,6 +56,7 @@ public class PlayerStats : MonoBehaviour
         theRealMainCamera = GameObject.Find("Main Camera");
         player = GameObject.Find("Player");
         rockSpawn = GameObject.Find("RockSpawn").transform;
+        audio_rockThrow = GameObject.Find("Throw_Sound").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -83,6 +84,8 @@ public class PlayerStats : MonoBehaviour
         {
             if (player.GetComponent<PlayerInventory>().count_rock > 0 && canThrow == true)
             {
+                //play rock throw sound effect
+                audio_rockThrow.Play();
                 canThrow = false; // make it so player can't throw again until cooldown is met
                 Invoke(nameof(ThrowRock),0.58f); // call the throw rock function
                 player.GetComponent<PlayerController>().walkSpeed = 0f;
@@ -219,8 +222,6 @@ public class PlayerStats : MonoBehaviour
     // throws a rock projectile
     private void ThrowRock()
     {
-        //play rock throw sound effect
-        // ???
         Debug.Log("Rock thrown");
         player.GetComponent<PlayerInventory>().count_rock -= 1; // decrease rock count
         var rock = (GameObject)Instantiate(
