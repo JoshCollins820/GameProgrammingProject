@@ -320,8 +320,10 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         StartCoroutine(StareAtPlayer()); // keep staring at player
         //blythe.GetComponent<EnemyAIFSMTest>().StopAllCoroutines(); // stop whatever Blythe is doing
         //StartCoroutine(BlytheKeepMoving());
+        //blythe.GetComponent<EnemyAIFSMTest>().StopCoroutines();
+        //StartCoroutine(blythe.GetComponent<EnemyAIFSMTest>().GoToPoint(lastSeen));
         blythe.GetComponent<EnemyAIFSMTest>().StopCoroutines();
-        StartCoroutine(blythe.GetComponent<EnemyAIFSMTest>().GoToPoint(lastSeen));
+        StartCoroutine(BlytheKeepMoving());
 
         /*
         int count = 0;
@@ -371,15 +373,14 @@ public class Ghoul_EnemyAIFSM : BaseFSM
             yield return null;
         }
 
-        blythe.transform.GetChild(2).gameObject.GetComponent<EnemyEarshot>().lastHeard = lastSeen; // helper for patrol radius
-        blythe.GetComponent<EnemyAIFSMTest>().SetStateToRadiusPatrol(); // go to where player was seen, patrol radius
-        yield return new WaitForSeconds(0.5f);
-        blythe.GetComponent<AnimationHandler>().PlayIdleAnimation(); // change animation to "idle"
+        //blythe.transform.GetChild(2).gameObject.GetComponent<EnemyEarshot>().lastHeard = lastSeen; // helper for patrol radius
+        //blythe.GetComponent<EnemyAIFSMTest>().SetStateToRadiusPatrol(); // go to where player was seen, patrol radius
+        //yield return new WaitForSeconds(0.5f);
+        //blythe.GetComponent<AnimationHandler>().PlayIdleAnimation(); // change animation to "idle"
 
-        //blythe.GetComponent<EnemyAIFSMTest>().SetStateToSilent();
+        blythe.GetComponent<EnemyAIFSMTest>().SetStateToSilent();
 
-        //yield return null;
-        yield break;
+        yield return null;
     }
 
     private Vector3 GetRandomPositionOnNavMesh()
