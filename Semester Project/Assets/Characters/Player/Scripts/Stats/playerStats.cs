@@ -94,8 +94,6 @@ public class PlayerStats : MonoBehaviour
                 player.GetComponent<PlayerUI>().DisableInteractUI(); // hidetext
             }
         }   
-
-
     }
 
 
