@@ -37,9 +37,9 @@ public class TrackPieces : MonoBehaviour
         JournalUI = GameObject.Find("JournalUI");
         Hilt = transform.GetChild(0).GetChild(1).gameObject;    //SwordPieces/Piece1/sword-hilt
         Base = transform.GetChild(1).GetChild(1).gameObject;
-        Middle = transform.GetChild(2).GetChild(1).gameObject;
-        Tip = transform.GetChild(0).GetChild(1).gameObject;
-        SwordCamera = transform.GetChild(0).GetChild(2).gameObject;
+        Middle = transform.GetChild(2).GetChild(0).GetChild(1).gameObject; 
+        Tip = transform.GetChild(3).GetChild(1).gameObject;
+        //SwordCamera = transform.GetChild(0).GetChild(2).gameObject;
         swordPieces = 0;
         leftPageContent = "I now have all of the pieces of the sword!\n" +
             "Time to find the forge and complete the\n" +
@@ -76,7 +76,7 @@ public class TrackPieces : MonoBehaviour
         if (swordPieceName == "Hilt")
         {
             Debug.Log("Picked up Hilt");
-            //SwordCamera = transform.GetChild(0).GetChild(2).gameObject;
+            SwordCamera = transform.GetChild(0).GetChild(2).gameObject;
         }
         if (swordPieceName == "Base")
         {
@@ -86,7 +86,7 @@ public class TrackPieces : MonoBehaviour
         if (swordPieceName == "Middle")
         {
             Debug.Log("Picked up Middle");
-            SwordCamera = transform.GetChild(2).GetChild(2).gameObject;
+            SwordCamera = transform.GetChild(2).GetChild(1).gameObject;
         }
         if (swordPieceName == "Tip")
         {

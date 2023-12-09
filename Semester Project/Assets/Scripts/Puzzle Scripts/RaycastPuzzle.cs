@@ -6,13 +6,16 @@ public class RaycastPuzzle : MonoBehaviour
 {
 
     public Camera Cam;
-    public LayerMask mask;
+    public LayerMask MusicPuzzleMask;
+    public LayerMask FeronsRoomPuzzleMask;
+    public GameObject FRPuzzle;
 
 
     // Start is called before the first frame update
     void Start()
     {
         Cam = Camera.main;
+        FRPuzzle = GameObject.Find("FeronsRoomPuzzle");
 
     }
 
@@ -29,10 +32,15 @@ public class RaycastPuzzle : MonoBehaviour
             Ray ray = Cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 10, mask))
+            if (Physics.Raycast(ray, out hit, 10, MusicPuzzleMask))
             {
-                Debug.Log(hit.transform.name);
+                Debug.Log("Raycast hit " + hit.transform.name);
                 hit.transform.GetComponent<RuneOnClick>().ActivateRune();
+            }
+            else if (Physics.Raycast(ray, out hit, 10, FeronsRoomPuzzleMask))
+            {
+                Debug.Log("Raycast hit " + hit.transform.name);
+                FRPuzzle.GetComponent<FeronsRoomPuzzle>().PickObject(hit.transform.name);
             }
         }
     }

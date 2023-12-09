@@ -5,7 +5,7 @@ using UnityEngine;
 public class OpenSafe : MonoBehaviour
 {
 
-    GameObject SwordPiece;
+    GameObject Bag4;
     GameObject Player;
     GameObject Combination;
 
@@ -15,13 +15,14 @@ public class OpenSafe : MonoBehaviour
     public bool showClue;      // true if UI should display clue about safe, false if showing
     public bool showAction;    // true if UI should display action that can be taken on safe
     public bool opened;
+    public bool combinationInput;
 
     // Start is called before the first frame update
     void Start()
     {
         Player = GameObject.Find("Magistrate").transform.GetChild(0).gameObject;
-        SwordPiece = GameObject.Find("Piece3");
-        Combination = GameObject.Find("Combination");
+        Bag4 = GameObject.Find("Piece4").transform.GetChild(0).gameObject;
+        Combination = GameObject.Find("Cabinet").transform.GetChild(0).GetChild(0).gameObject;
 
         slerpDuration = 2f;
         opening = false;
@@ -29,6 +30,7 @@ public class OpenSafe : MonoBehaviour
         showClue = true;
         showAction = true;
         interacting = false;
+        combinationInput = false;
     }
 
     // Update is called once per frame
@@ -38,10 +40,13 @@ public class OpenSafe : MonoBehaviour
         {
 
             Player.GetComponent<PlayerUI>().DisableInteractUI(); // action taken stop display
-            if (Combination.GetComponent<PickUpClue>().pickedUp)
+            if (Combination.GetComponent<PickUpClue>().pickedUp && !combinationInput)
             {
+                //put in combination is now true to stop more calls
+                combinationInput = true;
                 Debug.Log("opening marked");
                 opening = true;
+                Bag4.SetActive(true);
             }
             else if (showClue)
             {
@@ -54,7 +59,6 @@ public class OpenSafe : MonoBehaviour
         if (opening)
         {
             Debug.Log("opening chest");
-            SwordPiece.SetActive(true);
             StartCoroutine(Rotate90());
 
 

@@ -34,7 +34,7 @@ public class ReadJournal : MonoBehaviour
         Entries = new Dictionary<string, List<string>>();
         Log = new List<string>();
         reading = false;
-        leftPageContent = "Magistrate's Journal";
+        leftPageContent = "Magistrate's Journal\n";
         rightPageContent = "TenthMonth 30th day:\n" +
             "I have been sent in the footsteps of Magistrate Cody\n" +
             "who has disappeared along with several others.\n" +

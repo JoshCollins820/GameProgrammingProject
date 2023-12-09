@@ -12,14 +12,14 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Raycast
+  - MRPuzzleRaycast
   - Water
   - UI
   - Ground
   - Floor
   - Walls
   - EnemyCollision
-  - 
+  - FRPuzzleRaycast
   - 
   - 
   - 
