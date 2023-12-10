@@ -8,6 +8,9 @@ public class PickUpClue : MonoBehaviour
     GameObject Player;
     GameObject JournalUI;
     GameObject SwordPieces;
+    public GameObject SwordRebuilt;
+    public GameObject SwordInHand;
+    public GameObject Workshop;
 
     // Bools to help with interacting with clue or lore
     public bool pickedUp;
@@ -34,6 +37,9 @@ public class PickUpClue : MonoBehaviour
         Player = GameObject.Find("Magistrate").transform.GetChild(0).gameObject;
         JournalUI = GameObject.Find("JournalUI");
         SwordPieces = GameObject.Find("SwordPieces");
+        Workshop = GameObject.Find("Workshop");
+        SwordRebuilt = Workshop.transform.GetChild(3).gameObject;
+        SwordInHand = Player.transform.Find("Sword_Stormbringer").gameObject;
     }
 
     // Update is called once per frame
@@ -95,6 +101,15 @@ public class PickUpClue : MonoBehaviour
 
         // Sword Pieces
         //_____________________________________________________________________________
+        if (this.name == "Sword_Stormbringer")
+        {
+            SwordInHand.SetActive(true);
+            leftPageContent = "I have finally rebuilt the lost legendary sword: " +
+                "Stormbringer... It is time to bring the storm...";
+            rightPageContent = "I should Kill the Priest so I can go report " +
+                "back to the High Judge what has happened here.\n\n" +
+                "Cody... you will be avenged...";
+        }
         if (this.name == "Bag1")
         {
             SwordPieces.GetComponent<TrackPieces>().AddSwordPiece("Hilt");
