@@ -40,13 +40,14 @@ public class Ghoul_LineOfSight : MonoBehaviour
         // if player is within line of sight
         if (angleToTarget < viewAngle / 2 && distanceToTarget < viewRadius)
         {
+            Debug.Log("Ghoul: Player is in line of sight");
             // if there are no objects blocking line of sight to player
             if (!Physics.Raycast(transform.position, dirToTarget, distanceToTarget))
             {
                 if (inView == false)
                 {
                     inView = true;
-                    Debug.Log("Ghoul: Player is in view.");
+                    Debug.Log("Ghoul: Player is in view w/o obstuctions.");
                 }
             }
             else
