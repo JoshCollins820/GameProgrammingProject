@@ -31,6 +31,7 @@ public class PlayerStats : MonoBehaviour
     [Header("Other")] // OTHER section -------------------------
     public bool throwMode = false;                              // indicates if player is in throw mode
     public Animator anim;
+    public bool enemiesSpawned = false;                         // indicates when enemies are spawned
 
     [Header("Throwable")] // THROWABLE section -----------------
     public GameObject rockPrefab;                               // rock prefab
@@ -80,7 +81,8 @@ public class PlayerStats : MonoBehaviour
             killPlayer();
         }
         // throw mode: if player presses a specific button (currently F) switch to throw mode
-        if (Input.GetKey(KeyCode.F))
+        // if they are not hiding, 
+        if (Input.GetKey(KeyCode.F) && player.GetComponent<PlayerController>().hiding == false && canMove == true)
         {
             if (player.GetComponent<PlayerInventory>().count_rock > 0 && canThrow == true)
             {
@@ -93,7 +95,7 @@ public class PlayerStats : MonoBehaviour
                 anim.SetTrigger("Throw");// trigger throw animation
                 player.GetComponent<PlayerUI>().DisableInteractUI(); // hidetext
             }
-        }   
+        }
     }
 
 
@@ -229,5 +231,10 @@ public class PlayerStats : MonoBehaviour
         rock.GetComponent<Rigidbody>().velocity = rock.transform.forward * rock_speed; // apply force to rock
         rock.GetComponent<RockThrow>().enableRockMidAir();
         Invoke(nameof(EnableCanThrow), 0.3f); // rock throw cooldown
+    }
+
+    public void enableEnemiesSpawned()
+    {
+        enemiesSpawned = true;
     }
 }

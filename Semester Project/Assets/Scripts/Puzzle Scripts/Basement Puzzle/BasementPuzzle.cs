@@ -224,6 +224,7 @@ public class BasementPuzzle : MonoBehaviour
             Invoke("delayDoor", 1f);
             //Invoke("delayPriest", 4f);
             SpawnEnemies.Invoke();
+            GameObject.Find("Player").GetComponent<PlayerStats>().enableEnemiesSpawned();
         }
         else
         {

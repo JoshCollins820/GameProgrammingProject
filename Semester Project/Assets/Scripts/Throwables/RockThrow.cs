@@ -40,10 +40,12 @@ public class RockThrow : MonoBehaviour
             Debug.Log("Rock landed at: (" + location_hit.x + "," + location_hit.y + "," + location_hit.z);
             GetComponent<SphereCollider>().enabled = true; // turn on sphere collider so player can pick it up
             // call stop routines function
-            GameObject.Find("Priest").GetComponent<EnemyAIFSMTest>().StopCoroutines();
-            // call function that calls Priest to location_hit
-            StartCoroutine(GameObject.Find("Priest").GetComponent<EnemyAIFSMTest>().GoToPoint(location_hit));
-
+            if(GameObject.Find("Player").GetComponent<PlayerStats>().enemiesSpawned == true) // if enemies are spawned
+            {
+                // call functions that calls Priest to location_hit
+                GameObject.Find("Priest").GetComponent<EnemyAIFSMTest>().StopCoroutines();
+                StartCoroutine(GameObject.Find("Priest").GetComponent<EnemyAIFSMTest>().GoToPoint(location_hit));
+            }    
         }
     }
 }
