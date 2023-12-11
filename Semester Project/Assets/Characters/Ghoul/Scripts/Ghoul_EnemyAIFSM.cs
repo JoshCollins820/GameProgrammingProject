@@ -89,7 +89,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         agent.isStopped = false;
         // set walking animation
         StartCoroutine(PatrolCoroutine());
-        Debug.Log("Transitioned to patrol state");
+        Debug.Log("Ghoul: Transitioned to patrol state");
     }
     public void SetStateToAlert()
     {
@@ -97,7 +97,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         agent.isStopped = true;
         // set idle animation
         StartCoroutine(AlertCoroutine());
-        Debug.Log("Transitioned to alert state");
+        Debug.Log("Ghoul: Transitioned to alert state");
     }
     public void SetStateToRadiusPatrol()
     {
@@ -105,21 +105,21 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         agent.isStopped = false;
         // set walking animation
         StartCoroutine(RadiusPatrolCoroutine());
-        Debug.Log("Transitioned to radius patrol state");
+        Debug.Log("Ghoul: Transitioned to radius patrol state");
     }
     public void SetStateToScream()
     {
         currentState = FSMState.Scream;
         agent.isStopped = false;
         StartCoroutine(ScreamCoroutine());
-        Debug.Log("Transitioned to scream state");
+        Debug.Log("Ghoul: Transitioned to scream state");
     }
     public void SetStateToDead()
     {
         currentState = FSMState.Dead;
         agent.isStopped = true;
         // animation (?)
-        Debug.Log("Transitioned to dead state");
+        Debug.Log("Ghoul: Transitioned to dead state");
     }
 
     //------------------------------ States ------------------------------
@@ -134,7 +134,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         {
             if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
-                Debug.Log("Player is in view.");
+                Debug.Log("Ghoul: Player is in view.");
                 lastSeen = player.GetComponent<Transform>().position;
                 StopCoroutine(PatrolMovementCoroutine());
                 SetStateToScream(); // transition to scream state
@@ -244,7 +244,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         {
             yield return null; 
         }
-        Debug.Log("Player's last heard location reached.");
+        Debug.Log("Ghoul: Player's last heard location reached.");
         yield return new WaitForSeconds(5);
 
         /*
@@ -366,7 +366,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
 
             if (blythe.GetComponent<NavMeshAgent>().remainingDistance < 0.5)
             {
-                Debug.Log("Player's last seen position reached.");
+                Debug.Log("Ghoul: Player's last seen position reached.");
                 reached = true;
             }
 
