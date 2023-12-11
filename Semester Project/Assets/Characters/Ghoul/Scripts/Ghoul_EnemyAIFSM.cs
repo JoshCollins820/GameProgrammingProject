@@ -89,7 +89,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         agent.isStopped = false;
         // set walking animation
         StartCoroutine(PatrolCoroutine());
-        Debug.Log("Ghoul: Transitioned to patrol state");
+        Debug.Log("Transitioned to patrol state");
     }
     public void SetStateToAlert()
     {
@@ -97,7 +97,7 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         agent.isStopped = true;
         // set idle animation
         StartCoroutine(AlertCoroutine());
-        Debug.Log("Ghoul: Transitioned to alert state");
+        Debug.Log("Transitioned to alert state");
     }
     public void SetStateToRadiusPatrol()
     {
@@ -105,21 +105,21 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         agent.isStopped = false;
         // set walking animation
         StartCoroutine(RadiusPatrolCoroutine());
-        Debug.Log("Ghoul: Transitioned to radius patrol state");
+        Debug.Log("Transitioned to radius patrol state");
     }
     public void SetStateToScream()
     {
         currentState = FSMState.Scream;
         agent.isStopped = false;
         StartCoroutine(ScreamCoroutine());
-        Debug.Log("Ghoul: Transitioned to scream state");
+        Debug.Log("Transitioned to scream state");
     }
     public void SetStateToDead()
     {
         currentState = FSMState.Dead;
         agent.isStopped = true;
         // animation (?)
-        Debug.Log("Ghoul: Transitioned to dead state");
+        Debug.Log("Transitioned to dead state");
     }
 
     //------------------------------ States ------------------------------
@@ -132,21 +132,16 @@ public class Ghoul_EnemyAIFSM : BaseFSM
 
         while (currentState == FSMState.Patrol)
         {
-            if (eyesight.IsInView() == true)
+            if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
-                Debug.Log("in view");
-                if (!player.GetComponent<PlayerController>().hiding)
-                {
-                    Debug.Log("Player is in view and not hiding.");
-                    lastSeen = player.GetComponent<Transform>().position;
-                    StopCoroutine(PatrolMovementCoroutine());
-                    SetStateToScream(); // transition to scream state
-                    yield break;
-                }
+                Debug.Log("Player is in view.");
+                lastSeen = player.GetComponent<Transform>().position;
+                StopCoroutine(PatrolMovementCoroutine());
+                SetStateToScream(); // transition to scream state
+                yield break;
             }
             else if (earshot.IsInEarshot() == true && player.GetComponent<InputsManager>().move != Vector2.zero)
             {
-                Debug.Log("Player is in earshot");
                 StopCoroutine(PatrolMovementCoroutine());
                 SetStateToAlert();  // transition to alert state
                 yield break;
