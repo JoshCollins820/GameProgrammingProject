@@ -11,6 +11,7 @@ public class LineOfSight : MonoBehaviour
     public float viewAngle;
 
     private Transform target;
+    public LayerMask obstacleMask;
 
     private void Start()
     {
@@ -36,12 +37,13 @@ public class LineOfSight : MonoBehaviour
         Vector3 dirToTarget = (target.position - transform.position).normalized;
         float angleToTarget = Vector3.Angle(transform.forward, dirToTarget);
         float distanceToTarget = Vector3.Distance(transform.position, target.position);
+        Vector3 raycastOrigin = transform.position + Vector3.up * 2;
 
         // if player is within line of sight
         if (angleToTarget < viewAngle / 2 && distanceToTarget < viewRadius)
         {
             // if there are no objects blocking line of sight to player
-            if (!Physics.Raycast(transform.position, dirToTarget, distanceToTarget))
+            if (!Physics.Raycast(raycastOrigin, dirToTarget, distanceToTarget, obstacleMask))
             {
                 if (inView == false)
                 {
