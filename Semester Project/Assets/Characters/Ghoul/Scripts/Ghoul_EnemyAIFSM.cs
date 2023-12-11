@@ -134,7 +134,6 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         {
             if (eyesight.IsInView() == true && !player.GetComponent<PlayerController>().hiding)
             {
-                Debug.Log("Ghoul: Player is in view.");
                 lastSeen = player.GetComponent<Transform>().position;
                 StopCoroutine(PatrolMovementCoroutine());
                 SetStateToScream(); // transition to scream state
@@ -318,25 +317,11 @@ public class Ghoul_EnemyAIFSM : BaseFSM
     private IEnumerator ScreamCoroutine()
     {
         StartCoroutine(StareAtPlayer()); // keep staring at player
-        //blythe.GetComponent<EnemyAIFSMTest>().StopAllCoroutines(); // stop whatever Blythe is doing
-        //StartCoroutine(BlytheKeepMoving());
+
         //blythe.GetComponent<EnemyAIFSMTest>().StopCoroutines();
-        //StartCoroutine(blythe.GetComponent<EnemyAIFSMTest>().GoToPoint(lastSeen));
+        //StartCoroutine(BlytheKeepMoving());
         blythe.GetComponent<EnemyAIFSMTest>().StopCoroutines();
-        StartCoroutine(BlytheKeepMoving());
-
-        /*
-        int count = 0;
-        while (count < 2) // play scream 2 times
-        {
-            animations.PlayScreamAnimation(); // change animation to "scream"
-            screamAudio.Play(); // play scream audio
-            yield return new WaitForSeconds(7); // wait 7 seconds (scream is 7 seconds long)
-
-            count++;
-            yield return null;
-        }
-        */
+        StartCoroutine(blythe.GetComponent<EnemyAIFSMTest>().GoToPoint(lastSeen));
 
         animations.PlayScreamAnimation(); // change animation to "scream"
         screamAudio.Play(); // play scream audio
@@ -378,7 +363,10 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         //yield return new WaitForSeconds(0.5f);
         //blythe.GetComponent<AnimationHandler>().PlayIdleAnimation(); // change animation to "idle"
 
-        blythe.GetComponent<EnemyAIFSMTest>().SetStateToSilent();
+        //blythe.GetComponent<EnemyAIFSMTest>().SetStateToSilent();
+        blythe.GetComponent<AnimationHandler>().PlayIdleAnimation();
+        yield return new WaitForSeconds(7);
+        blythe.GetComponent<EnemyAIFSMTest>().SetStateToPatrol();
 
         yield return null;
     }

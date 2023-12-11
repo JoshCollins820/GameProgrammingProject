@@ -572,6 +572,8 @@ public class EnemyAIFSMTest : BaseFSM
 
     public IEnumerator GoToPoint(Vector3 point)
     {
+        Debug.Log("Currently at: " + transform.position);
+        Debug.Log("Moving to: " + point);
         animations.PlayRunAnimation(); // make priest run
 
         bool reached = false;
@@ -586,9 +588,12 @@ public class EnemyAIFSMTest : BaseFSM
                 yield break;
             }
 
-            if (agent.remainingDistance < 0.5)
+            if ((transform.position.x > point.x - 0.5 && transform.position.x < point.x + 0.5) &&
+                (transform.position.y > point.y - 0.5 && transform.position.y < point.y + 0.5) &&
+                (transform.position.z > point.z - 0.5 && transform.position.z < point.z + 0.5)
+                )//(agent.remainingDistance < 0.5)
             {
-                Debug.Log("Player's last seen position reached.");
+                Debug.Log("Destination reached.");
                 reached = true;
             }
 
