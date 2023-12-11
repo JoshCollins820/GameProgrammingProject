@@ -10,6 +10,7 @@ public class PlayerUI : MonoBehaviour
     public GameObject player; // player
     public GameObject stamina_bar; // stamina ui element
     public GameObject blood_screen; // blood screen ui element
+    public GameObject death_screen; // death_screen ui element
     public GameObject interact_e; // interact E ui element
     public GameObject hint; // hint from clue that was picked up
 
@@ -192,5 +193,14 @@ public class PlayerUI : MonoBehaviour
     public void DisableHintUI()
     {
         show_hint = false;
+    }
+
+    public void enableDeathScreen()
+    {
+        // display death screen
+        if (player.GetComponent<PlayerStats>().playerDead == true)
+        {
+            death_screen.SetActive(true);
+        }
     }
 }
