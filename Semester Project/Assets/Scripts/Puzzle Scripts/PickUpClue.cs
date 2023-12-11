@@ -39,7 +39,7 @@ public class PickUpClue : MonoBehaviour
         SwordPieces = GameObject.Find("SwordPieces");
         Workshop = GameObject.Find("Workshop");
         SwordRebuilt = Workshop.transform.GetChild(3).gameObject;
-        SwordInHand = Player.transform.Find("Sword_Stormbringer").gameObject;
+        SwordInHand = GameObject.Find("Sword_Stormbringer");
     }
 
     // Update is called once per frame

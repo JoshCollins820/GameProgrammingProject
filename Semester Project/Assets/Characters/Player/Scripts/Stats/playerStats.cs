@@ -55,7 +55,7 @@ public class PlayerStats : MonoBehaviour
     {
         theRealMainCamera = GameObject.Find("Main Camera");
         player = GameObject.Find("Player");
-        rockSpawn = GameObject.Find("RockSpawn").transform;
+        //rockSpawn = GameObject.Find("RockSpawn").transform;
         audio_rockThrow = GameObject.Find("Throw_Sound").GetComponent<AudioSource>();
     }
 
