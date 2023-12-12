@@ -609,7 +609,9 @@ public class EnemyAIFSMTest : BaseFSM
 
     public void StopCoroutines()
     {
+
         StopAllCoroutines();
+        animations.PlayIdleAnimation();
     }
 
 }
