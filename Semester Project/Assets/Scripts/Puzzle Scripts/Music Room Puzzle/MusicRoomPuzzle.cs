@@ -200,6 +200,7 @@ public class MusicRoomPuzzle : MonoBehaviour
             resetPuzzle();
             // open chest
             ChestHinge.GetComponent<OpenChest>().Open();
+            GameObject.Find("Chest_Sound").GetComponent<AudioSource>().Play();
         }
         else
         {

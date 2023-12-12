@@ -39,6 +39,7 @@ public class OpenSittingRoom : MonoBehaviour
             {
                 Debug.Log("opening marked");
                 opening = true;
+                GameObject.Find("Door_Sound").GetComponent<AudioSource>().Play();
             }
             else if (showClue)
             {
