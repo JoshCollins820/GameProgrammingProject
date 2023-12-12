@@ -46,6 +46,7 @@ public class PlayMusicPlayer : MonoBehaviour
         {
             if (!pipeFixed && !leverPulled)
             {
+                GameObject.Find("Lever_Sound").GetComponent<AudioSource>().Play();
                 Player.GetComponent<PlayerUI>().DisableInteractUI();
                 Player.GetComponent<PlayerUI>().DisplayHintUI("There is a rush of air\n" +
                     "from the open pipe...");
