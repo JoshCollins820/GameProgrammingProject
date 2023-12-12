@@ -600,16 +600,23 @@ public class EnemyAIFSMTest : BaseFSM
             yield return null;
         }
 
-        animations.PlayIdleAnimation();
-        yield return new WaitForSeconds(7);
-        SetStateToPatrol();
+        //animations.PlayIdleAnimation();
+        //yield return new WaitForSeconds(7);
+        //SetStateToPatrol();
+        SetStateToAlert();
 
         yield return null;
     }
 
     public void StopCoroutines()
     {
+        StopAllCoroutines();
+    }
 
+    public void DoNothing()
+    {
+        hitbox.SetActive(false);
+        animator.SetBool("IsAttack", false);
         StopAllCoroutines();
         animations.PlayIdleAnimation();
     }
