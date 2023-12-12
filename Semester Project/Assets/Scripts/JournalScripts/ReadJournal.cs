@@ -75,13 +75,22 @@ public class ReadJournal : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.N))
         {
             if (NextPage.activeSelf)
+            {
                 NextJournalEntry();
+                GameObject.Find("Book_Sound").GetComponent<AudioSource>().Play();
+            }
+                
+
         }
         // If there is a previous journal page, view previous page
         if (Input.GetKeyDown(KeyCode.P))
         {
             if (PreviousPage.activeSelf)
+            {
                 PreviousJournalEntry();
+                GameObject.Find("Book_Sound").GetComponent<AudioSource>().Play();
+            }
+                
         }
     }
 
