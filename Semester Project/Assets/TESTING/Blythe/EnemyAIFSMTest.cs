@@ -67,6 +67,8 @@ public class EnemyAIFSMTest : BaseFSM
     //private float lerpDuration;
     int i = 0;
 
+    public GameObject pointsList;
+
     protected override void Initialize()
     {
         player = GameObject.Find("Player").GetComponent<Transform>();
@@ -75,7 +77,11 @@ public class EnemyAIFSMTest : BaseFSM
         eyesight = gameObject.GetComponentInChildren<LineOfSight>();
         animations = gameObject.GetComponentInChildren<AnimationHandler>();
         screamAudio = GetComponent<AudioSource>();
-        pointList = GameObject.FindGameObjectsWithTag("PatrolPoint");
+
+
+        //pointList = GameObject.FindGameObjectsWithTag("PatrolPoint");
+        pointsList = GameObject.Find("PriestPatrol");
+
 
         animator = GetComponentInChildren<Animator>();
         range = transform.GetChild(4).gameObject.GetComponent<Attack>();
@@ -186,7 +192,11 @@ public class EnemyAIFSMTest : BaseFSM
         while (currentState == FSMState.Patrol)
         {
             animations.PlayWalkAnimation(); // change animation to "walk"
-            GameObject destination = pointList[i];
+
+            //GameObject destination = pointList[i];
+            GameObject destination = pointsList.transform.GetChild(i).gameObject;
+
+
             agent.SetDestination(destination.transform.position);
             //yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
             while (agent.pathPending || agent.remainingDistance > 0.1f)
@@ -615,7 +625,7 @@ public class EnemyAIFSMTest : BaseFSM
 
     public void DoNothing()
     {
-        hitbox.SetActive(false);
+        //hitbox.SetActive(false);
         animator.SetBool("IsAttack", false);
         StopAllCoroutines();
         animations.PlayIdleAnimation();
