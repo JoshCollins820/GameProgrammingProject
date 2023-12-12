@@ -38,12 +38,13 @@ public class DungeonDoorOpen : MonoBehaviour
             Player.GetComponent<PlayerUI>().DisableInteractUI(); // action taken stop display
             if (DungeonDoorKey.GetComponent<PickUpClue>().pickedUp)
             {
+                GameObject.Find("Sound_PrisonDoor").GetComponent<AudioSource>().Play();
                 Debug.Log("opening marked");
                 opening = true;
-                GameObject.Find("Sound_PrisonDoor").GetComponent<AudioSource>().Play();
             }
             else if (showClue)
             {
+                GameObject.Find("Sound_PrisonDoorLocked").GetComponent<AudioSource>().Play();
                 Player.GetComponent<PlayerUI>().DisplayHintUI("Locked...");
                 showClue = false;
             }
