@@ -56,8 +56,11 @@ public class PickUpClue : MonoBehaviour
             {
                 GameObject.Find("Key_Sound").GetComponent<AudioSource>().Play();
             }
-            
-            
+            if (sound_type == 2)
+            {
+                GameObject.Find("Book_Sound").GetComponent<AudioSource>().Play();
+            }
+
         }
         // open journal with "j"
         if (Input.GetKeyDown(KeyCode.J) && interacting && pickedUp)
