@@ -55,6 +55,7 @@ public class PlayMusicPlayer : MonoBehaviour
             }
             if (pipeFixed && !leverPulled)
             {
+                GameObject.Find("Lever_Sound").GetComponent<AudioSource>().Play();
                 rotating = true;
                 melody.Play();
             }
