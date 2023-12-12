@@ -15,6 +15,8 @@ public class PlayerStats : MonoBehaviour
     public float recoverTime = 10f;                             // time it takes to recover from being damaged
     public bool canBeHurt = true;                               // if the player can be hurt
     public float invinc_period = 1f;                            // period of time in seconds that player is invincible
+    public AudioSource audio_hit;
+    public AudioSource audio_die;
 
     [Header("Stamina")] // STAMINA section ---------------------
     public float playerStamina = 100f;                          // current stamina
@@ -59,6 +61,8 @@ public class PlayerStats : MonoBehaviour
         player = GameObject.Find("Player");
         //rockSpawn = GameObject.Find("RockSpawn").transform;
         audio_rockThrow = GameObject.Find("Throw_Sound").GetComponent<AudioSource>();
+        audio_hit = GameObject.Find("Hit_Sound").GetComponent<AudioSource>();
+        audio_die = GameObject.Find("Die_Sound").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -136,12 +140,14 @@ public class PlayerStats : MonoBehaviour
         // if player is not damaged
         if (playerDamaged == false && canBeHurt == true)
         {
+            audio_hit.Play();
             playerDamaged = true ; // player is now damaged
             canBeHurt = false;
             Invoke(nameof(canBeHurtToggle), invinc_period);
         }
         if(playerDamaged == true && playerDead == false && canBeHurt == true)
         {
+            audio_die.Play();
             GameObject.Find("Priest").GetComponent<EnemyAIFSMTest>().DoNothing(); // stop coroutines
             GameObject.Find("Normal VCamera").GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = 85; // set fov to 85
             playerDead = true; // enable dead
