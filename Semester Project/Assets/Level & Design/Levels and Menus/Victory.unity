@@ -1034,9 +1034,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4429241851313915176, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
       insertIndex: -1
       addedObject: {fileID: 658695678}
-    - targetCorrespondingSourceObject: {fileID: 4429241851313915176, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 658695677}
   m_SourcePrefab: {fileID: 100100000, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
 --- !u!4 &658695673 stripped
 Transform:
@@ -1058,19 +1055,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4429241851313915176, guid: 0193c29eadd8af64fa221848a658c866, type: 3}
   m_PrefabInstance: {fileID: 658695672}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &658695677
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 658695676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae97aa50c25c7014ea08b765b8c5929c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SwordRebuilt: {fileID: 0}
 --- !u!135 &658695678
 SphereCollider:
   m_ObjectHideFlags: 0
