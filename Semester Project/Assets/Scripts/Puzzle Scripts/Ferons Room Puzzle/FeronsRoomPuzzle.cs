@@ -288,6 +288,7 @@ public class FeronsRoomPuzzle : MonoBehaviour
             opening = true; 
             FRVCamera.SetActive(false );
             DrawerVCamera.SetActive(true );
+            GameObject.Find("Drawer_Sound").GetComponent<AudioSource>().Play();
         }
         else
         {
