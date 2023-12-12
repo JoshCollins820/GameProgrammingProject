@@ -27,6 +27,7 @@ public class RockPickup : MonoBehaviour
             // if player presses E to pick up rock
             if (Input.GetKey(KeyCode.E) && collected == false)
             {
+                GameObject.Find("General_Sound").GetComponent<AudioSource>().Play();
                 collected = true; // rock is picked up
                 player.GetComponent<PlayerInventory>().count_rock += 1; // add a rock to players inventory
                 player.GetComponent<PlayerUI>().DisableInteractUI(); // hidetext
