@@ -21,6 +21,7 @@ public class BasementPuzzle : MonoBehaviour
     GameObject StoneYellow;
     [SerializeField] GameObject PuzzleCamera;
     [SerializeField] GameObject PlayerCamera;
+    [SerializeField] GameObject AimCamera;//NEW!
     [SerializeField] GameObject SecretDoorCamera;
     CharacterController PlayerController;
     GameObject SecretDoor;
@@ -66,6 +67,7 @@ public class BasementPuzzle : MonoBehaviour
         StoneYellow = GameObject.Find("Stone_Yellow");
         PuzzleCamera = this.transform.Find("Basement Puzzle VCamera").gameObject;
         PlayerCamera = Magistrate.transform.Find("Normal VCamera").gameObject;
+        AimCamera = Magistrate.transform.Find("Aim VCamera").gameObject;//NEW!
         SecretDoorCamera = this.transform.Find("Basement Secret Door VCamera").gameObject;
         SecretDoor = GameObject.Find("SecretDoor");
         doorOpen = SecretDoor.transform.GetChild(1).gameObject.GetComponent<AudioSource>();
@@ -103,6 +105,7 @@ public class BasementPuzzle : MonoBehaviour
                 Player.GetComponent<PlayerUI>().DisableInteractUI();
                 Player.GetComponent<PlayerStats>().canMove = false;
                 PlayerCamera.SetActive(false);
+                AimCamera.SetActive(false);// NEW!
                 PuzzleCamera.SetActive(true);
                 PlayerMesh.SetActive(false);
                 PlayerHair.SetActive(false);
@@ -182,6 +185,7 @@ public class BasementPuzzle : MonoBehaviour
         {
             //Debug.Log("Give camera back.");
             SecretDoorCamera.SetActive(false);
+            AimCamera.SetActive(false);// NEW!
             PlayerCamera.SetActive(true);
             PlayerHair.SetActive(true);
             PlayerMesh.SetActive(true);

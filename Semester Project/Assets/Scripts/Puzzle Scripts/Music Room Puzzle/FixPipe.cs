@@ -39,6 +39,7 @@ public class FixPipe : MonoBehaviour
             hasPipe = MissingCornerPipe.GetComponent<PickUpClue>().pickedUp;
             if (hasPipe)
             {
+                GameObject.Find("General_Sound").GetComponent<AudioSource>().Play();
                 FixedMissingCornerPipe.SetActive(true);
                 pipeFixed = true;
             }
