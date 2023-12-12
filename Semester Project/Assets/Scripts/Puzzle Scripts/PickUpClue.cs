@@ -51,6 +51,7 @@ public class PickUpClue : MonoBehaviour
             Player.GetComponent<PlayerUI>().DisableInteractUI();
             pickedUp = true;
             this.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            GameObject.Find("Key_Sound").GetComponent<AudioSource>().Play();
             
         }
         // open journal with "j"
