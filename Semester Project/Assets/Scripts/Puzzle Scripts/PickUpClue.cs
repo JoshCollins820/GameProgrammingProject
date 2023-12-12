@@ -114,7 +114,7 @@ public class PickUpClue : MonoBehaviour
 
         // Sword Pieces
         //_____________________________________________________________________________
-        if (this.name == "Sword_Stormbringer")
+        if (this.name == "Sword_Rebuilt")
         {
             SwordInHand.SetActive(true);
             leftPageContent = "I have finally rebuilt the lost legendary sword: " +
