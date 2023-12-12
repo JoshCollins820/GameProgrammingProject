@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
@@ -73,13 +74,6 @@ public class PlayerStats : MonoBehaviour
             isRecovering = true; // player is healing
             Invoke(nameof(healPlayer), 10); // heal player after 10 seconds
         }
-        // if player is dead and hasn't died before
-        if (playerDead == true && deathSequence == false)
-        {
-            deathSequence = true; // make it so this cannot be called again
-            // call death stuff
-            killPlayer();
-        }
         // throw mode: if player presses a specific button (currently F) switch to throw mode
         // if they are not hiding, 
         if (Input.GetKey(KeyCode.F) && player.GetComponent<PlayerController>().hiding == false && canMove == true)
@@ -148,7 +142,12 @@ public class PlayerStats : MonoBehaviour
         }
         if(playerDamaged == true && playerDead == false && canBeHurt == true)
         {
-            playerDead = true;
+            GameObject.Find("Priest").GetComponent<EnemyAIFSMTest>().DoNothing(); // stop coroutines
+            GameObject.Find("Normal VCamera").GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = 85; // set fov to 85
+            playerDead = true; // enable dead
+            canMove = false; // disable movement
+            anim.SetTrigger("Dead");// trigger throw animation
+            Invoke(nameof(killPlayer),4);
             Invoke(nameof(canBeHurtToggle), invinc_period);
         }
     }
@@ -166,7 +165,11 @@ public class PlayerStats : MonoBehaviour
 
     public void killPlayer()
     {
-        // ???
+
+        // Lock mouse onto screen
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene("Death Scene"); // swap to death scene
     }
 
     public void enableMove()
