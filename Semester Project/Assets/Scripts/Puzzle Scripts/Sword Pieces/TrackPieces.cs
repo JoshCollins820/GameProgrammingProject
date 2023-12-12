@@ -175,7 +175,7 @@ public class TrackPieces : MonoBehaviour
     IEnumerator DelayReturnToPlayer()
     {
         Debug.Log("Waiting for 2 seconds");
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
         returnPlayerControl(SwordCamera);
     }
 }
