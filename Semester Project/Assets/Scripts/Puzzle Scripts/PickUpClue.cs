@@ -17,7 +17,7 @@ public class PickUpClue : MonoBehaviour
     public bool showClue;
     public bool showInteract;
     public bool interacting;
-    public int sound_type; // 1 = key, 2 = book
+    public int sound_type; // 1 = key, 2 = book, 3 = general
 
 
 
@@ -59,6 +59,10 @@ public class PickUpClue : MonoBehaviour
             if (sound_type == 2)
             {
                 GameObject.Find("Book_Sound").GetComponent<AudioSource>().Play();
+            }
+            if (sound_type == 3)
+            {
+                GameObject.Find("General_Sound").GetComponent<AudioSource>().Play();
             }
 
         }
