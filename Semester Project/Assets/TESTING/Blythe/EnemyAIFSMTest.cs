@@ -598,6 +598,7 @@ public class EnemyAIFSMTest : BaseFSM
         Debug.Log("Moving to: " + point);
         animations.PlayRunAnimation(); // make priest run
 
+        float failSafe = 0;
         bool reached = false;
         while (reached == false)
         {
@@ -610,14 +611,23 @@ public class EnemyAIFSMTest : BaseFSM
                 yield break;
             }
 
-            if ((transform.position.x > point.x - 0.5 && transform.position.x < point.x + 0.5) &&
+            if ((transform.position.x > point.x - 2.0 && transform.position.x < point.x + 2.0) &&
                 (transform.position.y > point.y - 0.5 && transform.position.y < point.y + 0.5) &&
-                (transform.position.z > point.z - 0.5 && transform.position.z < point.z + 0.5)
+                (transform.position.z > point.z - 2.0 && transform.position.z < point.z + 2.0)
                 )//(agent.remainingDistance < 0.5)
             {
                 Debug.Log("Destination reached.");
                 reached = true;
             }
+
+            // failsafe
+            if(failSafe > 45)//30
+            {
+                Debug.Log("Priest took too long to reach location.");
+                SetStateToSilent();
+                yield break;
+            }
+            failSafe += Time.deltaTime;
 
             yield return null;
         }
