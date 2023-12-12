@@ -16,6 +16,7 @@ public class Hide : MonoBehaviour
 
     [SerializeField] GameObject normalCam; // Virtual Normal Camera
     [SerializeField] GameObject hidingCam; // Virtual Hiding Camera
+    [SerializeField] GameObject aimCam;
 
     private bool collisionEntered = false; // Flag to see if the player is in range to hide
 
@@ -44,8 +45,10 @@ public class Hide : MonoBehaviour
         // Get the "Hiding VCamera" object OF the hiding spot
         hidingCam = this.transform.parent.gameObject.transform.Find("Hide VCamera").gameObject;
 
+        aimCam = Magistrate.transform.gameObject.transform.Find("Aim VCamera").gameObject;
+
         // If the hiding spot is a wardrobe
-        if(this.transform.parent.gameObject.name.Contains("(Hinge)"))
+        if (this.transform.parent.gameObject.name.Contains("(Hinge)"))
         {
             door = this.transform.parent.gameObject.transform.Find("Door").gameObject.transform;
             openPos = this.transform.parent.gameObject.transform.Find("OpenPosition").gameObject.transform;
@@ -59,12 +62,12 @@ public class Hide : MonoBehaviour
         // NOTE: Had to use "Input.GetKeyDown" rather than "input.interact" since the latter would trigger multiple times
 
         // Enter hiding spot
-        if(collisionEntered && Input.GetKeyDown(KeyCode.E) && normalCam.activeInHierarchy)
+        if(collisionEntered && Input.GetKeyDown(KeyCode.E) && normalCam.activeInHierarchy && !aimCam.activeInHierarchy)
         {
             EnterHidingSpot();
         }
         // Leave hiding spot
-        else if(collisionEntered && Input.GetKeyDown(KeyCode.E) && !normalCam.activeInHierarchy)
+        else if(collisionEntered && Input.GetKeyDown(KeyCode.E) && !normalCam.activeInHierarchy && !aimCam.activeInHierarchy)
         {
             LeaveHidingSpot();
         }
@@ -118,6 +121,7 @@ public class Hide : MonoBehaviour
         Player.GetComponent<Animator>().SetFloat("speed", 0);
         Player.GetComponent<PlayerController>().hiding = true;
         normalCam.SetActive(false);
+        aimCam.SetActive(false);//NEW!
         hidingCam.SetActive(true);
         //player.SetActive(false);
         //Player.SetActive(false);
@@ -145,6 +149,7 @@ public class Hide : MonoBehaviour
     {
         Player.GetComponent<PlayerController>().hiding = false;
         normalCam.SetActive(true);
+        aimCam.SetActive(false);//NEW!
         hidingCam.SetActive(false);
         //player.SetActive(true);
         //Player.SetActive(true);
