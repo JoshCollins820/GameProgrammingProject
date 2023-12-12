@@ -18,7 +18,7 @@ public class PickUpClue : MonoBehaviour
     public bool showClue;
     public bool showInteract;
     public bool interacting;
-    public int sound_type; // 1 = key, 2 = book, 3 = general
+    public int sound_type; // 1 = key, 2 = book, 3 = general, 4 = cloth, 5 = sword
 
 
 
@@ -49,7 +49,7 @@ public class PickUpClue : MonoBehaviour
     void Update()
     {
         // pick up clue with "e"
-        if (Input.GetKeyDown(KeyCode.E) && interacting)
+        if (Input.GetKeyDown(KeyCode.E) && interacting && !pickedUp)
         {
             Player.GetComponent<PlayerUI>().DisableInteractUI();
             pickedUp = true;
@@ -70,6 +70,11 @@ public class PickUpClue : MonoBehaviour
             {
                 GameObject.Find("Cloth_Sound").GetComponent<AudioSource>().Play();
             }
+            if (sound_type == 5)
+            {
+                GameObject.Find("SwordEquip_Sound").GetComponent<AudioSource>().Play();
+            }
+
 
         }
         // open journal with "j"

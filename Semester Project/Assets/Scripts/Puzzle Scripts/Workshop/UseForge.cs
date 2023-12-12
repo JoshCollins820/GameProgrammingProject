@@ -86,6 +86,7 @@ public class UseForge : MonoBehaviour
         }
         if (reforge)
         {
+            GameObject.Find("SwordCraft_Sound").GetComponent<AudioSource>().Play();
             Player.GetComponent<PlayerStats>().canMove = false;
             PlayerCamera.SetActive(false);
             Debug.Log("Player camera turned off");

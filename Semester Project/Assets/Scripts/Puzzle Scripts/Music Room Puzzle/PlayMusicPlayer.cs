@@ -57,7 +57,7 @@ public class PlayMusicPlayer : MonoBehaviour
             {
                 GameObject.Find("Lever_Sound").GetComponent<AudioSource>().Play();
                 rotating = true;
-                melody.Play();
+                Invoke(nameof(playMusic), 1);
             }
         }
         if (rotating)
@@ -134,5 +134,9 @@ public class PlayMusicPlayer : MonoBehaviour
         leverPulled = false;
     }
 
+    private void playMusic()
+    {
+        melody.Play();
+    }
 
 }

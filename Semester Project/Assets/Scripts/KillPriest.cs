@@ -32,7 +32,7 @@ public class KillPriest : MonoBehaviour
         {
             interacting = false;
             Player.GetComponent<PlayerUI>().DisableInteractUI();
-            SceneManager.LoadScene(KillPriestCutscene);
+            SceneManager.LoadScene("Victory");
         }
         //  when player gets sword, Kill trigger becomes active
         if (SwordRebuilt.GetComponent<PickUpClue>().pickedUp)
