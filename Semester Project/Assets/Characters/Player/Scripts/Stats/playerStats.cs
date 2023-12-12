@@ -108,6 +108,7 @@ public class PlayerStats : MonoBehaviour
             if(playerStamina >= maxStamina) // once stamina is fully refilled
             {
                 isExausted = false; // no longer exausted, can not run
+                GameObject.Find("Pant_Sound").GetComponent<AudioSource>().Stop();
             }
         }
     }
@@ -124,6 +125,7 @@ public class PlayerStats : MonoBehaviour
             {
                 isExausted = true; // player is tired
                 isRunning = false; // player is not running anymore
+                GameObject.Find("Pant_Sound").GetComponent<AudioSource>().Play();
             }
         }
     }
@@ -175,6 +177,7 @@ public class PlayerStats : MonoBehaviour
         // Lock mouse onto screen
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        GameObject.Find("Pant_Sound").GetComponent<AudioSource>().Stop();
         SceneManager.LoadScene("Death Scene"); // swap to death scene
     }
 
