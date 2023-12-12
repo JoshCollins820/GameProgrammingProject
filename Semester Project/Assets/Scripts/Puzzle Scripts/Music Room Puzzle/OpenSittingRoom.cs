@@ -43,6 +43,7 @@ public class OpenSittingRoom : MonoBehaviour
             }
             else if (showClue)
             {
+                GameObject.Find("DoorLocked_Sound").GetComponent<AudioSource>().Play();
                 Player.GetComponent<PlayerUI>().DisplayHintUI("Locked...");
                 showClue = false;
             }
