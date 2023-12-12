@@ -17,6 +17,7 @@ public class PickUpClue : MonoBehaviour
     public bool showClue;
     public bool showInteract;
     public bool interacting;
+    public int sound_type; // 1 = key, 2 = book
 
 
 
@@ -51,7 +52,11 @@ public class PickUpClue : MonoBehaviour
             Player.GetComponent<PlayerUI>().DisableInteractUI();
             pickedUp = true;
             this.gameObject.GetComponent<MeshRenderer>().enabled = false;
-            GameObject.Find("Key_Sound").GetComponent<AudioSource>().Play();
+            if(sound_type == 1)
+            {
+                GameObject.Find("Key_Sound").GetComponent<AudioSource>().Play();
+            }
+            
             
         }
         // open journal with "j"
