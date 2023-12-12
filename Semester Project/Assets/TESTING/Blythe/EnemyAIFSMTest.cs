@@ -68,6 +68,8 @@ public class EnemyAIFSMTest : BaseFSM
     int i = 0;
 
     public GameObject pointsList;
+    public Transform[] childrenOfList;
+    public int pointsCount;
 
     protected override void Initialize()
     {
@@ -81,6 +83,13 @@ public class EnemyAIFSMTest : BaseFSM
 
         //pointList = GameObject.FindGameObjectsWithTag("PatrolPoint");
         pointsList = GameObject.Find("PriestPatrol");
+        childrenOfList = pointsList.GetComponentsInChildren<Transform>();
+        pointsCount = childrenOfList.Length - 1;
+        Debug.Log("Found " + pointsCount + " points for the Priest. These include:");
+        for(int j = 1; j <= pointsCount; j++)
+        {
+            Debug.Log(childrenOfList[j].name);
+        }
 
 
         animator = GetComponentInChildren<Animator>();
@@ -195,7 +204,7 @@ public class EnemyAIFSMTest : BaseFSM
 
             //GameObject destination = pointList[i];
             GameObject destination = pointsList.transform.GetChild(i).gameObject;
-
+            Debug.Log("Moving to " + destination.name);
 
             agent.SetDestination(destination.transform.position);
             //yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
@@ -203,7 +212,10 @@ public class EnemyAIFSMTest : BaseFSM
             {
                 yield return null;
             }
-            i = (i + 1) % pointList.Length;
+
+            //i = (i + 1) % pointList.Length;
+            i = (i + 1) % pointsCount;
+
             animations.PlayIdleAnimation(); // change animation to "idle"
             yield return new WaitForSeconds(4.0f);  // pause briefly at the destination (2 default)
         }

@@ -62,6 +62,10 @@ public class Ghoul_EnemyAIFSM : BaseFSM
     private float lerpDuration;
     int i = 0;
 
+    public GameObject pointsList;
+    public Transform[] childrenOfList;
+    public int pointsCount;
+
     protected override void Initialize()
     {
         player = GameObject.Find("Player").GetComponent<Transform>();
@@ -70,7 +74,16 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         eyesight = gameObject.GetComponentInChildren<Ghoul_LineOfSight>();
         animations = gameObject.GetComponentInChildren<Ghoul_AnimationHandler>();
         screamAudio = transform.GetChild(5).gameObject.GetComponent<AudioSource>();
-        pointList = GameObject.FindGameObjectsWithTag("GhoulPatrol");
+
+        //pointList = GameObject.FindGameObjectsWithTag("GhoulPatrol");
+        pointsList = GameObject.Find("GhoulPatrol");
+        childrenOfList = pointsList.GetComponentsInChildren<Transform>();
+        pointsCount = childrenOfList.Length - 1;
+        Debug.Log("Found " + pointsCount + " points for the Ghoul. These include:");
+        for (int j = 1; j <= pointsCount; j++)
+        {
+            Debug.Log(childrenOfList[j].name);
+        }
 
         animator = GetComponentInChildren<Animator>();
 
@@ -155,14 +168,21 @@ public class Ghoul_EnemyAIFSM : BaseFSM
         while (currentState == FSMState.Patrol)
         {
             animations.PlayWalkAnimation(); // change animation to "walk"
-            GameObject destination = pointList[i];
+
+            //GameObject destination = pointList[i];
+            GameObject destination = pointsList.transform.GetChild(i).gameObject;
+            Debug.Log("Moving to " + destination.name);
+
             agent.SetDestination(destination.transform.position);
             //yield return new WaitForSeconds(Random.Range(minMoveInterval, maxMoveInterval));
             while (agent.pathPending || agent.remainingDistance > 0.1f)
             {
                 yield return null;
             }
-            i = (i + 1) % pointList.Length;
+
+            //i = (i + 1) % pointList.Length;
+            i = (i + 1) % pointsCount;
+
             animations.PlayIdleAnimation(); // change animation to "idle"
             yield return new WaitForSeconds(4.0f);  // pause briefly at the destination (2 default)
         }
