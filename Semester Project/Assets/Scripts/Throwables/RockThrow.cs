@@ -17,10 +17,6 @@ public class RockThrow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(midAir == true)
-        {
-            Debug.Log("TEST MIDAIR");
-        }
     }
 
     public void enableRockMidAir()
