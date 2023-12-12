@@ -625,7 +625,7 @@ public class EnemyAIFSMTest : BaseFSM
         //animations.PlayIdleAnimation();
         //yield return new WaitForSeconds(7);
         //SetStateToPatrol();
-        SetStateToAlert();
+        SetStateToSilent();
 
         yield return null;
     }
