@@ -10,6 +10,7 @@ public class PickUpClue : MonoBehaviour
     GameObject SwordPieces;
     public GameObject SwordRebuilt;
     public GameObject SwordInHand;
+    //public GameObject Hand;
     public GameObject Workshop;
 
     // Bools to help with interacting with clue or lore
@@ -40,7 +41,8 @@ public class PickUpClue : MonoBehaviour
         SwordPieces = GameObject.Find("SwordPieces");
         Workshop = GameObject.Find("Workshop");
         SwordRebuilt = Workshop.transform.GetChild(3).gameObject;
-        SwordInHand = GameObject.Find("Sword_Stormbringer");
+        //Hand = GameObject.Find("Player/Root/Hips/Spine_01/Spine_02/Spine03/Clavicle_R/Shoulder_R/Elbow_R/Hand_R/Thumb_01 1/Thumb_02 1/Thumb_03 1");
+        SwordInHand = Player.transform.GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).gameObject;
     }
 
     // Update is called once per frame
