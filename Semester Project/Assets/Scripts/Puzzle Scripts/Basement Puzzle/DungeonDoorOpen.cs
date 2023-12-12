@@ -40,6 +40,7 @@ public class DungeonDoorOpen : MonoBehaviour
             {
                 Debug.Log("opening marked");
                 opening = true;
+                GameObject.Find("Sound_PrisonDoor").GetComponent<AudioSource>().Play();
             }
             else if (showClue)
             {
