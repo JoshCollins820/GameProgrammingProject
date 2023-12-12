@@ -64,6 +64,10 @@ public class PickUpClue : MonoBehaviour
             {
                 GameObject.Find("General_Sound").GetComponent<AudioSource>().Play();
             }
+            if (sound_type == 4)
+            {
+                GameObject.Find("Cloth_Sound").GetComponent<AudioSource>().Play();
+            }
 
         }
         // open journal with "j"

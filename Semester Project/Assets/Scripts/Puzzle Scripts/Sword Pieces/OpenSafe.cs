@@ -46,6 +46,7 @@ public class OpenSafe : MonoBehaviour
                 combinationInput = true;
                 Debug.Log("opening marked");
                 opening = true;
+                GameObject.Find("Sound_Safe").GetComponent<AudioSource>().Play();
                 Bag4.SetActive(true);
             }
             else if (showClue)
@@ -53,6 +54,7 @@ public class OpenSafe : MonoBehaviour
                 Player.GetComponent<PlayerUI>().DisplayHintUI("Locked, I'm going to\n" +
                     "need the combination...");
                 showClue = false;
+                GameObject.Find("Sound_SafeLocked").GetComponent<AudioSource>().Play();
             }
 
         }
